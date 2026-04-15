@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenka – Prostor pro změnu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGACE -->
+    <header>
+        <div class="logo">Lenka</div>
+        <nav>
+            <a href="#">Úvod</a>
+            <a href="#">Služby</a>
+            <a href="#">Přihlášení</a>
+            <a href="#">E‑shop</a>
+            <a href="#">Blog</a>
+        </nav>
+    </header>
+
+    <!-- HERO SEKCE -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Prostor pro změnu, růst a nový začátek.</h1>
+            <p>Každý den v sobě nese možnost udělat krok, který tě přiblíží k životu, po kterém toužíš.</p>
+
+            <div class="hero-buttons">
+                <a href="#" class="btn">Služby</a>
+                <a href="#" class="btn-outline">E‑shop</a>
+            </div>
+        </div>
+
+        <div class="hero-photo">
+            <!-- Až budeš mít fotku, vložíme ji sem -->
+            <div class="photo-placeholder">FOTKA</div>
+        </div>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+/* ZÁKLAD */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    background-color: #FFFFFF;
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+/* NAVIGACE */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 70px;
+    background: #ffffffee;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #F4E7C6;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #D4AF37;
+}
+
+nav a {
+    margin-left: 32px;
+    text-decoration: none;
+    color: #000000;
+    font-weight: 400;
+    font-size: 17px;
+    transition: 0.25s;
+}
+
+nav a:hover {
+    color: #D4AF37;
+}
+
+/* HERO SEKCE */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 120px 70px;
+}
+
+.hero-text {
+    max-width: 48%;
+}
+
+.hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 54px;
+    line-height: 1.25;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: #000000;
+}
+
+.hero-text p {
+    font-size: 20px;
+    margin-bottom: 40px;
+    color: #000000;
+}
+
+/* TLAČÍTKA */
+.hero-buttons .btn,
+.hero-buttons .btn-outline {
+    padding: 14px 34px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-size: 17px;
+    margin-right: 18px;
+    transition: 0.25s;
+}
+
+.btn {
+    background-color: #D4AF37;
+    color: white;
+}
+
+.btn-outline {
+    border: 2px solid #D4AF37;
+    color: #D4AF37;
+}
+
+.btn:hover {
+    background-color: #b8962f;
+}
+
+.btn-outline:hover {
+    background-color: #D4AF37;
+    color: white;
+}
+
+/* FOTKA / HERO PRVEK */
+.hero-photo {
+    width: 42%;
+    display: flex;
+    justify-content: center;
+}
+
+.photo-placeholder {
+    width: 100%;
+    height: 420px;
+    background-color: #F4E7C6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #8a7a70;
+    border-radius: 14px;
+    letter-spacing: 1px;
+}
