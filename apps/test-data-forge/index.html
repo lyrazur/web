@@ -4,23 +4,21 @@
   <meta charset="UTF-8" />
   <title>Test Data Forge – LyraZur Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     :root {
       --bg-page: #fafafa;
       --bg-card: #ffffff;
       --text-main: #222222;
       --text-muted: #666666;
-      --gold: #d4af37;
-      --gold-dark: #b08d2c;
+      --gold-dark: #b08d2c; /* zlatá jen pro hlavní nadpis */
       --border-soft: #e5e5e5;
       --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
       --radius-card: 16px;
       --transition-fast: 0.2s ease;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -29,13 +27,13 @@
       color: var(--text-main);
     }
 
-    /* MAIN MENU (same as homepage) */
+    /* MAIN MENU */
     nav.main-nav {
       background: white;
       border-bottom: 1px solid #eee;
       padding: 14px 20px;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start; /* zarovnání vlevo */
       gap: 40px;
       font-size: 1rem;
       margin-bottom: 32px;
@@ -49,7 +47,7 @@
     }
 
     nav.main-nav a:hover {
-      color: var(--gold-dark);
+      color: #000;
     }
 
     .page {
@@ -64,10 +62,10 @@
     }
 
     .page-title {
-      font-family: "Playfair Display", "Times New Roman", serif;
+      font-family: "Playfair Display", serif;
       font-size: 2.4rem;
       margin: 0 0 6px;
-      color: var(--gold-dark);
+      color: var(--gold-dark); /* jediný zlatý text */
     }
 
     .page-subtitle {
@@ -88,7 +86,7 @@
     }
 
     .breadcrumb a:hover {
-      color: var(--gold-dark);
+      color: #000;
     }
 
     /* SECTION CARDS */
@@ -107,7 +105,7 @@
       font-family: "Playfair Display", serif;
       font-size: 1.4rem;
       margin: 0 0 12px;
-      color: var(--gold-dark);
+      color: #222; /* už ne zlatá */
     }
 
     .section-description {
@@ -162,8 +160,8 @@
     select:focus,
     textarea:focus {
       outline: none;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
+      border-color: #999;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
     }
 
     textarea {
@@ -190,7 +188,7 @@
 
     .radio-option input,
     .checkbox-option input {
-      accent-color: var(--gold-dark);
+      accent-color: #444;
     }
 
     /* TOOLTIP */
@@ -202,8 +200,8 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: rgba(212, 175, 55, 0.12);
-      color: var(--gold-dark);
+      background: rgba(0,0,0,0.1);
+      color: #444;
       font-size: 0.7rem;
       cursor: default;
     }
@@ -256,14 +254,14 @@
     }
 
     .btn-primary {
-      background: var(--gold-dark);
+      background: #444;
       color: #fff;
-      border-color: var(--gold-dark);
+      border-color: #444;
     }
 
     .btn-primary:hover {
-      background: #c29a2f;
-      border-color: #c29a2f;
+      background: #000;
+      border-color: #000;
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
     }
@@ -274,8 +272,8 @@
     }
 
     .btn-ghost:hover {
-      border-color: var(--gold);
-      color: var(--gold-dark);
+      border-color: #444;
+      color: #000;
       transform: translateY(-1px);
     }
 
@@ -306,8 +304,8 @@
 
     .pill-option.active {
       background: #ffffff;
-      color: var(--gold-dark);
-      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+      color: #000;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
     }
 
     /* CARDS GRID */
@@ -335,7 +333,7 @@
       font-family: "Playfair Display", serif;
       font-size: 1.1rem;
       margin: 0 0 10px;
-      color: var(--gold-dark);
+      color: #222; /* už ne zlatá */
     }
 
     .inline-note {
@@ -356,7 +354,7 @@
     }
 
     .output-box {
-      background: #111111;
+      background: #111;
       color: #f5f5f5;
       border-radius: 12px;
       padding: 14px;
@@ -378,8 +376,8 @@
       gap: 4px;
       padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(212, 175, 55, 0.12);
-      color: var(--gold-dark);
+      background: rgba(0,0,0,0.1);
+      color: #444;
       font-size: 0.75rem;
     }
 
@@ -387,7 +385,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--gold-dark);
+      background: #444;
     }
 
     @media (max-width: 900px) {
@@ -400,10 +398,9 @@
 
 <body>
 
-<!-- ⭐ MAIN MENU (same as homepage) -->
+<!-- MAIN MENU -->
 <nav class="main-nav">
   <a href="/">Home</a>
-  <a href="/#software-testing">Software Testing</a>
 </nav>
 
 <div class="page">
@@ -415,7 +412,399 @@
     <p class="page-subtitle">Elegant test data generator for Software Testing.</p>
   </header>
 
-    <!-- OUTPUT SECTION -->
+    <!-- CONFIGURATION SECTION -->
+  <section class="section-card" id="configuration-section">
+    <h2 class="section-title">Configuration</h2>
+    <p class="section-description">
+      Choose what kind of data you want to generate and how it should be structured.
+    </p>
+
+    <div class="config-grid">
+      <div class="form-field">
+        <label class="form-label">
+          Data type
+          <span class="tooltip" data-tooltip="Select the logical structure of the generated records.">i</span>
+        </label>
+        <select id="dataTypeSelect">
+          <option value="user">User</option>
+          <option value="product" disabled>Product (coming soon)</option>
+          <option value="order" disabled>Order (coming soon)</option>
+          <option value="randomString" disabled>Random String (coming soon)</option>
+          <option value="dateSet" disabled>Date Set (coming soon)</option>
+          <option value="edgeCases" disabled>Edge Cases (coming soon)</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">
+          Record count
+          <span class="tooltip" data-tooltip="How many records should be generated in a single run.">i</span>
+        </label>
+        <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
+        <div class="inline-note">1–200 records</div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">
+          Output format
+          <span class="tooltip" data-tooltip="Choose between JSON or a table-like structure.">i</span>
+        </label>
+        <div class="pill-toggle" id="outputFormatToggle">
+          <div class="pill-option active" data-format="json">JSON</div>
+          <div class="pill-option" data-format="table">Table</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="btn btn-primary" id="generateBtn">
+        <span class="btn-icon">⚙️</span>
+        Generate
+      </button>
+      <button class="btn btn-ghost" id="copyBtn">
+        <span class="btn-icon">📋</span>
+        Copy
+      </button>
+      <button class="btn btn-ghost" id="downloadBtn">
+        <span class="btn-icon">⬇️</span>
+        Download JSON
+      </button>
+    </div>
+  </section>
+
+  <!-- FIELD CONFIGURATION -->
+  <section class="section-card" id="field-config-section">
+    <h2 class="section-title">Field configuration</h2>
+    <p class="section-description">
+      Fine‑tune how each field is generated. Configuration adapts to the selected data type.
+    </p>
+
+    <!-- USER CONFIGURATION CARDS -->
+    <div id="userConfigCards" class="cards-grid">
+
+      <!-- NAME SETTINGS -->
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Name settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Name language
+              <span class="tooltip" data-tooltip="Choose the language and style of generated names.">i</span>
+            </label>
+            <div class="radio-group" id="nameLanguageGroup">
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="english" checked />
+                <span>English</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="czech" />
+                <span>Czech</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="mixed" />
+                <span>Mixed</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="custom" />
+                <span>Custom list</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
+          <div class="form-label">
+            Czech name rules
+            <span class="tooltip" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
+          </div>
+          <div class="checkbox-group">
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleGenderEnding" checked />
+              <span>Apply gender‑correct surname endings</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleAllowNonDeclined" checked />
+              <span>Allow non‑declined surnames (Novak, Dvorak)</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleNoMaleWithOva" checked />
+              <span>Never mix male first name with “‑ová” surname</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleNoFemaleWithMaleSurname" checked />
+              <span>Never mix female first name with male‑form surname only</span>
+            </label>
+          </div>
+          <div class="inline-note">
+            Example of valid combinations: Eva Nováková, Miroslav Novák, Eva Novak.  
+            Invalid combinations (never generated): Miroslav Nováková.
+          </div>
+        </div>
+
+        <div id="customNameListBlock" style="display:none; margin-top:14px;">
+          <label class="form-label">
+            Custom name list
+            <span class="tooltip" data-tooltip="One name per line. If only first names are provided, surnames will be generated. If full names are provided, they are used as‑is.">i</span>
+          </label>
+          <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
+        </div>
+      </div>
+
+      <!-- ID SETTINGS -->
+      <div class="field-card">
+        <h3 class="field-card-title">ID settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID length
+              <span class="tooltip" data-tooltip="How many digits the ID should have. Leading zeros will be added if needed.">i</span>
+            </label>
+            <select id="idLengthSelect">
+              <option value="3">3 digits (000–999)</option>
+              <option value="4">4 digits (0000–9999)</option>
+              <option value="5" selected>5 digits (00000–99999)</option>
+              <option value="6">6 digits (000000–999999)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="idCustomLengthField" style="display:none;">
+            <label class="form-label">
+              Custom length
+              <span class="tooltip" data-tooltip="Specify the exact number of digits for the ID.">i</span>
+            </label>
+            <input id="idCustomLengthInput" class="input" type="number" min="1" max="12" value="5" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID range – from
+              <span class="tooltip" data-tooltip="Minimum numeric value for the ID. It will be padded with zeros if needed.">i</span>
+            </label>
+            <input id="idRangeFromInput" class="input" type="text" value="00000" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              ID range – to
+              <span class="tooltip" data-tooltip="Maximum numeric value for the ID. It will be padded with zeros if needed.">i</span>
+            </label>
+            <input id="idRangeToInput" class="input" type="text" value="99999" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID format
+              <span class="tooltip" data-tooltip="Choose how the final ID should look.">i</span>
+            </label>
+            <select id="idFormatSelect">
+              <option value="numeric">Numeric only</option>
+              <option value="numericPadded" selected>Numeric with leading zeros</option>
+              <option value="prefix">Prefix + number</option>
+              <option value="suffix">Suffix + number</option>
+              <option value="pattern">Custom pattern</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" id="idPrefixField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Prefix
+              <span class="tooltip" data-tooltip="Text added before the numeric part.">i</span>
+            </label>
+            <input id="idPrefixInput" class="input" type="text" placeholder="USR-" />
+          </div>
+        </div>
+
+        <div class="form-row" id="idSuffixField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Suffix
+              <span class="tooltip" data-tooltip="Text added after the numeric part.">i</span>
+            </label>
+            <input id="idSuffixInput" class="input" type="text" placeholder="-CZ" />
+          </div>
+        </div>
+
+        <div class="form-row" id="idPatternField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Custom pattern
+              <span class="tooltip" data-tooltip="Use # symbols for digits. Example: USR-{#####} → USR-00052.">i</span>
+            </label>
+            <input id="idPatternInput" class="input" type="text" value="USR-{#####}" />
+            <div class="inline-note">
+              <strong>#</strong> = digit. Use braces to group digits if you like.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div class="form-label">
+            Preview
+            <span class="tooltip" data-tooltip="Live preview of how generated IDs will look.">i</span>
+          </div>
+          <div id="idPreviewBox" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background:#f6f6f6; border-radius:8px; padding:8px 10px; color:#333;">
+            USR-00052<br />
+            USR-00053<br />
+            USR-00054
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL SETTINGS -->
+      <div class="field-card">
+        <h3 class="field-card-title">Email settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Domain
+              <span class="tooltip" data-tooltip="Domain part of the email address.">i</span>
+            </label>
+            <input id="emailDomainInput" class="input" type="text" value="example.com" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Email format
+              <span class="tooltip" data-tooltip="Choose how the email address should be constructed from the name.">i</span>
+            </label>
+            <div class="radio-group" id="emailFormatGroup">
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="firstLast" checked />
+                <span>{first}.{last}@domain</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="fullName" />
+                <span>{name}@domain</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="random" />
+                <span>Random pattern</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLE SETTINGS -->
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Role settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Roles
+              <span class="tooltip" data-tooltip="Select which roles can be assigned to generated users.">i</span>
+            </label>
+            <div class="checkbox-group" id="roleCheckboxGroup">
+              <label class="checkbox-option">
+                <input type="checkbox" value="user" checked />
+                <span>user</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="admin" checked />
+                <span>admin</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="tester" checked />
+                <span>tester</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="viewer" />
+                <span>viewer</span>
+              </label>
+            </div>
+
+            <div style="margin-top:8px;">
+              <button class="btn btn-ghost" type="button" id="addRoleBtn">
+                <span class="btn-icon">＋</span>
+                Add custom role
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" id="customRoleField" style="display:none; margin-top:4px;">
+          <div class="form-field">
+            <label class="form-label">New role</label>
+            <input id="customRoleInput" class="input" type="text" placeholder="e.g. auditor" />
+          </div>
+          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
+            <button class="btn btn-primary" type="button" id="confirmAddRoleBtn">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE STATUS -->
+      <div class="field-card">
+        <h3 class="field-card-title">Active status</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Active flag
+              <span class="tooltip" data-tooltip="Control how the 'active' flag is generated.">i</span>
+            </label>
+            <div class="radio-group" id="activeStatusGroup">
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="random" checked />
+                <span>Random</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="true" />
+                <span>Always true</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="false" />
+                <span>Always false</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATE SETTINGS -->
+      <div class="field-card">
+        <h3 class="field-card-title">Date settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              CreatedAt – from
+              <span class="tooltip" data-tooltip="Earliest possible creation date.">i</span>
+            </label>
+            <input id="createdFromInput" class="input" type="date" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              CreatedAt – to
+              <span class="tooltip" data-tooltip="Latest possible creation date.">i</span>
+            </label>
+            <input id="createdToInput" class="input" type="date" />
+          </div>
+        </div>
+
+        <div class="inline-note">
+          If left empty, dates will be generated within a reasonable default range.
+        </div>
+      </div>
+
+    </div> <!-- end userConfigCards -->
+  </section>
+
+  <!-- OUTPUT SECTION -->
   <section class="section-card" id="output-section">
     <h2 class="section-title">Output</h2>
     <p class="section-description">
@@ -437,9 +826,9 @@
       <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
     </div>
   </section>
-</div>
+</div> <!-- end .page -->
 
-<!-- ⭐ JAVASCRIPT -->
+  <!-- JAVASCRIPT -->
 <script>
 /* -----------------------------------------------------------
    Helper functions
@@ -671,7 +1060,7 @@ confirmAddRoleBtn.addEventListener("click", () => {
   customRoleField.style.display = "none";
 });
 
-/* -----------------------------------------------------------
+  /* -----------------------------------------------------------
    Name generation (English + Czech)
 ----------------------------------------------------------- */
 
@@ -959,6 +1348,7 @@ $("copyBtn").addEventListener("click", async () => {
 /* -----------------------------------------------------------
    Download button
 ----------------------------------------------------------- */
+
 $("downloadBtn").addEventListener("click", () => {
   if (!lastGeneratedData || lastGeneratedData.length === 0) return;
 
@@ -980,3 +1370,4 @@ $("downloadBtn").addEventListener("click", () => {
 
 </body>
 </html>
+
