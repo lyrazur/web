@@ -29,6 +29,29 @@
       color: var(--text-main);
     }
 
+    /* MAIN MENU (same as homepage) */
+    nav.main-nav {
+      background: white;
+      border-bottom: 1px solid #eee;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    nav.main-nav a {
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    nav.main-nav a:hover {
+      color: var(--gold-dark);
+    }
+
     .page {
       max-width: 1120px;
       margin: 0 auto;
@@ -68,8 +91,7 @@
       color: var(--gold-dark);
     }
 
-    /* Layout sections */
-
+    /* SECTION CARDS */
     .section-card {
       background: var(--bg-card);
       border-radius: var(--radius-card);
@@ -95,18 +117,11 @@
     }
 
     @keyframes cardFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Form basics */
-
+    /* FORM BASICS */
     .form-row {
       display: flex;
       flex-wrap: wrap;
@@ -127,12 +142,6 @@
       font-weight: 500;
       margin-bottom: 4px;
       color: var(--text-main);
-    }
-
-    .form-label span.helper {
-      font-weight: 400;
-      color: var(--text-muted);
-      font-size: 0.85rem;
     }
 
     .input,
@@ -184,8 +193,7 @@
       accent-color: var(--gold-dark);
     }
 
-    /* Tooltip */
-
+    /* TOOLTIP */
     .tooltip {
       position: relative;
       display: inline-flex;
@@ -220,26 +228,11 @@
       z-index: 10;
     }
 
-    .tooltip::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: 120%;
-      transform: translateX(-50%);
-      border-width: 5px;
-      border-style: solid;
-      border-color: #111 transparent transparent transparent;
-      opacity: 0;
-      transition: opacity 0.15s ease;
-    }
-
-    .tooltip:hover::after,
-    .tooltip:hover::before {
+    .tooltip:hover::after {
       opacity: 1;
     }
 
-    /* Buttons */
-
+    /* BUTTONS */
     .button-row {
       display: flex;
       flex-wrap: wrap;
@@ -286,20 +279,11 @@
       transform: translateY(-1px);
     }
 
-    .btn-icon {
-      font-size: 1rem;
-    }
-
-    /* Configuration section */
-
+    /* CONFIGURATION GRID */
     .config-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
-    }
-
-    .config-grid .form-field {
-      min-width: 200px;
     }
 
     .pill-toggle {
@@ -326,8 +310,7 @@
       box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
     }
 
-    /* Field configuration – cards layout */
-
+    /* CARDS GRID */
     .cards-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -355,27 +338,13 @@
       color: var(--gold-dark);
     }
 
-    .field-card + .field-card {
-      margin-top: 0;
-    }
-
-    .field-card .form-row {
-      margin-bottom: 10px;
-    }
-
-    .field-card small {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
     .inline-note {
       font-size: 0.8rem;
       color: var(--text-muted);
       margin-top: 4px;
     }
 
-    /* Output section */
-
+    /* OUTPUT */
     .output-meta {
       font-size: 0.85rem;
       color: var(--text-muted);
@@ -390,8 +359,8 @@
       background: #111111;
       color: #f5f5f5;
       border-radius: 12px;
-      padding: 14px 14px 12px;
-      font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+      padding: 14px;
+      font-family: "JetBrains Mono", monospace;
       font-size: 0.85rem;
       max-height: 360px;
       overflow: auto;
@@ -421,30 +390,22 @@
       background: var(--gold-dark);
     }
 
-    /* Responsive */
-
     @media (max-width: 900px) {
       .cards-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .page {
-        padding: 20px 12px 32px;
-      }
-
-      .section-card {
-        padding: 18px 16px 16px;
-      }
-
-      .field-card {
-        padding: 16px 14px 14px;
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
+
+<!-- ⭐ MAIN MENU (same as homepage) -->
+<nav class="main-nav">
+  <a href="/">Home</a>
+  <a href="/#software-testing">Software Testing</a>
+</nav>
+
 <div class="page">
   <header class="page-header">
     <div class="breadcrumb">
@@ -454,397 +415,7 @@
     <p class="page-subtitle">Elegant test data generator for Software Testing.</p>
   </header>
 
-  <!-- CONFIGURATION -->
-  <section class="section-card" id="configuration-section">
-    <h2 class="section-title">Configuration</h2>
-    <p class="section-description">
-      Choose what kind of data you want to generate and how it should be structured.
-    </p>
-
-    <div class="config-grid">
-      <div class="form-field">
-        <label class="form-label">
-          Data type
-          <span class="tooltip" data-tooltip="Select the logical structure of the generated records.">i</span>
-        </label>
-        <select id="dataTypeSelect">
-          <option value="user">User</option>
-          <option value="product" disabled>Product (coming soon)</option>
-          <option value="order" disabled>Order (coming soon)</option>
-          <option value="randomString" disabled>Random String (coming soon)</option>
-          <option value="dateSet" disabled>Date Set (coming soon)</option>
-          <option value="edgeCases" disabled>Edge Cases (coming soon)</option>
-        </select>
-      </div>
-
-      <div class="form-field">
-        <label class="form-label">
-          Record count
-          <span class="tooltip" data-tooltip="How many records should be generated in a single run.">i</span>
-        </label>
-        <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
-        <div class="inline-note">1–200 records</div>
-      </div>
-
-      <div class="form-field">
-        <label class="form-label">
-          Output format
-          <span class="tooltip" data-tooltip="Choose between JSON or a table-like structure.">i</span>
-        </label>
-        <div class="pill-toggle" id="outputFormatToggle">
-          <div class="pill-option active" data-format="json">JSON</div>
-          <div class="pill-option" data-format="table">Table</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="button-row">
-      <button class="btn btn-primary" id="generateBtn">
-        <span class="btn-icon">⚙️</span>
-        Generate
-      </button>
-      <button class="btn btn-ghost" id="copyBtn">
-        <span class="btn-icon">📋</span>
-        Copy
-      </button>
-      <button class="btn btn-ghost" id="downloadBtn">
-        <span class="btn-icon">⬇️</span>
-        Download JSON
-      </button>
-    </div>
-  </section>
-
-  <!-- FIELD CONFIGURATION -->
-  <section class="section-card" id="field-config-section">
-    <h2 class="section-title">Field configuration</h2>
-    <p class="section-description">
-      Fine‑tune how each field is generated. Configuration adapts to the selected data type.
-    </p>
-
-    <!-- USER CONFIGURATION CARDS -->
-    <div id="userConfigCards" class="cards-grid">
-      <!-- Name Settings – full width -->
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Name settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Name language
-              <span class="tooltip" data-tooltip="Choose the language and style of generated names.">i</span>
-            </label>
-            <div class="radio-group" id="nameLanguageGroup">
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="english" checked />
-                <span>English</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="czech" />
-                <span>Czech</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="mixed" />
-                <span>Mixed</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="custom" />
-                <span>Custom list</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
-          <div class="form-label">
-            Czech name rules
-            <span class="tooltip" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
-          </div>
-          <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleGenderEnding" checked />
-              <span>Apply gender‑correct surname endings</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleAllowNonDeclined" checked />
-              <span>Allow non‑declined surnames (Novak, Dvorak)</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoMaleWithOva" checked />
-              <span>Never mix male first name with “‑ová” surname</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoFemaleWithMaleSurname" checked />
-              <span>Never mix female first name with male‑form surname only</span>
-            </label>
-          </div>
-          <div class="inline-note">
-            Example of valid combinations: Eva Nováková, Miroslav Novák, Eva Novak.  
-            Invalid combinations (never generated): Miroslav Nováková.
-          </div>
-        </div>
-
-        <div id="customNameListBlock" style="display:none; margin-top:14px;">
-          <label class="form-label">
-            Custom name list
-            <span class="tooltip" data-tooltip="One name per line. If only first names are provided, surnames will be generated. If full names are provided, they are used as‑is.">i</span>
-          </label>
-          <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
-        </div>
-      </div>
-
-      <!-- ID Settings – half width -->
-      <div class="field-card">
-        <h3 class="field-card-title">ID settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              ID length
-              <span class="tooltip" data-tooltip="How many digits the ID should have. Leading zeros will be added if needed.">i</span>
-            </label>
-            <select id="idLengthSelect">
-              <option value="3">3 digits (000–999)</option>
-              <option value="4">4 digits (0000–9999)</option>
-              <option value="5" selected>5 digits (00000–99999)</option>
-              <option value="6">6 digits (000000–999999)</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-
-          <div class="form-field" id="idCustomLengthField" style="display:none;">
-            <label class="form-label">
-              Custom length
-              <span class="tooltip" data-tooltip="Specify the exact number of digits for the ID.">i</span>
-            </label>
-            <input id="idCustomLengthInput" class="input" type="number" min="1" max="12" value="5" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              ID range – from
-              <span class="tooltip" data-tooltip="Minimum numeric value for the ID. It will be padded with zeros if needed.">i</span>
-            </label>
-            <input id="idRangeFromInput" class="input" type="text" value="00000" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">
-              ID range – to
-              <span class="tooltip" data-tooltip="Maximum numeric value for the ID. It will be padded with zeros if needed.">i</span>
-            </label>
-            <input id="idRangeToInput" class="input" type="text" value="99999" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              ID format
-              <span class="tooltip" data-tooltip="Choose how the final ID should look.">i</span>
-            </label>
-            <select id="idFormatSelect">
-              <option value="numeric">Numeric only</option>
-              <option value="numericPadded" selected>Numeric with leading zeros</option>
-              <option value="prefix">Prefix + number</option>
-              <option value="suffix">Suffix + number</option>
-              <option value="pattern">Custom pattern</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" id="idPrefixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">
-              Prefix
-              <span class="tooltip" data-tooltip="Text added before the numeric part.">i</span>
-            </label>
-            <input id="idPrefixInput" class="input" type="text" placeholder="USR-" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idSuffixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">
-              Suffix
-              <span class="tooltip" data-tooltip="Text added after the numeric part.">i</span>
-            </label>
-            <input id="idSuffixInput" class="input" type="text" placeholder="-CZ" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idPatternField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">
-              Custom pattern
-              <span class="tooltip" data-tooltip="Use # symbols for digits. Example: USR-{#####} → USR-00052.">i</span>
-            </label>
-            <input id="idPatternInput" class="input" type="text" value="USR-{#####}" />
-            <div class="inline-note">
-              <strong>#</strong> = digit. Use braces to group digits if you like, e.g. <code>USR-{#####}</code>.
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:10px;">
-          <div class="form-label">
-            Preview
-            <span class="tooltip" data-tooltip="Live preview of how generated IDs will look.">i</span>
-          </div>
-          <div id="idPreviewBox" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background:#f6f6f6; border-radius:8px; padding:8px 10px; color:#333;">
-            USR-00052<br />
-            USR-00053<br />
-            USR-00054
-          </div>
-        </div>
-      </div>
-
-      <!-- Email Settings – half width -->
-      <div class="field-card">
-        <h3 class="field-card-title">Email settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Domain
-              <span class="tooltip" data-tooltip="Domain part of the email address.">i</span>
-            </label>
-            <input id="emailDomainInput" class="input" type="text" value="example.com" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Email format
-              <span class="tooltip" data-tooltip="Choose how the email address should be constructed from the name.">i</span>
-            </label>
-            <div class="radio-group" id="emailFormatGroup">
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="firstLast" checked />
-                <span>{first}.{last}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="fullName" />
-                <span>{name}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="random" />
-                <span>Random pattern</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Role Settings – full width -->
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Role settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Roles
-              <span class="tooltip" data-tooltip="Select which roles can be assigned to generated users.">i</span>
-            </label>
-            <div class="checkbox-group" id="roleCheckboxGroup">
-              <label class="checkbox-option">
-                <input type="checkbox" value="user" checked />
-                <span>user</span>
-              </label>
-              <label class="checkbox-option">
-                <input type="checkbox" value="admin" checked />
-                <span>admin</span>
-              </label>
-              <label class="checkbox-option">
-                <input type="checkbox" value="tester" checked />
-                <span>tester</span>
-              </label>
-              <label class="checkbox-option">
-                <input type="checkbox" value="viewer" />
-                <span>viewer</span>
-              </label>
-            </div>
-            <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addRoleBtn">
-                <span class="btn-icon">＋</span>
-                Add custom role
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row" id="customRoleField" style="display:none; margin-top:4px;">
-          <div class="form-field">
-            <label class="form-label">
-              New role
-            </label>
-            <input id="customRoleInput" class="input" type="text" placeholder="e.g. auditor" />
-          </div>
-          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
-            <button class="btn btn-primary" type="button" id="confirmAddRoleBtn">
-              Add
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Active Status – half width -->
-      <div class="field-card">
-        <h3 class="field-card-title">Active status</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Active flag
-              <span class="tooltip" data-tooltip="Control how the 'active' flag is generated.">i</span>
-            </label>
-            <div class="radio-group" id="activeStatusGroup">
-              <label class="radio-option">
-                <input type="radio" name="activeStatus" value="random" checked />
-                <span>Random</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="activeStatus" value="true" />
-                <span>Always true</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="activeStatus" value="false" />
-                <span>Always false</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Date Settings – half width -->
-      <div class="field-card">
-        <h3 class="field-card-title">Date settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              CreatedAt – from
-              <span class="tooltip" data-tooltip="Earliest possible creation date.">i</span>
-            </label>
-            <input id="createdFromInput" class="input" type="date" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">
-              CreatedAt – to
-              <span class="tooltip" data-tooltip="Latest possible creation date.">i</span>
-            </label>
-            <input id="createdToInput" class="input" type="date" />
-          </div>
-        </div>
-        <div class="inline-note">
-          If left empty, dates will be generated within a reasonable default range.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OUTPUT -->
+    <!-- OUTPUT SECTION -->
   <section class="section-card" id="output-section">
     <h2 class="section-title">Output</h2>
     <p class="section-description">
@@ -868,518 +439,544 @@
   </section>
 </div>
 
+<!-- ⭐ JAVASCRIPT -->
 <script>
-  // Utility helpers
-  function $(id) {
-    return document.getElementById(id);
+/* -----------------------------------------------------------
+   Helper functions
+----------------------------------------------------------- */
+
+function $(id) { return document.getElementById(id); }
+
+function getRadioValue(name) {
+  const el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : null;
+}
+
+function padNumber(num, length) {
+  let s = String(Math.floor(Math.abs(num)));
+  while (s.length < length) s = "0" + s;
+  return s;
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/* -----------------------------------------------------------
+   Output format toggle
+----------------------------------------------------------- */
+
+let outputFormat = "json";
+
+$("outputFormatToggle").addEventListener("click", (e) => {
+  const option = e.target.closest(".pill-option");
+  if (!option) return;
+
+  document.querySelectorAll("#outputFormatToggle .pill-option")
+    .forEach(el => el.classList.remove("active"));
+
+  option.classList.add("active");
+  outputFormat = option.dataset.format;
+
+  $("outputMetaFormat").textContent =
+    outputFormat === "json" ? "JSON format" : "Table format";
+
+  renderOutput(lastGeneratedData);
+});
+
+/* -----------------------------------------------------------
+   Name settings (Czech rules + custom list)
+----------------------------------------------------------- */
+
+const nameLanguageGroup = $("nameLanguageGroup");
+const czechNameRulesBlock = $("czechNameRulesBlock");
+const customNameListBlock = $("customNameListBlock");
+
+nameLanguageGroup.addEventListener("change", () => {
+  const value = getRadioValue("nameLanguage");
+
+  czechNameRulesBlock.style.display =
+    value === "czech" || value === "mixed" ? "block" : "none";
+
+  customNameListBlock.style.display =
+    value === "custom" ? "block" : "none";
+});
+
+/* -----------------------------------------------------------
+   ID settings logic
+----------------------------------------------------------- */
+
+const idLengthSelect = $("idLengthSelect");
+const idCustomLengthField = $("idCustomLengthField");
+const idCustomLengthInput = $("idCustomLengthInput");
+const idRangeFromInput = $("idRangeFromInput");
+const idRangeToInput = $("idRangeToInput");
+const idFormatSelect = $("idFormatSelect");
+const idPrefixField = $("idPrefixField");
+const idSuffixField = $("idSuffixField");
+const idPatternField = $("idPatternField");
+const idPrefixInput = $("idPrefixInput");
+const idSuffixInput = $("idSuffixInput");
+const idPatternInput = $("idPatternInput");
+const idPreviewBox = $("idPreviewBox");
+
+function getIdLength() {
+  const val = idLengthSelect.value;
+  if (val === "custom") {
+    const n = parseInt(idCustomLengthInput.value, 10);
+    return isNaN(n) || n < 1 ? 1 : Math.min(n, 12);
   }
+  return parseInt(val, 10);
+}
 
-  function getRadioValue(name) {
-    const el = document.querySelector('input[name="' + name + '"]:checked');
-    return el ? el.value : null;
+function syncIdRangePlaceholders() {
+  const len = getIdLength();
+  const max = Math.pow(10, len) - 1;
+  const minStr = padNumber(0, len);
+  const maxStr = padNumber(max, len);
+
+  if (!idRangeFromInput.value || idRangeFromInput.value.length !== len) {
+    idRangeFromInput.value = minStr;
   }
-
-  function padNumber(num, length) {
-    let s = String(Math.floor(Math.abs(num)));
-    while (s.length < length) s = "0" + s;
-    return s;
+  if (!idRangeToInput.value || idRangeToInput.value.length !== len) {
+    idRangeToInput.value = maxStr;
   }
+}
 
-  function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  // Output format toggle
-  const outputFormatToggle = $("outputFormatToggle");
-  let outputFormat = "json";
-
-  outputFormatToggle.addEventListener("click", (e) => {
-    const option = e.target.closest(".pill-option");
-    if (!option) return;
-    document
-      .querySelectorAll("#outputFormatToggle .pill-option")
-      .forEach((el) => el.classList.remove("active"));
-    option.classList.add("active");
-    outputFormat = option.dataset.format;
-    $("outputMetaFormat").textContent =
-      outputFormat === "json" ? "JSON format" : "Table format";
-    renderOutput(lastGeneratedData);
-  });
-
-  // Name language logic (Czech rules + custom list)
-  const nameLanguageGroup = $("nameLanguageGroup");
-  const czechNameRulesBlock = $("czechNameRulesBlock");
-  const customNameListBlock = $("customNameListBlock");
-
-  nameLanguageGroup.addEventListener("change", () => {
-    const value = getRadioValue("nameLanguage");
-    czechNameRulesBlock.style.display =
-      value === "czech" || value === "mixed" ? "block" : "none";
-    customNameListBlock.style.display = value === "custom" ? "block" : "none";
-  });
-
-  // ID settings logic
-  const idLengthSelect = $("idLengthSelect");
-  const idCustomLengthField = $("idCustomLengthField");
-  const idCustomLengthInput = $("idCustomLengthInput");
-  const idRangeFromInput = $("idRangeFromInput");
-  const idRangeToInput = $("idRangeToInput");
-  const idFormatSelect = $("idFormatSelect");
-  const idPrefixField = $("idPrefixField");
-  const idSuffixField = $("idSuffixField");
-  const idPatternField = $("idPatternField");
-  const idPrefixInput = $("idPrefixInput");
-  const idSuffixInput = $("idSuffixInput");
-  const idPatternInput = $("idPatternInput");
-  const idPreviewBox = $("idPreviewBox");
-
-  function getIdLength() {
-    const val = idLengthSelect.value;
-    if (val === "custom") {
-      const n = parseInt(idCustomLengthInput.value, 10);
-      return isNaN(n) || n < 1 ? 1 : Math.min(n, 12);
-    }
-    return parseInt(val, 10);
-  }
-
-  function syncIdRangePlaceholders() {
-    const len = getIdLength();
-    const max = Math.pow(10, len) - 1;
-    const minStr = padNumber(0, len);
-    const maxStr = padNumber(max, len);
-
-    if (!idRangeFromInput.value || idRangeFromInput.value.length !== len) {
-      idRangeFromInput.value = minStr;
-    }
-    if (!idRangeToInput.value || idRangeToInput.value.length !== len) {
-      idRangeToInput.value = maxStr;
-    }
-  }
-
-  idLengthSelect.addEventListener("change", () => {
-    const val = idLengthSelect.value;
-    idCustomLengthField.style.display = val === "custom" ? "block" : "none";
-    syncIdRangePlaceholders();
-    updateIdPreview();
-  });
-
-  idCustomLengthInput.addEventListener("input", () => {
-    syncIdRangePlaceholders();
-    updateIdPreview();
-  });
-
-  idRangeFromInput.addEventListener("input", updateIdPreview);
-  idRangeToInput.addEventListener("input", updateIdPreview);
-  idFormatSelect.addEventListener("change", () => {
-    const val = idFormatSelect.value;
-    idPrefixField.style.display = val === "prefix" ? "block" : "none";
-    idSuffixField.style.display = val === "suffix" ? "block" : "none";
-    idPatternField.style.display = val === "pattern" ? "block" : "none";
-    updateIdPreview();
-  });
-  idPrefixInput.addEventListener("input", updateIdPreview);
-  idSuffixInput.addEventListener("input", updateIdPreview);
-  idPatternInput.addEventListener("input", updateIdPreview);
-
-  function buildIdFromNumber(num) {
-    const len = getIdLength();
-    const format = idFormatSelect.value;
-    const padded = padNumber(num, len);
-
-    if (format === "numeric") return String(num);
-    if (format === "numericPadded") return padded;
-    if (format === "prefix") return (idPrefixInput.value || "") + padded;
-    if (format === "suffix") return padded + (idSuffixInput.value || "");
-    if (format === "pattern") {
-      const pattern = idPatternInput.value || "{#####}";
-      const digits = padded;
-      // Replace first {...} block containing # with digits
-      const match = pattern.match(/\{(#+)\}/);
-      if (match) {
-        const count = match[1].length;
-        const slice = digits.slice(-count);
-        return pattern.replace(match[0], slice);
-      }
-      // Fallback: replace first sequence of # outside braces
-      const hashMatch = pattern.match(/#+/);
-      if (hashMatch) {
-        const count = hashMatch[0].length;
-        const slice = digits.slice(-count);
-        return pattern.replace(hashMatch[0], slice);
-      }
-      return pattern + digits;
-    }
-    return padded;
-  }
-
-  function updateIdPreview() {
-    const len = getIdLength();
-    const fromStr = idRangeFromInput.value || padNumber(0, len);
-    const toStr = idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
-
-    const fromNum = parseInt(fromStr, 10);
-    const toNum = parseInt(toStr, 10);
-    if (isNaN(fromNum) || isNaN(toNum) || fromNum > toNum) {
-      idPreviewBox.textContent = "Invalid range.";
-      return;
-    }
-
-    const base = fromNum;
-    const lines = [];
-    for (let i = 0; i < 3; i++) {
-      const n = base + i;
-      if (n > toNum) break;
-      lines.push(buildIdFromNumber(n));
-    }
-    idPreviewBox.textContent = lines.join("\n");
-  }
-
-  // Initial sync
+idLengthSelect.addEventListener("change", () => {
+  const val = idLengthSelect.value;
+  idCustomLengthField.style.display = val === "custom" ? "block" : "none";
   syncIdRangePlaceholders();
   updateIdPreview();
+});
 
-  // Role adding
-  const addRoleBtn = $("addRoleBtn");
-  const customRoleField = $("customRoleField");
-  const customRoleInput = $("customRoleInput");
-  const confirmAddRoleBtn = $("confirmAddRoleBtn");
-  const roleCheckboxGroup = $("roleCheckboxGroup");
+idCustomLengthInput.addEventListener("input", () => {
+  syncIdRangePlaceholders();
+  updateIdPreview();
+});
 
-  addRoleBtn.addEventListener("click", () => {
-    customRoleField.style.display = "flex";
-    customRoleInput.focus();
-  });
+idRangeFromInput.addEventListener("input", updateIdPreview);
+idRangeToInput.addEventListener("input", updateIdPreview);
 
-  confirmAddRoleBtn.addEventListener("click", () => {
-    const value = (customRoleInput.value || "").trim();
-    if (!value) return;
-    const label = document.createElement("label");
-    label.className = "checkbox-option";
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.value = value;
-    input.checked = true;
-    const span = document.createElement("span");
-    span.textContent = value;
-    label.appendChild(input);
-    label.appendChild(span);
-    roleCheckboxGroup.appendChild(label);
-    customRoleInput.value = "";
-    customRoleField.style.display = "none";
-  });
+idFormatSelect.addEventListener("change", () => {
+  const val = idFormatSelect.value;
 
-  // Active status, email format etc. are read directly when generating
+  idPrefixField.style.display = val === "prefix" ? "block" : "none";
+  idSuffixField.style.display = val === "suffix" ? "block" : "none";
+  idPatternField.style.display = val === "pattern" ? "block" : "none";
 
-  // Simple name pools (English + Czech) – demo only
-  const englishFirstNamesMale = ["John", "Michael", "David", "James", "Robert"];
-  const englishFirstNamesFemale = ["Emma", "Olivia", "Sophia", "Ava", "Emily"];
-  const englishLastNames = ["Smith", "Johnson", "Brown", "Taylor", "Wilson"];
+  updateIdPreview();
+});
 
-  const czechFirstNamesMale = ["Miroslav", "Jan", "Petr", "Tomáš", "Martin"];
-  const czechFirstNamesFemale = ["Eva", "Lucie", "Jana", "Petra", "Alena"];
-  const czechLastNamesBase = ["Novák", "Dvořák", "Svoboda", "Procházka", "Černý"];
+idPrefixInput.addEventListener("input", updateIdPreview);
+idSuffixInput.addEventListener("input", updateIdPreview);
+idPatternInput.addEventListener("input", updateIdPreview);
 
-  function buildCzechSurname(base, isFemale, allowNonDeclined) {
-    if (!isFemale) {
-      // male
-      return base;
+function buildIdFromNumber(num) {
+  const len = getIdLength();
+  const format = idFormatSelect.value;
+  const padded = padNumber(num, len);
+
+  if (format === "numeric") return String(num);
+  if (format === "numericPadded") return padded;
+  if (format === "prefix") return (idPrefixInput.value || "") + padded;
+  if (format === "suffix") return padded + (idSuffixInput.value || "");
+  if (format === "pattern") {
+    const pattern = idPatternInput.value || "{#####}";
+    const digits = padded;
+
+    const match = pattern.match(/\{(#+)\}/);
+    if (match) {
+      const count = match[1].length;
+      const slice = digits.slice(-count);
+      return pattern.replace(match[0], slice);
     }
-    // female
-    if (!allowNonDeclined) {
-      // always declined
-      if (base.endsWith("ý")) return base.slice(0, -1) + "á";
-      if (base.endsWith("ek")) return base.slice(0, -2) + "ková";
-      if (base.endsWith("ák")) return base.slice(0, -2) + "áková";
-      return base + "ová";
+
+    const hashMatch = pattern.match(/#+/);
+    if (hashMatch) {
+      const count = hashMatch[0].length;
+      const slice = digits.slice(-count);
+      return pattern.replace(hashMatch[0], slice);
     }
-    // allow non-declined: randomly choose declined or not
-    const declined =
-      base.endsWith("ý") ? base.slice(0, -1) + "á" : base + "ová";
-    return Math.random() < 0.5 ? declined : base;
+
+    return pattern + digits;
   }
 
-  function generateName() {
-    const mode = getRadioValue("nameLanguage");
-    const useCzechRules =
-      mode === "czech" || mode === "mixed"
-        ? {
-            genderEnding: $("ruleGenderEnding").checked,
-            allowNonDeclined: $("ruleAllowNonDeclined").checked,
-            noMaleWithOva: $("ruleNoMaleWithOva").checked,
-            noFemaleWithMaleSurname: $("ruleNoFemaleWithMaleSurname").checked,
-          }
-        : null;
+  return padded;
+}
 
-    // Custom list
-    if (mode === "custom") {
-      const raw = $("customNameList").value || "";
-      const lines = raw
-        .split("\n")
-        .map((l) => l.trim())
-        .filter(Boolean);
-      if (lines.length > 0) {
-        const pick = lines[randomInt(0, lines.length - 1)];
-        return { fullName: pick, firstName: pick, lastName: "" };
-      }
-      // fallback to English
-    }
+function updateIdPreview() {
+  const len = getIdLength();
+  const fromStr = idRangeFromInput.value || padNumber(0, len);
+  const toStr = idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
 
-    // Mixed: randomly choose English or Czech
-    if (mode === "mixed") {
-      if (Math.random() < 0.5) {
-        return generateEnglishName();
-      } else {
-        return generateCzechName(useCzechRules);
-      }
-    }
+  const fromNum = parseInt(fromStr, 10);
+  const toNum = parseInt(toStr, 10);
 
-    if (mode === "czech") {
-      return generateCzechName(useCzechRules);
-    }
-
-    // default English
-    return generateEnglishName();
+  if (isNaN(fromNum) || isNaN(toNum) || fromNum > toNum) {
+    idPreviewBox.textContent = "Invalid range.";
+    return;
   }
 
-  function generateEnglishName() {
-    const isFemale = Math.random() < 0.5;
-    const first = isFemale
-      ? englishFirstNamesFemale[randomInt(0, englishFirstNamesFemale.length - 1)]
-      : englishFirstNamesMale[randomInt(0, englishFirstNamesMale.length - 1)];
-    const last =
-      englishLastNames[randomInt(0, englishLastNames.length - 1)];
-    return { fullName: first + " " + last, firstName: first, lastName: last };
+  const base = fromNum;
+  const lines = [];
+
+  for (let i = 0; i < 3; i++) {
+    const n = base + i;
+    if (n > toNum) break;
+    lines.push(buildIdFromNumber(n));
   }
 
-  function generateCzechName(rules) {
-    const isFemale = Math.random() < 0.5;
-    const first = isFemale
-      ? czechFirstNamesFemale[randomInt(0, czechFirstNamesFemale.length - 1)]
-      : czechFirstNamesMale[randomInt(0, czechFirstNamesMale.length - 1)];
-    const baseSurname =
-      czechLastNamesBase[randomInt(0, czechLastNamesBase.length - 1)];
+  idPreviewBox.textContent = lines.join("\n");
+}
 
-    let surname = baseSurname;
-    if (rules && rules.genderEnding) {
-      surname = buildCzechSurname(
-        baseSurname,
-        isFemale,
-        !!rules.allowNonDeclined
-      );
-    }
+syncIdRangePlaceholders();
+updateIdPreview();
 
-    // enforce "no male with -ová"
-    if (
-      rules &&
-      rules.noMaleWithOva &&
-      !isFemale &&
-      surname.toLowerCase().endsWith("ová")
-    ) {
-      surname = baseSurname; // fallback to base male form
-    }
+/* -----------------------------------------------------------
+   Role adding
+----------------------------------------------------------- */
 
-    // enforce "no female with male-only surname" – simplified:
-    if (
-      rules &&
-      rules.noFemaleWithMaleSurname &&
-      isFemale &&
-      !surname.toLowerCase().endsWith("á") &&
-      !surname.toLowerCase().endsWith("ová")
-    ) {
-      surname = buildCzechSurname(baseSurname, true, false);
-    }
+const addRoleBtn = $("addRoleBtn");
+const customRoleField = $("customRoleField");
+const customRoleInput = $("customRoleInput");
+const confirmAddRoleBtn = $("confirmAddRoleBtn");
+const roleCheckboxGroup = $("roleCheckboxGroup");
 
-    return { fullName: first + " " + surname, firstName: first, lastName: surname };
+addRoleBtn.addEventListener("click", () => {
+  customRoleField.style.display = "flex";
+  customRoleInput.focus();
+});
+
+confirmAddRoleBtn.addEventListener("click", () => {
+  const value = (customRoleInput.value || "").trim();
+  if (!value) return;
+
+  const label = document.createElement("label");
+  label.className = "checkbox-option";
+
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.value = value;
+  input.checked = true;
+
+  const span = document.createElement("span");
+  span.textContent = value;
+
+  label.appendChild(input);
+  label.appendChild(span);
+  roleCheckboxGroup.appendChild(label);
+
+  customRoleInput.value = "";
+  customRoleField.style.display = "none";
+});
+
+/* -----------------------------------------------------------
+   Name generation (English + Czech)
+----------------------------------------------------------- */
+
+const englishFirstNamesMale = ["John", "Michael", "David", "James", "Robert"];
+const englishFirstNamesFemale = ["Emma", "Olivia", "Sophia", "Ava", "Emily"];
+const englishLastNames = ["Smith", "Johnson", "Brown", "Taylor", "Wilson"];
+
+const czechFirstNamesMale = ["Miroslav", "Jan", "Petr", "Tomáš", "Martin"];
+const czechFirstNamesFemale = ["Eva", "Lucie", "Jana", "Petra", "Alena"];
+const czechLastNamesBase = ["Novák", "Dvořák", "Svoboda", "Procházka", "Černý"];
+
+function buildCzechSurname(base, isFemale, allowNonDeclined) {
+  if (!isFemale) return base;
+
+  if (!allowNonDeclined) {
+    if (base.endsWith("ý")) return base.slice(0, -1) + "á";
+    if (base.endsWith("ek")) return base.slice(0, -2) + "ková";
+    if (base.endsWith("ák")) return base.slice(0, -2) + "áková";
+    return base + "ová";
   }
 
-  function generateEmail(nameObj) {
-    const domain = ($("emailDomainInput").value || "example.com").trim();
-    const format = getRadioValue("emailFormat") || "firstLast";
+  const declined =
+    base.endsWith("ý") ? base.slice(0, -1) + "á" : base + "ová";
 
-    const first = nameObj.firstName || "";
-    const last = nameObj.lastName || "";
-    const full = nameObj.fullName || "";
+  return Math.random() < 0.5 ? declined : base;
+}
 
-    function slugify(str) {
-      return str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9]+/g, ".")
-        .replace(/^\.+|\.+$/g, "")
-        .toLowerCase();
-    }
+function generateEnglishName() {
+  const isFemale = Math.random() < 0.5;
+  const first = isFemale
+    ? englishFirstNamesFemale[randomInt(0, englishFirstNamesFemale.length - 1)]
+    : englishFirstNamesMale[randomInt(0, englishFirstNamesMale.length - 1)];
 
-    if (format === "firstLast") {
-      const local = slugify(first) + "." + slugify(last);
-      return local + "@" + domain;
-    }
-    if (format === "fullName") {
-      const local = slugify(full);
-      return local + "@" + domain;
-    }
-    // random pattern
-    const patterns = [
-      () => slugify(first[0] || "") + slugify(last),
-      () => slugify(first) + randomInt(1, 999),
-      () => slugify(first[0] || "") + slugify(last) + randomInt(1, 99),
-    ];
-    const local = patterns[randomInt(0, patterns.length - 1)]();
-    return local + "@" + domain;
+  const last =
+    englishLastNames[randomInt(0, englishLastNames.length - 1)];
+
+  return { fullName: first + " " + last, firstName: first, lastName: last };
+}
+
+function generateCzechName(rules) {
+  const isFemale = Math.random() < 0.5;
+  const first = isFemale
+    ? czechFirstNamesFemale[randomInt(0, czechFirstNamesFemale.length - 1)]
+    : czechFirstNamesMale[randomInt(0, czechFirstNamesMale.length - 1)];
+
+  const baseSurname =
+    czechLastNamesBase[randomInt(0, czechLastNamesBase.length - 1)];
+
+  let surname = baseSurname;
+
+  if (rules && rules.genderEnding) {
+    surname = buildCzechSurname(baseSurname, isFemale, !!rules.allowNonDeclined);
   }
 
-  function generateId() {
-    const len = getIdLength();
-    const fromStr = idRangeFromInput.value || padNumber(0, len);
-    const toStr =
-      idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
-    let fromNum = parseInt(fromStr, 10);
-    let toNum = parseInt(toStr, 10);
-    if (isNaN(fromNum)) fromNum = 0;
-    if (isNaN(toNum)) toNum = Math.pow(10, len) - 1;
-    if (fromNum > toNum) [fromNum, toNum] = [toNum, fromNum];
-    const n = randomInt(fromNum, toNum);
-    return buildIdFromNumber(n);
+  if (rules && rules.noMaleWithOva && !isFemale && surname.endsWith("ová")) {
+    surname = baseSurname;
   }
 
-  function generateRole() {
-    const checked = Array.from(
-      roleCheckboxGroup.querySelectorAll("input[type=checkbox]:checked")
-    ).map((el) => el.value);
-    if (checked.length === 0) return null;
-    return checked[randomInt(0, checked.length - 1)];
+  if (
+    rules &&
+    rules.noFemaleWithMaleSurname &&
+    isFemale &&
+    !surname.endsWith("á") &&
+    !surname.endsWith("ová")
+  ) {
+    surname = buildCzechSurname(baseSurname, true, false);
   }
 
-  function generateActive() {
-    const mode = getRadioValue("activeStatus") || "random";
-    if (mode === "true") return true;
-    if (mode === "false") return false;
-    return Math.random() < 0.5;
-  }
+  return { fullName: first + " " + surname, firstName: first, lastName: surname };
+}
 
-  function generateCreatedAt() {
-    const fromVal = $("createdFromInput").value;
-    const toVal = $("createdToInput").value;
+function generateName() {
+  const mode = getRadioValue("nameLanguage");
 
-    let fromDate = fromVal ? new Date(fromVal) : null;
-    let toDate = toVal ? new Date(toVal) : null;
+  const rules =
+    mode === "czech" || mode === "mixed"
+      ? {
+          genderEnding: $("ruleGenderEnding").checked,
+          allowNonDeclined: $("ruleAllowNonDeclined").checked,
+          noMaleWithOva: $("ruleNoMaleWithOva").checked,
+          noFemaleWithMaleSurname: $("ruleNoFemaleWithMaleSurname").checked,
+        }
+      : null;
 
-    if (!fromDate || isNaN(fromDate.getTime())) {
-      fromDate = new Date();
-      fromDate.setFullYear(fromDate.getFullYear() - 1);
-    }
-    if (!toDate || isNaN(toDate.getTime())) {
-      toDate = new Date();
-    }
-    if (fromDate > toDate) {
-      const tmp = fromDate;
-      fromDate = toDate;
-      toDate = tmp;
-    }
+  if (mode === "custom") {
+    const raw = $("customNameList").value || "";
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
 
-    const t1 = fromDate.getTime();
-    const t2 = toDate.getTime();
-    const t = randomInt(t1, t2);
-    return new Date(t).toISOString();
-  }
-
-  // Generate user record
-  function generateUserRecord() {
-    const id = generateId();
-    const nameObj = generateName();
-    const email = generateEmail(nameObj);
-    const role = generateRole();
-    const active = generateActive();
-    const createdAt = generateCreatedAt();
-
-    return {
-      id,
-      name: nameObj.fullName,
-      email,
-      role,
-      active,
-      createdAt,
-    };
-  }
-
-  let lastGeneratedData = [];
-
-  function renderOutput(data) {
-    const box = $("outputBox");
-    if (!data || data.length === 0) {
-      box.innerHTML =
-        '<span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>';
-      $("outputMetaRecords").textContent = "0 records";
-      return;
-    }
-
-    $("outputMetaRecords").textContent = data.length + " records";
-
-    if (outputFormat === "table") {
-      // simple table-like text
-      const headers = Object.keys(data[0]);
-      const lines = [];
-      lines.push(headers.join(" | "));
-      lines.push(headers.map(() => "---").join(" | "));
-      data.forEach((row) => {
-        lines.push(headers.map((h) => String(row[h])).join(" | "));
-      });
-      box.textContent = lines.join("\n");
-    } else {
-      box.textContent = JSON.stringify(data, null, 2);
+    if (lines.length > 0) {
+      const pick = lines[randomInt(0, lines.length - 1)];
+      return { fullName: pick, firstName: pick, lastName: "" };
     }
   }
 
-  // Generate button
-  $("generateBtn").addEventListener("click", () => {
-    const count = parseInt($("recordCountInput").value, 10) || 1;
-    const safeCount = Math.max(1, Math.min(count, 200));
-    $("recordCountInput").value = safeCount;
+  if (mode === "mixed") {
+    return Math.random() < 0.5
+      ? generateEnglishName()
+      : generateCzechName(rules);
+  }
 
-    const dataType = $("dataTypeSelect").value;
-    const records = [];
+  if (mode === "czech") return generateCzechName(rules);
 
-    if (dataType === "user") {
-      for (let i = 0; i < safeCount; i++) {
-        records.push(generateUserRecord());
-      }
-    } else {
-      // future: other data types
-    }
+  return generateEnglishName();
+}
 
-    lastGeneratedData = records;
-    renderOutput(records);
-  });
+/* -----------------------------------------------------------
+   Email generation
+----------------------------------------------------------- */
 
-  // Copy button
-  $("copyBtn").addEventListener("click", async () => {
-    if (!lastGeneratedData || lastGeneratedData.length === 0) return;
-    const text =
-      outputFormat === "json"
-        ? JSON.stringify(lastGeneratedData, null, 2)
-        : $("outputBox").textContent;
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (e) {
-      console.warn("Clipboard copy failed", e);
-    }
-  });
+function generateEmail(nameObj) {
+  const domain = ($("emailDomainInput").value || "example.com").trim();
+  const format = getRadioValue("emailFormat") || "firstLast";
 
-  // Download button
-  $("downloadBtn").addEventListener("click", () => {
-    if (!lastGeneratedData || lastGeneratedData.length === 0) return;
-    const blob = new Blob(
-      [JSON.stringify(lastGeneratedData, null, 2)],
-      { type: "application/json" }
-    );
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "test-data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
+  const first = nameObj.firstName || "";
+  const last = nameObj.lastName || "";
+  const full = nameObj.fullName || "";
+
+  function slugify(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, ".")
+      .replace(/^\.+|\.+$/g, "")
+      .toLowerCase();
+  }
+
+  if (format === "firstLast") {
+    return slugify(first) + "." + slugify(last) + "@" + domain;
+  }
+
+  if (format === "fullName") {
+    return slugify(full) + "@" + domain;
+  }
+
+  const patterns = [
+    () => slugify(first[0] || "") + slugify(last),
+    () => slugify(first) + randomInt(1, 999),
+    () => slugify(first[0] || "") + slugify(last) + randomInt(1, 99),
+  ];
+
+  return patterns[randomInt(0, patterns.length - 1)]() + "@" + domain;
+}
+
+/* -----------------------------------------------------------
+   Active flag + CreatedAt
+----------------------------------------------------------- */
+
+function generateActive() {
+  const mode = getRadioValue("activeStatus") || "random";
+  if (mode === "true") return true;
+  if (mode === "false") return false;
+  return Math.random() < 0.5;
+}
+
+function generateCreatedAt() {
+  const fromVal = $("createdFromInput").value;
+  const toVal = $("createdToInput").value;
+
+  let fromDate = fromVal ? new Date(fromVal) : null;
+  let toDate = toVal ? new Date(toVal) : null;
+
+  if (!fromDate || isNaN(fromDate.getTime())) {
+    fromDate = new Date();
+    fromDate.setFullYear(fromDate.getFullYear() - 1);
+  }
+
+  if (!toDate || isNaN(toDate.getTime())) {
+    toDate = new Date();
+  }
+
+  if (fromDate > toDate) [fromDate, toDate] = [toDate, fromDate];
+
+  const t = randomInt(fromDate.getTime(), toDate.getTime());
+  return new Date(t).toISOString();
+}
+
+/* -----------------------------------------------------------
+   Generate full user record
+----------------------------------------------------------- */
+
+function generateUserRecord() {
+  const id = buildIdFromNumber(
+    randomInt(
+      parseInt(idRangeFromInput.value, 10),
+      parseInt(idRangeToInput.value, 10)
+    )
+  );
+
+  const nameObj = generateName();
+  const email = generateEmail(nameObj);
+  const active = generateActive();
+  const createdAt = generateCreatedAt();
+
+  const roles = Array.from(
+    roleCheckboxGroup.querySelectorAll("input[type=checkbox]:checked")
+  ).map(el => el.value);
+
+  const role = roles.length > 0
+    ? roles[randomInt(0, roles.length - 1)]
+    : null;
+
+  return {
+    id,
+    name: nameObj.fullName,
+    email,
+    role,
+    active,
+    createdAt,
+  };
+}
+
+/* -----------------------------------------------------------
+   Rendering output
+----------------------------------------------------------- */
+
+let lastGeneratedData = [];
+
+function renderOutput(data) {
+  const box = $("outputBox");
+
+  if (!data || data.length === 0) {
+    box.innerHTML =
+      '<span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>';
+    $("outputMetaRecords").textContent = "0 records";
+    return;
+  }
+
+  $("outputMetaRecords").textContent = data.length + " records";
+
+  if (outputFormat === "table") {
+    const headers = Object.keys(data[0]);
+    const lines = [];
+
+    lines.push(headers.join(" | "));
+    lines.push(headers.map(() => "---").join(" | "));
+
+    data.forEach(row => {
+      lines.push(headers.map(h => String(row[h])).join(" | "));
+    });
+
+    box.textContent = lines.join("\n");
+  } else {
+    box.textContent = JSON.stringify(data, null, 2);
+  }
+}
+
+/* -----------------------------------------------------------
+   Generate button
+----------------------------------------------------------- */
+
+$("generateBtn").addEventListener("click", () => {
+  const count = parseInt($("recordCountInput").value, 10) || 1;
+  const safeCount = Math.max(1, Math.min(count, 200));
+  $("recordCountInput").value = safeCount;
+
+  const records = [];
+
+  for (let i = 0; i < safeCount; i++) {
+    records.push(generateUserRecord());
+  }
+
+  lastGeneratedData = records;
+  renderOutput(records);
+});
+
+/* -----------------------------------------------------------
+   Copy button
+----------------------------------------------------------- */
+
+$("copyBtn").addEventListener("click", async () => {
+  if (!lastGeneratedData.length) return;
+
+  const text =
+    outputFormat === "json"
+      ? JSON.stringify(lastGeneratedData, null, 2)
+      : $("outputBox").textContent;
+
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    console.warn("Clipboard copy failed", e);
+  }
+});
+
+/* -----------------------------------------------------------
+   Download button
+----------------------------------------------------------- */
+$("downloadBtn").addEventListener("click", () => {
+  if (!lastGeneratedData || lastGeneratedData.length === 0) return;
+
+  const blob = new Blob(
+    [JSON.stringify(lastGeneratedData, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "test-data.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
 </script>
+
 </body>
 </html>
