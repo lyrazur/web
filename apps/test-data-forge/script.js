@@ -1,657 +1,567 @@
-/* -------------------------------------------------------
-   Test Data Forge – Main Script
-   Modular architecture · LyraZur Tools
-------------------------------------------------------- */
-
-/* -------------------------------------------------------
-   DOM ELEMENTS
-------------------------------------------------------- */
-
-const dataTypeSelect = document.getElementById("dataTypeSelect");
-const recordCountInput = document.getElementById("recordCountInput");
-
-const outputFormatToggle = document.getElementById("outputFormatToggle");
-const outputBox = document.getElementById("outputBox");
-
-const globalFieldList = document.getElementById("globalFieldList");
-const selectAllFieldsBtn = document.getElementById("selectAllFieldsBtn");
-const deselectAllFieldsBtn = document.getElementById("deselectAllFieldsBtn");
-
-const generateBtn = document.getElementById("generateBtn");
-const copyBtn = document.getElementById("copyBtn");
-
-/* Config sections */
-const userConfigCards = document.getElementById("userConfigCards");
-const productConfigCards = document.getElementById("productConfigCards");
-const orderConfigCards = document.getElementById("orderConfigCards");
-const randomStringConfigCards = document.getElementById("randomStringConfigCards");
-const dateSetConfigCards = document.getElementById("dateSetConfigCards");
-const edgeCasesConfigCards = document.getElementById("edgeCasesConfigCards");
-
-/* -------------------------------------------------------
-   FIELD DEFINITIONS
-------------------------------------------------------- */
-
-const FIELD_SETS = {
-  user: [
-    { key: "user_id", label: "ID" },
-    { key: "user_name", label: "Name" },
-    { key: "user_email", label: "Email" },
-    { key: "user_role", label: "Role" },
-    { key: "user_active", label: "Active" },
-    { key: "user_createdAt", label: "CreatedAt" }
-  ],
-
-  product: [
-    { key: "product_id", label: "ID" },
-    { key: "product_name", label: "Name" },
-    { key: "product_category", label: "Category" },
-    { key: "product_price", label: "Price" },
-    { key: "product_stock", label: "Stock" }
-  ],
-
-  order: [],
-  randomString: [],
-  dateSet: [],
-  edgeCases: []
-};
-
-/* -------------------------------------------------------
-   RENDER GLOBAL FIELD SELECTOR
-------------------------------------------------------- */
-
-function renderGlobalFieldSelector(type) {
-  globalFieldList.innerHTML = "";
-
-  FIELD_SETS[type].forEach(field => {
-    const div = document.createElement("label");
-    div.className = "checkbox-option";
-
-    div.innerHTML = `
-      <input type="checkbox" class="global-field-checkbox" data-field="${field.key}" checked>
-      <span>${field.label}</span>
-    `;
-
-    globalFieldList.appendChild(div);
-  });
+function $(id) { return document.getElementById(id); }
+function getRadioValue(name) {
+  const el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : null;
 }
-
-/* -------------------------------------------------------
-   SELECT / DESELECT ALL FIELDS
-------------------------------------------------------- */
-
-selectAllFieldsBtn.addEventListener("click", () => {
-  document.querySelectorAll(".global-field-checkbox").forEach(cb => cb.checked = true);
-});
-
-deselectAllFieldsBtn.addEventListener("click", () => {
-  document.querySelectorAll(".global-field-checkbox").forEach(cb => cb.checked = false);
-});
-
-/* -------------------------------------------------------
-   SWITCH DATA TYPE – SHOW/HIDE CONFIG CARDS
-------------------------------------------------------- */
-
-function updateConfigVisibility(type) {
-  userConfigCards.style.display = type === "user" ? "grid" : "none";
-  productConfigCards.style.display = type === "product" ? "grid" : "none";
-  orderConfigCards.style.display = type === "order" ? "grid" : "none";
-  randomStringConfigCards.style.display = type === "randomString" ? "grid" : "none";
-  dateSetConfigCards.style.display = type === "dateSet" ? "grid" : "none";
-  edgeCasesConfigCards.style.display = type === "edgeCases" ? "grid" : "none";
+function padNumber(num, length) {
+  let s = String(Math.floor(Math.abs(num)));
+  while (s.length < length) s = "0" + s;
+  return s;
 }
-
-dataTypeSelect.addEventListener("change", () => {
-  const type = dataTypeSelect.value;
-  renderGlobalFieldSelector(type);
-  updateConfigVisibility(type);
-});
-
-/* Initial load */
-renderGlobalFieldSelector("user");
-updateConfigVisibility("user");
-
-/* -------------------------------------------------------
-   OUTPUT FORMAT TOGGLE
-------------------------------------------------------- */
-
-let outputFormat = "json";
-
-outputFormatToggle.addEventListener("click", e => {
-  if (!e.target.classList.contains("pill-option")) return;
-
-  document.querySelectorAll(".pill-option").forEach(opt => opt.classList.remove("active"));
-  e.target.classList.add("active");
-
-  outputFormat = e.target.dataset.format;
-});
-
-/* -------------------------------------------------------
-   ID GENERATION UTILITIES
-------------------------------------------------------- */
-
-function randomDigits(length) {
-  let out = "";
-  for (let i = 0; i < length; i++) out += Math.floor(Math.random() * 10);
-  return out;
-}
-
-function applyIdFormat(format, base, prefix = "", suffix = "", pattern = "") {
-  switch (format) {
-    case "numeric":
-      return base;
-
-    case "numericPadded":
-      return base.padStart(base.length, "0");
-
-    case "prefix":
-      return prefix + base;
-
-    case "suffix":
-      return base + suffix;
-
-    case "pattern":
-      return pattern.replace("{#####}", base);
-
-    default:
-      return base;
-  }
-}
-
-/* -------------------------------------------------------
-   USER ID PREVIEW
-------------------------------------------------------- */
-
-const idLengthSelect = document.getElementById("idLengthSelect");
-const idCustomLengthField = document.getElementById("idCustomLengthField");
-const idCustomLengthInput = document.getElementById("idCustomLengthInput");
-
-const idRangeFromInput = document.getElementById("idRangeFromInput");
-const idRangeToInput = document.getElementById("idRangeToInput");
-
-const idFormatSelect = document.getElementById("idFormatSelect");
-const idPrefixField = document.getElementById("idPrefixField");
-const idSuffixField = document.getElementById("idSuffixField");
-const idPatternField = document.getElementById("idPatternField");
-
-const idPrefixInput = document.getElementById("idPrefixInput");
-const idSuffixInput = document.getElementById("idSuffixInput");
-const idPatternInput = document.getElementById("idPatternInput");
-
-const idPreviewBox = document.getElementById("idPreviewBox");
-
-function updateIdPreview() {
-  let length = idLengthSelect.value === "custom"
-    ? Number(idCustomLengthInput.value)
-    : Number(idLengthSelect.value);
-
-  const base = randomDigits(length);
-  const format = idFormatSelect.value;
-
-  const preview = applyIdFormat(
-    format,
-    base,
-    idPrefixInput.value,
-    idSuffixInput.value,
-    idPatternInput.value
-  );
-
-  idPreviewBox.textContent = preview;
-}
-
-[idLengthSelect, idCustomLengthInput, idRangeFromInput, idRangeToInput,
- idFormatSelect, idPrefixInput, idSuffixInput, idPatternInput]
-.forEach(el => el.addEventListener("input", updateIdPreview));
-
-idLengthSelect.addEventListener("change", () => {
-  idCustomLengthField.style.display = idLengthSelect.value === "custom" ? "block" : "none";
-  updateIdPreview();
-});
-
-idFormatSelect.addEventListener("change", () => {
-  idPrefixField.style.display = idFormatSelect.value === "prefix" ? "block" : "none";
-  idSuffixField.style.display = idFormatSelect.value === "suffix" ? "block" : "none";
-  idPatternField.style.display = idFormatSelect.value === "pattern" ? "block" : "none";
-  updateIdPreview();
-});
-
-updateIdPreview();
-
-/* -------------------------------------------------------
-   PRODUCT ID PREVIEW
-------------------------------------------------------- */
-
-const productIdPatternInput = document.getElementById("productIdPatternInput");
-const productIdPreviewBox = document.getElementById("productIdPreviewBox");
-
-function updateProductIdPreview() {
-  const base = randomDigits(5);
-  const pattern = productIdPatternInput.value;
-  productIdPreviewBox.textContent = pattern.replace("{#####}", base);
-}
-
-productIdPatternInput.addEventListener("input", updateProductIdPreview);
-updateProductIdPreview();
-
-/* -------------------------------------------------------
-   NAME GENERATION (EN / CZ / MIX / CUSTOM)
-------------------------------------------------------- */
-
-const nameLanguageGroup = document.getElementById("nameLanguageGroup");
-const czechNameRulesBlock = document.getElementById("czechNameRulesBlock");
-const customNameListBlock = document.getElementById("customNameListBlock");
-const customNameList = document.getElementById("customNameList");
-
-function updateNameLanguageUI() {
-  const selected = document.querySelector("input[name='nameLanguage']:checked").value;
-
-  czechNameRulesBlock.style.display = selected === "czech" ? "block" : "none";
-  customNameListBlock.style.display = selected === "custom" ? "block" : "none";
-}
-
-nameLanguageGroup.addEventListener("change", updateNameLanguageUI);
-updateNameLanguageUI();
-
-/* -------------------------------------------------------
-   PRODUCT NAME SOURCE
-------------------------------------------------------- */
-
-const productNameSourceGroup = document.getElementById("productNameSourceGroup");
-const productCustomNameListBlock = document.getElementById("productCustomNameListBlock");
-const productCustomNameList = document.getElementById("productCustomNameList");
-
-function updateProductNameSourceUI() {
-  const selected = document.querySelector("input[name='productNameSource']:checked").value;
-  productCustomNameListBlock.style.display = selected === "custom" ? "block" : "none";
-}
-
-productNameSourceGroup.addEventListener("change", updateProductNameSourceUI);
-updateProductNameSourceUI();
-
-/* -------------------------------------------------------
-   RANDOM HELPERS
-------------------------------------------------------- */
-
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/* -------------------------------------------------------
-   NAME GENERATION
-------------------------------------------------------- */
+/* STATE */
+let outputFormat = "json";
+let lastGeneratedData = [];
+let currentDataType = "user";
 
-const EN_FIRST = ["John", "Emily", "Michael", "Sarah", "David", "Laura"];
-const EN_LAST = ["Smith", "Johnson", "Brown", "Taylor", "Anderson"];
+/* OUTPUT FORMAT TOGGLE */
+$("outputFormatToggle").addEventListener("click", (e) => {
+  const option = e.target.closest(".pill-option");
+  if (!option) return;
+  document.querySelectorAll("#outputFormatToggle .pill-option")
+    .forEach(el => el.classList.remove("active"));
+  option.classList.add("active");
+  outputFormat = option.dataset.format;
+  $("outputMetaFormat").textContent =
+    outputFormat === "json" ? "JSON format" : "Table format";
+  renderOutput(lastGeneratedData);
+});
 
-const CZ_FIRST = ["Jan", "Petr", "Lucie", "Tereza", "Martin", "Eva"];
-const CZ_LAST = ["Novák", "Svoboda", "Dvořák", "Procházka", "Černý", "Kučera"];
+/* DATA TYPE SWITCH */
+const userConfigCards = $("userConfigCards");
+const productConfigCards = $("productConfigCards");
 
-/* Czech rules */
-const ruleGenderEnding = document.getElementById("ruleGenderEnding");
-const ruleAllowNonDeclined = document.getElementById("ruleAllowNonDeclined");
-const ruleNoMaleWithOva = document.getElementById("ruleNoMaleWithOva");
-const ruleNoFemaleWithMaleSurname = document.getElementById("ruleNoFemaleWithMaleSurname");
+$("dataTypeSelect").addEventListener("change", () => {
+  currentDataType = $("dataTypeSelect").value;
+  userConfigCards.style.display = currentDataType === "user" ? "grid" : "none";
+  productConfigCards.style.display = currentDataType === "product" ? "grid" : "none";
+});
 
-function applyCzechSurnameRules(first, last) {
-  const isFemale = first.endsWith("a") || first.endsWith("e");
+/* NAME SETTINGS (USER) */
+const nameLanguageGroup = $("nameLanguageGroup");
+const czechNameRulesBlock = $("czechNameRulesBlock");
+const customNameListBlock = $("customNameListBlock");
 
-  if (isFemale) {
-    if (ruleNoFemaleWithMaleSurname.checked && !last.endsWith("á")) {
-      return last + "ová";
-    }
-    if (ruleGenderEnding.checked && !last.endsWith("á")) {
-      return last + "ová";
-    }
-  } else {
-    if (ruleNoMaleWithOva.checked && last.endsWith("ová")) {
-      return last.replace("ová", "");
-    }
+nameLanguageGroup.addEventListener("change", () => {
+  const value = getRadioValue("nameLanguage");
+  czechNameRulesBlock.style.display =
+    value === "czech" || value === "mixed" ? "block" : "none";
+  customNameListBlock.style.display =
+    value === "custom" ? "block" : "none";
+});
+
+/* ID SETTINGS (USER) */
+const idLengthSelect = $("idLengthSelect");
+const idCustomLengthField = $("idCustomLengthField");
+const idCustomLengthInput = $("idCustomLengthInput");
+const idRangeFromInput = $("idRangeFromInput");
+const idRangeToInput = $("idRangeToInput");
+const idFormatSelect = $("idFormatSelect");
+const idPrefixField = $("idPrefixField");
+const idSuffixField = $("idSuffixField");
+const idPatternField = $("idPatternField");
+const idPrefixInput = $("idPrefixInput");
+const idSuffixInput = $("idSuffixInput");
+const idPatternInput = $("idPatternInput");
+const idPreviewBox = $("idPreviewBox");
+
+function getIdLength() {
+  const val = idLengthSelect.value;
+  if (val === "custom") {
+    const n = parseInt(idCustomLengthInput.value, 10);
+    return isNaN(n) || n < 1 ? 1 : Math.min(n, 12);
   }
+  return parseInt(val, 10);
+}
 
-  return last;
+function syncIdRangePlaceholders() {
+  const len = getIdLength();
+  const max = Math.pow(10, len) - 1;
+  const minStr = padNumber(0, len);
+  const maxStr = padNumber(max, len);
+  if (!idRangeFromInput.value || idRangeFromInput.value.length !== len) {
+    idRangeFromInput.value = minStr;
+  }
+  if (!idRangeToInput.value || idRangeToInput.value.length !== len) {
+    idRangeToInput.value = maxStr;
+  }
+}
+
+idLengthSelect.addEventListener("change", () => {
+  const val = idLengthSelect.value;
+  idCustomLengthField.style.display = val === "custom" ? "block" : "none";
+  syncIdRangePlaceholders();
+  updateIdPreview();
+});
+idCustomLengthInput.addEventListener("input", () => {
+  syncIdRangePlaceholders();
+  updateIdPreview();
+});
+idRangeFromInput.addEventListener("input", updateIdPreview);
+idRangeToInput.addEventListener("input", updateIdPreview);
+
+idFormatSelect.addEventListener("change", () => {
+  const val = idFormatSelect.value;
+  idPrefixField.style.display = val === "prefix" ? "block" : "none";
+  idSuffixField.style.display = val === "suffix" ? "block" : "none";
+  idPatternField.style.display = val === "pattern" ? "block" : "none";
+  updateIdPreview();
+});
+idPrefixInput.addEventListener("input", updateIdPreview);
+idSuffixInput.addEventListener("input", updateIdPreview);
+idPatternInput.addEventListener("input", updateIdPreview);
+
+function buildIdFromNumber(num) {
+  const len = getIdLength();
+  const format = idFormatSelect.value;
+  const padded = padNumber(num, len);
+  if (format === "numeric") return String(num);
+  if (format === "numericPadded") return padded;
+  if (format === "prefix") return (idPrefixInput.value || "") + padded;
+  if (format === "suffix") return padded + (idSuffixInput.value || "");
+  if (format === "pattern") {
+    const pattern = idPatternInput.value || "{#####}";
+    const digits = padded;
+    const match = pattern.match(/\{(#+)\}/);
+    if (match) {
+      const count = match[1].length;
+      const slice = digits.slice(-count);
+      return pattern.replace(match[0], slice);
+    }
+    const hashMatch = pattern.match(/#+/);
+    if (hashMatch) {
+      const count = hashMatch[0].length;
+      const slice = digits.slice(-count);
+      return pattern.replace(hashMatch[0], slice);
+    }
+    return pattern + digits;
+  }
+  return padded;
+}
+
+function updateIdPreview() {
+  const len = getIdLength();
+  const fromStr = idRangeFromInput.value || padNumber(0, len);
+  const toStr = idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
+  const fromNum = parseInt(fromStr, 10);
+  const toNum = parseInt(toStr, 10);
+  if (isNaN(fromNum) || isNaN(toNum) || fromNum > toNum) {
+    idPreviewBox.textContent = "Invalid range.";
+    return;
+  }
+  const base = fromNum;
+  const lines = [];
+  for (let i = 0; i < 3; i++) {
+    const n = base + i;
+    if (n > toNum) break;
+    lines.push(buildIdFromNumber(n));
+  }
+  idPreviewBox.textContent = lines.join("\n");
+}
+
+syncIdRangePlaceholders();
+updateIdPreview();
+
+/* ROLE ADDING (USER) */
+const addRoleBtn = $("addRoleBtn");
+const customRoleField = $("customRoleField");
+const customRoleInput = $("customRoleInput");
+const confirmAddRoleBtn = $("confirmAddRoleBtn");
+const roleCheckboxGroup = $("roleCheckboxGroup");
+
+addRoleBtn.addEventListener("click", () => {
+  customRoleField.style.display = "flex";
+  customRoleInput.focus();
+});
+
+confirmAddRoleBtn.addEventListener("click", () => {
+  const value = (customRoleInput.value || "").trim();
+  if (!value) return;
+  const label = document.createElement("label");
+  label.className = "checkbox-option";
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.value = value;
+  input.checked = true;
+  const span = document.createElement("span");
+  span.textContent = value;
+  label.appendChild(input);
+  label.appendChild(span);
+  roleCheckboxGroup.appendChild(label);
+  customRoleInput.value = "";
+  customRoleField.style.display = "none";
+});
+
+/* USER NAME GENERATION */
+const englishFirstNamesMale = ["John", "Michael", "David", "James", "Robert"];
+const englishFirstNamesFemale = ["Emma", "Olivia", "Sophia", "Ava", "Emily"];
+const englishLastNames = ["Smith", "Johnson", "Brown", "Taylor", "Wilson"];
+
+const czechFirstNamesMale = ["Miroslav", "Jan", "Petr", "Tomáš", "Martin"];
+const czechFirstNamesFemale = ["Eva", "Lucie", "Jana", "Petra", "Alena"];
+const czechLastNamesBase = ["Novák", "Dvořák", "Svoboda", "Procházka", "Černý"];
+
+function buildCzechSurname(base, isFemale, allowNonDeclined) {
+  if (!isFemale) return base;
+  if (!allowNonDeclined) {
+    if (base.endsWith("ý")) return base.slice(0, -1) + "á";
+    if (base.endsWith("ek")) return base.slice(0, -2) + "ková";
+    if (base.endsWith("ák")) return base.slice(0, -2) + "áková";
+    return base + "ová";
+  }
+  const declined =
+    base.endsWith("ý") ? base.slice(0, -1) + "á" : base + "ová";
+  return Math.random() < 0.5 ? declined : base;
+}
+
+function generateEnglishName() {
+  const isFemale = Math.random() < 0.5;
+  const first = isFemale
+    ? englishFirstNamesFemale[randomInt(0, englishFirstNamesFemale.length - 1)]
+    : englishFirstNamesMale[randomInt(0, englishFirstNamesMale.length - 1)];
+  const last =
+    englishLastNames[randomInt(0, englishLastNames.length - 1)];
+  return { fullName: first + " " + last, firstName: first, lastName: last };
+}
+
+function generateCzechName(rules) {
+  const isFemale = Math.random() < 0.5;
+  const first = isFemale
+    ? czechFirstNamesFemale[randomInt(0, czechFirstNamesFemale.length - 1)]
+    : czechFirstNamesMale[randomInt(0, czechFirstNamesMale.length - 1)];
+  const baseSurname =
+    czechLastNamesBase[randomInt(0, czechLastNamesBase.length - 1)];
+  let surname = baseSurname;
+  if (rules && rules.genderEnding) {
+    surname = buildCzechSurname(baseSurname, isFemale, !!rules.allowNonDeclined);
+  }
+  if (rules && rules.noMaleWithOva && !isFemale && surname.endsWith("ová")) {
+    surname = baseSurname;
+  }
+  if (
+    rules &&
+    rules.noFemaleWithMaleSurname &&
+    isFemale &&
+    !surname.endsWith("á") &&
+    !surname.endsWith("ová")
+  ) {
+    surname = buildCzechSurname(baseSurname, true, false);
+  }
+  return { fullName: first + " " + surname, firstName: first, lastName: surname };
 }
 
 function generateName() {
-  const mode = document.querySelector("input[name='nameLanguage']:checked").value;
-
-  if (mode === "english") {
-    return pickRandom(EN_FIRST) + " " + pickRandom(EN_LAST);
-  }
-
-  if (mode === "czech") {
-    const first = pickRandom(CZ_FIRST);
-    let last = pickRandom(CZ_LAST);
-    last = applyCzechSurnameRules(first, last);
-    return first + " " + last;
-  }
-
-  if (mode === "mixed") {
-    const first = pickRandom([...EN_FIRST, ...CZ_FIRST]);
-    const last = pickRandom([...EN_LAST, ...CZ_LAST]);
-    return first + " " + last;
-  }
-
+  const mode = getRadioValue("nameLanguage");
+  const rules =
+    mode === "czech" || mode === "mixed"
+      ? {
+          genderEnding: $("ruleGenderEnding").checked,
+          allowNonDeclined: $("ruleAllowNonDeclined").checked,
+          noMaleWithOva: $("ruleNoMaleWithOva").checked,
+          noFemaleWithMaleSurname: $("ruleNoFemaleWithMaleSurname").checked,
+        }
+      : null;
   if (mode === "custom") {
-    const list = customNameList.value
-      .split("\n")
-      .map(x => x.trim())
-      .filter(x => x.length > 0);
-
-    if (list.length === 0) return "Unknown";
-    return pickRandom(list);
+    const raw = $("customNameList").value || "";
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+    if (lines.length > 0) {
+      const pick = lines[randomInt(0, lines.length - 1)];
+      return { fullName: pick, firstName: pick, lastName: "" };
+    }
   }
-}
-
-/* -------------------------------------------------------
-   EMAIL GENERATION
-------------------------------------------------------- */
-
-const emailDomainInput = document.getElementById("emailDomainInput");
-const emailFormatSelect = document.getElementById("emailFormatSelect");
-const emailCustomPatternInput = document.getElementById("emailCustomPatternInput");
-const emailCustomPatternField = document.getElementById("emailCustomPatternField");
-
-emailFormatSelect.addEventListener("change", () => {
-  emailCustomPatternField.style.display =
-    emailFormatSelect.value === "custom" ? "block" : "none";
-});
-
-function generateEmail(fullName) {
-  const domain = emailDomainInput.value.trim() || "example.com";
-  const [first, last] = fullName.toLowerCase().split(" ");
-
-  switch (emailFormatSelect.value) {
-    case "first.last":
-      return `${first}.${last}@${domain}`;
-    case "firstlast":
-      return `${first}${last}@${domain}`;
-    case "f.last":
-      return `${first[0]}.${last}@${domain}`;
-    case "custom":
-      return emailCustomPatternInput.value
-        .replace("{first}", first)
-        .replace("{last}", last)
-        .replace("{domain}", domain);
-    default:
-      return `${first}.${last}@${domain}`;
+  if (mode === "mixed") {
+    return Math.random() < 0.5
+      ? generateEnglishName()
+      : generateCzechName(rules);
   }
+  if (mode === "czech") return generateCzechName(rules);
+  return generateEnglishName();
 }
 
-/* -------------------------------------------------------
-   ROLE GENERATION
-------------------------------------------------------- */
-
-const roleCheckboxGroup = document.getElementById("roleCheckboxGroup");
-
-function generateRole() {
-  const selected = [...roleCheckboxGroup.querySelectorAll("input:checked")]
-    .map(cb => cb.value);
-
-  if (selected.length === 0) return "none";
-  return pickRandom(selected);
+/* USER EMAIL / ACTIVE / CREATEDAT */
+function generateEmail(nameObj) {
+  const domain = ($("emailDomainInput").value || "example.com").trim();
+  const format = getRadioValue("emailFormat") || "firstLast";
+  const first = nameObj.firstName || "";
+  const last = nameObj.lastName || "";
+  const full = nameObj.fullName || "";
+  function slugify(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, ".")
+      .replace(/^\.+|\.+$/g, "")
+      .toLowerCase();
+  }
+  if (format === "firstLast") {
+    return slugify(first) + "." + slugify(last) + "@" + domain;
+  }
+  if (format === "fullName") {
+    return slugify(full) + "@" + domain;
+  }
+  const patterns = [
+    () => slugify(first[0] || "") + slugify(last),
+    () => slugify(first) + randomInt(1, 999),
+    () => slugify(first[0] || "") + slugify(last) + randomInt(1, 99),
+  ];
+  return patterns[randomInt(0, patterns.length - 1)]() + "@" + domain;
 }
-
-/* -------------------------------------------------------
-   ACTIVE STATUS
-------------------------------------------------------- */
 
 function generateActive() {
-  const mode = document.querySelector("input[name='activeStatus']:checked").value;
-
-  if (mode === "alwaysTrue") return true;
-  if (mode === "alwaysFalse") return false;
+  const mode = getRadioValue("activeStatus") || "random";
+  if (mode === "true") return true;
+  if (mode === "false") return false;
   return Math.random() < 0.5;
 }
 
-/* -------------------------------------------------------
-   CREATED AT DATE
-------------------------------------------------------- */
-
-const createdAtFromInput = document.getElementById("createdAtFromInput");
-const createdAtToInput = document.getElementById("createdAtToInput");
-
 function generateCreatedAt() {
-  const from = new Date(createdAtFromInput.value).getTime();
-  const to = new Date(createdAtToInput.value).getTime();
-  const random = randomInt(from, to);
-  return new Date(random).toISOString().split("T")[0];
+  const fromVal = $("createdFromInput").value;
+  const toVal = $("createdToInput").value;
+  let fromDate = fromVal ? new Date(fromVal) : null;
+  let toDate = toVal ? new Date(toVal) : null;
+  if (!fromDate || isNaN(fromDate.getTime())) {
+    fromDate = new Date();
+    fromDate.setFullYear(fromDate.getFullYear() - 1);
+  }
+  if (!toDate || isNaN(toDate.getTime())) {
+    toDate = new Date();
+  }
+  if (fromDate > toDate) [fromDate, toDate] = [toDate, fromDate];
+  const t = randomInt(fromDate.getTime(), toDate.getTime());
+  return new Date(t).toISOString();
 }
 
-/* -------------------------------------------------------
-   PRODUCT NAME
-------------------------------------------------------- */
+/* USER RECORD */
+function generateUserRecord() {
+  const fromNum = parseInt(idRangeFromInput.value, 10);
+  const toNum = parseInt(idRangeToInput.value, 10);
+  const num = randomInt(isNaN(fromNum) ? 0 : fromNum, isNaN(toNum) ? 99999 : toNum);
+  const id = buildIdFromNumber(num);
+  const nameObj = generateName();
+  const email = generateEmail(nameObj);
+  const active = generateActive();
+  const createdAt = generateCreatedAt();
+  const roles = Array.from(
+    roleCheckboxGroup.querySelectorAll("input[type=checkbox]:checked")
+  ).map(el => el.value);
+  const role = roles.length > 0
+    ? roles[randomInt(0, roles.length - 1)]
+    : null;
+  return {
+    id,
+    name: nameObj.fullName,
+    email,
+    role,
+    active,
+    createdAt,
+  };
+}
 
-const PRESET_PRODUCTS = [
-  "Laptop Pro 15",
-  "Wireless Headphones",
-  "Smartwatch X",
-  "Coffee Maker Deluxe",
-  "LED Desk Lamp",
+/* PRODUCT CONFIG JS */
+const productNameSourceGroup = $("productNameSourceGroup");
+const productCustomNameBlock = $("productCustomNameBlock");
+const productCustomNameList = $("productCustomNameList");
+const productCategoryGroup = $("productCategoryGroup");
+const addProductCategoryBtn = $("addProductCategoryBtn");
+const productCustomCategoryField = $("productCustomCategoryField");
+const productCustomCategoryInput = $("productCustomCategoryInput");
+const confirmAddProductCategoryBtn = $("confirmAddProductCategoryBtn");
+const productPriceMinInput = $("productPriceMinInput");
+const productPriceMaxInput = $("productPriceMaxInput");
+const productCurrencySelect = $("productCurrencySelect");
+const productSkuPatternInput = $("productSkuPatternInput");
+const productWeightInput = $("productWeightInput");
+const productDimensionsInput = $("productDimensionsInput");
+
+productNameSourceGroup.addEventListener("change", () => {
+  const mode = getRadioValue("productNameSource");
+  productCustomNameBlock.style.display = mode === "custom" ? "block" : "none";
+});
+
+addProductCategoryBtn.addEventListener("click", () => {
+  productCustomCategoryField.style.display = "flex";
+  productCustomCategoryInput.focus();
+});
+
+confirmAddProductCategoryBtn.addEventListener("click", () => {
+  const value = (productCustomCategoryInput.value || "").trim();
+  if (!value) return;
+  const label = document.createElement("label");
+  label.className = "checkbox-option";
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.value = value;
+  input.checked = true;
+  const span = document.createElement("span");
+  span.textContent = value;
+  label.appendChild(input);
+  label.appendChild(span);
+  productCategoryGroup.appendChild(label);
+  productCustomCategoryInput.value = "";
+  productCustomCategoryField.style.display = "none";
+});
+
+/* PRODUCT NAME GENERATION */
+const builtinProductNames = [
+  "Wireless Mouse",
+  "Mechanical Keyboard",
+  "Noise‑cancelling Headphones",
+  "USB‑C Hub",
+  "4K Monitor",
+  "Laptop Stand",
+  "Ergonomic Chair",
+  "Desk Lamp",
+  "External SSD",
   "Bluetooth Speaker"
 ];
 
-function generateProductName() {
-  const mode = document.querySelector("input[name='productNameSource']:checked").value;
-
-  if (mode === "preset") return pickRandom(PRESET_PRODUCTS);
-
-  const list = productCustomNameList.value
-    .split("\n")
-    .map(x => x.trim())
-    .filter(x => x.length > 0);
-
-  if (list.length === 0) return "Unnamed Product";
-  return pickRandom(list);
-}
-
-/* -------------------------------------------------------
-   PRODUCT CATEGORY
-------------------------------------------------------- */
-
-const productCategoryGroup = document.getElementById("productCategoryGroup");
-const productCustomCategoryBlock = document.getElementById("productCustomCategoryBlock");
-const productCustomCategoryList = document.getElementById("productCustomCategoryList");
-
-productCategoryGroup.addEventListener("change", () => {
-  const customChecked = [...productCategoryGroup.querySelectorAll("input:checked")]
-    .some(cb => cb.value === "custom");
-
-  productCustomCategoryBlock.style.display = customChecked ? "block" : "none";
-});
-
-function generateProductCategory() {
-  const selected = [...productCategoryGroup.querySelectorAll("input:checked")]
-    .map(cb => cb.value);
-
-  if (selected.length === 0) return "none";
-
-  if (selected.includes("custom")) {
-    const list = productCustomCategoryList.value
-      .split("\n")
-      .map(x => x.trim())
-      .filter(x => x.length > 0);
-
-    if (list.length > 0) return pickRandom(list);
-  }
-
-  const filtered = selected.filter(x => x !== "custom");
-  return pickRandom(filtered);
-}
-
-/* -------------------------------------------------------
-   PRODUCT PRICE & STOCK
-------------------------------------------------------- */
-
-const productPriceMinInput = document.getElementById("productPriceMinInput");
-const productPriceMaxInput = document.getElementById("productPriceMaxInput");
-
-function generateProductPrice() {
-  return randomInt(
-    Number(productPriceMinInput.value),
-    Number(productPriceMaxInput.value)
-  );
-}
-
-const productStockMinInput = document.getElementById("productStockMinInput");
-const productStockMaxInput = document.getElementById("productStockMaxInput");
-
-function generateProductStock() {
-  return randomInt(
-    Number(productStockMinInput.value),
-    Number(productStockMaxInput.value)
-  );
-}
-
-/* -------------------------------------------------------
-   RECORD GENERATION – USER
-------------------------------------------------------- */
-
-function generateUserRecord() {
-  const fields = [...document.querySelectorAll(".global-field-checkbox:checked")]
-    .map(cb => cb.dataset.field);
-
-  const record = {};
-
-  if (fields.includes("user_id")) {
-    const length = idLengthSelect.value === "custom"
-      ? Number(idCustomLengthInput.value)
-      : Number(idLengthSelect.value);
-
-    const base = randomDigits(length);
-    record.id = applyIdFormat(
-      idFormatSelect.value,
-      base,
-      idPrefixInput.value,
-      idSuffixInput.value,
-      idPatternInput.value
-    );
-  }
-
-  if (fields.includes("user_name")) {
-    record.name = generateName();
-  }
-
-  if (fields.includes("user_email")) {
-    record.email = generateEmail(record.name || generateName());
-  }
-
-  if (fields.includes("user_role")) {
-    record.role = generateRole();
-  }
-
-  if (fields.includes("user_active")) {
-    record.active = generateActive();
-  }
-
-  if (fields.includes("user_createdAt")) {
-    record.createdAt = generateCreatedAt();
-  }
-
-  return record;
-}
-
-/* -------------------------------------------------------
-   RECORD GENERATION – PRODUCT
-------------------------------------------------------- */
-
-function generateProductRecord() {
-  const fields = [...document.querySelectorAll(".global-field-checkbox:checked")]
-    .map(cb => cb.dataset.field);
-
-  const record = {};
-
-  if (fields.includes("product_id")) {
-    const base = randomDigits(5);
-    record.id = productIdPatternInput.value.replace("{#####}", base);
-  }
-
-  if (fields.includes("product_name")) {
-    record.name = generateProductName();
-  }
-
-  if (fields.includes("product_category")) {
-    record.category = generateProductCategory();
-  }
-
-  if (fields.includes("product_price")) {
-    record.price = generateProductPrice();
-  }
-
-  if (fields.includes("product_stock")) {
-    record.stock = generateProductStock();
-  }
-
-  return record;
-}
-
-/* -------------------------------------------------------
-   MAIN GENERATOR
-------------------------------------------------------- */
-
-function generateRecords() {
-  const type = dataTypeSelect.value;
-  const count = Number(recordCountInput.value);
-
-  const records = [];
-
-  for (let i = 0; i < count; i++) {
-    if (type === "user") records.push(generateUserRecord());
-    if (type === "product") records.push(generateProductRecord());
-    if (type !== "user" && type !== "product") {
-      records.push({ message: "This data type is not implemented yet." });
+function pickProductName() {
+  const mode = getRadioValue("productNameSource") || "builtin";
+  if (mode === "custom") {
+    const raw = productCustomNameList.value || "";
+    const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+    if (lines.length > 0) {
+      return lines[randomInt(0, lines.length - 1)];
     }
   }
-
-  return records;
+  return builtinProductNames[randomInt(0, builtinProductNames.length - 1)];
 }
 
-/* -------------------------------------------------------
-   RENDER OUTPUT
-------------------------------------------------------- */
+/* PRODUCT CATEGORY */
+function pickProductCategory() {
+  const checked = Array.from(
+    productCategoryGroup.querySelectorAll("input[type=checkbox]:checked")
+  ).map(el => el.value);
+  if (!checked.length) return null;
+  return checked[randomInt(0, checked.length - 1)];
+}
 
-function renderOutput(records) {
-  if (outputFormat === "json") {
-    outputBox.textContent = JSON.stringify(records, null, 2);
+/* PRODUCT STOCK */
+function pickProductInStock() {
+  const mode = getRadioValue("productStockMode") || "random";
+  if (mode === "true") return true;
+  if (mode === "false") return false;
+  return Math.random() < 0.7; // mírně preferovat in stock
+}
+
+/* PRODUCT PRICE */
+function pickProductPrice() {
+  const min = parseFloat(productPriceMinInput.value) || 0;
+  const max = parseFloat(productPriceMaxInput.value) || min;
+  const from = Math.min(min, max);
+  const to = Math.max(min, max);
+  const value = from + Math.random() * (to - from);
+  return Math.round(value * 100) / 100;
+}
+
+/* PRODUCT SKU */
+function buildSku(pattern) {
+  const p = pattern || "PRD-#####";
+  const digits = padNumber(randomInt(0, 99999), 5);
+  const match = p.match(/#+/);
+  if (match) {
+    const count = match[0].length;
+    const slice = digits.slice(-count);
+    return p.replace(match[0], slice);
+  }
+  return p + digits;
+}
+
+/* PRODUCT RECORD */
+function generateProductRecord() {
+  const name = pickProductName();
+  const category = pickProductCategory();
+  const price = pickProductPrice();
+  const currency = productCurrencySelect.value || "CZK";
+  const inStock = pickProductInStock();
+  const sku = buildSku(productSkuPatternInput.value || "PRD-#####");
+  const weight = parseFloat(productWeightInput.value) || null;
+  const dimensions = (productDimensionsInput.value || "").trim() || null;
+
+  return {
+    id: sku,
+    name,
+    category,
+    price,
+    currency,
+    inStock,
+    sku,
+    weight,
+    dimensions
+  };
+}
+
+/* OUTPUT RENDERING */
+function renderOutput(data) {
+  const box = $("outputBox");
+  if (!data || data.length === 0) {
+    box.innerHTML =
+      '<span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>';
+    $("outputMetaRecords").textContent = "0 records";
     return;
   }
-
+  $("outputMetaRecords").textContent = data.length + " records";
   if (outputFormat === "table") {
-    if (records.length === 0) {
-      outputBox.textContent = "No data.";
-      return;
-    }
-
-    const keys = Object.keys(records[0]);
-    let table = keys.join("\t") + "\n";
-
-    records.forEach(rec => {
-      table += keys.map(k => rec[k]).join("\t") + "\n";
+    const headers = Object.keys(data[0]);
+    const lines = [];
+    lines.push(headers.join(" | "));
+    lines.push(headers.map(() => "---").join(" | "));
+    data.forEach(row => {
+      lines.push(headers.map(h => String(row[h])).join(" | "));
     });
-
-    outputBox.textContent = table;
+    box.textContent = lines.join("\n");
+  } else {
+    box.textContent = JSON.stringify(data, null, 2);
   }
 }
 
-/* -------------------------------------------------------
-   GENERATE BUTTON
-------------------------------------------------------- */
-
-generateBtn.addEventListener("click", () => {
-  const records = generateRecords();
+/* GENERATE BUTTON */
+$("generateBtn").addEventListener("click", () => {
+  const count = parseInt($("recordCountInput").value, 10) || 1;
+  const safeCount = Math.max(1, Math.min(count, 200));
+  $("recordCountInput").value = safeCount;
+  const records = [];
+  for (let i = 0; i < safeCount; i++) {
+    if (currentDataType === "user") {
+      records.push(generateUserRecord());
+    } else if (currentDataType === "product") {
+      records.push(generateProductRecord());
+    }
+  }
+  lastGeneratedData = records;
   renderOutput(records);
 });
 
-/* -------------------------------------------------------
-   COPY BUTTON
-------------------------------------------------------- */
-
-copyBtn.addEventListener("click", () => {
-  navigator.clipboard.writeText(outputBox.textContent);
-  copyBtn.textContent = "Copied!";
-  setTimeout(() => (copyBtn.textContent = "Copy"), 1200);
+/* COPY BUTTON */
+$("copyBtn").addEventListener("click", async () => {
+  if (!lastGeneratedData.length) return;
+  const text =
+    outputFormat === "json"
+      ? JSON.stringify(lastGeneratedData, null, 2)
+      : $("outputBox").textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    console.warn("Clipboard copy failed", e);
+  }
 });
 
+/* DOWNLOAD BUTTON */
+$("downloadBtn").addEventListener("click", () => {
+  if (!lastGeneratedData || lastGeneratedData.length === 0) return;
+  const blob = new Blob(
+    [JSON.stringify(lastGeneratedData, null, 2)],
+    { type: "application/json" }
+  );
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "test-data.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
