@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Test Data Forge</title>
+  <title>Test Data Forge – LyraZur Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --bg: #f9fafb;
-      --card-bg: #ffffff;
-      --accent: #d4af37;
-      --accent-soft: rgba(212, 175, 55, 0.12);
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --border: #e5e7eb;
-      --radius-lg: 18px;
-      --radius-md: 10px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
-      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-      --font-serif: "Playfair Display", "Georgia", serif;
+      --bg-page: #fafafa;
+      --bg-card: #ffffff;
+      --text-main: #222222;
+      --text-muted: #666666;
+      --gold: #d4af37;
+      --gold-dark: #b08d2c;
+      --border-soft: #e5e5e5;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
+      --radius-card: 16px;
+      --transition-fast: 0.2s ease;
     }
 
     * {
@@ -26,655 +24,1362 @@
 
     body {
       margin: 0;
-      padding: 0;
-      font-family: var(--font-sans);
-      background: radial-gradient(circle at top left, #fdfcfb, #f3f4f6);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-page);
       color: var(--text-main);
     }
 
     .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px 16px 40px;
-    }
-
-    .container {
-      width: 100%;
       max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
     }
 
-    header {
+    header.page-header {
+      text-align: left;
       margin-bottom: 32px;
-      text-align: center;
     }
 
-    header h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.4rem, 4vw, 3.2rem);
-      margin: 0 0 8px;
-      letter-spacing: 0.03em;
+    .page-title {
+      font-family: "Playfair Display", "Times New Roman", serif;
+      font-size: 2.4rem;
+      margin: 0 0 6px;
+      color: var(--gold-dark);
     }
 
-    header p {
+    .page-subtitle {
       margin: 0;
+      font-size: 1rem;
       color: var(--text-muted);
-      font-size: 0.98rem;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: #7c651e;
-      font-size: 0.75rem;
-      font-weight: 500;
-      margin-bottom: 10px;
+    .breadcrumb {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
-      gap: 24px;
+    .breadcrumb a:hover {
+      color: var(--gold-dark);
     }
 
-    @media (max-width: 840px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
+    /* Layout sections */
+
+    .section-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 24px 20px;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: cardFadeIn 0.22s ease-out forwards;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.4rem;
+      margin: 0 0 12px;
+      color: var(--gold-dark);
+    }
+
+    .section-description {
+      margin: 0 0 16px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      padding: 20px 20px 18px;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-    }
+    /* Form basics */
 
-    .card h2 {
-      margin: 0 0 12px;
-      font-size: 1.1rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #4b5563;
-    }
-
-    .card-subtitle {
-      margin: 0 0 16px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px 16px;
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
       margin-bottom: 16px;
     }
 
-    @media (max-width: 600px) {
-      .form-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    .form-field {
+      flex: 1 1 180px;
+      min-width: 160px;
     }
 
-    .field {
+    .form-label {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .form-label span.helper {
+      font-weight: 400;
+      color: var(--text-muted);
       font-size: 0.85rem;
     }
 
-    .field label {
-      font-weight: 500;
-      color: #374151;
-    }
-
-    .field small {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-    }
-
+    .input,
     select,
-    input[type="number"] {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      padding: 7px 9px;
-      font-size: 0.9rem;
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      font-size: 0.95rem;
       font-family: inherit;
-      background: #f9fafb;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      color: var(--text-main);
+      background: #ffffff;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     }
 
+    .input:focus,
     select:focus,
-    input[type="number"]:focus {
+    textarea:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
-      background: #ffffff;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
     }
 
-    .toggle-row {
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .radio-group,
+    .checkbox-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .toggle-group {
-      display: inline-flex;
-      padding: 3px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      border: 1px solid #e5e7eb;
-    }
-
-    .toggle-btn {
-      border: none;
-      background: transparent;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      color: #6b7280;
-      font-weight: 500;
-      transition: background 0.15s ease, color 0.15s ease;
-    }
-
-    .toggle-btn.active {
-      background: #111827;
-      color: #f9fafb;
-    }
-
-    .primary-btn {
-      border-radius: 999px;
-      border: none;
-      padding: 8px 18px;
+      gap: 10px 16px;
       font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-      background: linear-gradient(135deg, #111827, #1f2937);
-      color: #f9fafb;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
     }
 
-    .primary-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4);
-    }
-
-    .primary-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
-      opacity: 0.95;
-    }
-
-    .secondary-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .secondary-btn {
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      background: #ffffff;
-      color: #374151;
+    .radio-option,
+    .checkbox-option {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.1s ease, border-color 0.1s ease;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .secondary-btn:hover {
-      background: #f9fafb;
-      border-color: #9ca3af;
+    .radio-option input,
+    .checkbox-option input {
+      accent-color: var(--gold-dark);
     }
 
-    .secondary-btn span {
-      font-size: 0.9rem;
+    /* Tooltip */
+
+    .tooltip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-dark);
+      font-size: 0.7rem;
+      cursor: default;
     }
 
-    .output-header {
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: 130%;
+      transform: translateX(-50%);
+      background: #111;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      white-space: normal;
+      max-width: 220px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      z-index: 10;
+    }
+
+    .tooltip::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 120%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #111 transparent transparent transparent;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .tooltip:hover::after,
+    .tooltip:hover::before {
+      opacity: 1;
+    }
+
+    /* Buttons */
+
+    .button-row {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f3f3f3;
+      color: #333;
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .btn-primary {
+      background: var(--gold-dark);
+      color: #fff;
+      border-color: var(--gold-dark);
+    }
+
+    .btn-primary:hover {
+      background: #c29a2f;
+      border-color: #c29a2f;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border-soft);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+
+    /* Configuration section */
+
+    .config-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .config-grid .form-field {
+      min-width: 200px;
+    }
+
+    .pill-toggle {
+      display: inline-flex;
+      border-radius: 999px;
+      background: #f3f3f3;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .pill-option {
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #555;
+      user-select: none;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .pill-option.active {
+      background: #ffffff;
+      color: var(--gold-dark);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+    }
+
+    /* Field configuration – cards layout */
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .card-full {
+      grid-column: 1 / -1;
+    }
+
+    .field-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: cardFadeIn 0.22s ease-out forwards;
+    }
+
+    .field-card-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.1rem;
+      margin: 0 0 10px;
+      color: var(--gold-dark);
+    }
+
+    .field-card + .field-card {
+      margin-top: 0;
+    }
+
+    .field-card .form-row {
       margin-bottom: 10px;
     }
 
-    .output-header-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #4b5563;
-    }
-
-    .output-header-meta {
+    .field-card small {
       font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    .output-box {
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: #0b1120;
-      color: #e5e7eb;
-      padding: 10px 12px;
-      font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    .inline-note {
       font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Output section */
+
+    .output-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .output-box {
+      background: #111111;
+      color: #f5f5f5;
+      border-radius: 12px;
+      padding: 14px 14px 12px;
+      font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+      font-size: 0.85rem;
       max-height: 360px;
       overflow: auto;
       white-space: pre;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
+    .output-empty {
+      color: #888;
+      font-style: italic;
     }
 
-    th,
-    td {
-      border: 1px solid #1f2937;
-      padding: 4px 6px;
-      text-align: left;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-dark);
+      font-size: 0.75rem;
     }
 
-    th {
-      background: #020617;
-      position: sticky;
-      top: 0;
-      z-index: 1;
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold-dark);
     }
 
-    .footer-note {
-      margin-top: 18px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: right;
+    /* Responsive */
+
+    @media (max-width: 900px) {
+      .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 20px 12px 32px;
+      }
+
+      .section-card {
+        padding: 18px 16px 16px;
+      }
+
+      .field-card {
+        padding: 16px 14px 14px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="container">
-      <header>
-        <div class="badge">
-          <span class="badge-dot"></span>
-          <span>QA utility · Test Data Forge</span>
-        </div>
-        <h1>Generate perfect test data in seconds.</h1>
-        <p>A small but powerful test data generator for manual and automated testing.</p>
-      </header>
-
-      <main class="layout">
-        <!-- LEFT: Controls -->
-        <section class="card">
-          <h2>Configuration</h2>
-          <p class="card-subtitle">
-            Choose the data type, number of records, and output format. Everything runs locally in your browser.
-          </p>
-
-          <div class="form-grid">
-            <div class="field">
-              <label for="dataType">Data type</label>
-              <select id="dataType">
-                <option value="user">User</option>
-                <option value="product">Product</option>
-                <option value="order">Order</option>
-                <option value="randomString">Random string</option>
-                <option value="dateSet">Date set</option>
-                <option value="edgeCases">Edge cases</option>
-              </select>
-              <small>Different presets for common QA scenarios.</small>
-            </div>
-
-            <div class="field">
-              <label for="count">Record count</label>
-              <input id="count" type="number" min="1" max="200" value="5" />
-              <small>Recommended range: 1–200.</small>
-            </div>
-          </div>
-
-          <div class="toggle-row">
-            <div class="field" style="margin: 0;">
-              <label>Output format</label>
-              <div class="toggle-group" id="formatToggle">
-                <button class="toggle-btn active" data-format="json">JSON</button>
-                <button class="toggle-btn" data-format="table">Table</button>
-              </div>
-            </div>
-          </div>
-
-          <button class="primary-btn" id="generateBtn">
-            <span>⚡</span>
-            <span>Generate</span>
-          </button>
-
-          <div class="secondary-actions">
-            <button class="secondary-btn" id="copyBtn">
-              <span>📋</span>
-              <span>Copy to clipboard</span>
-            </button>
-            <button class="secondary-btn" id="downloadBtn">
-              <span>⬇️</span>
-              <span>Download JSON</span>
-            </button>
-          </div>
-        </section>
-
-        <!-- RIGHT: Output -->
-        <section class="card">
-          <div class="output-header">
-            <div class="output-header-title">Output</div>
-            <div class="output-header-meta" id="outputMeta">
-              Nothing generated yet.
-            </div>
-          </div>
-          <div class="output-box" id="outputBox">
-{ }
-          </div>
-          <div class="footer-note">
-            Tip: You can use the generated data directly in Postman, Cypress, or as seed data for test databases.
-          </div>
-        </section>
-      </main>
+<div class="page">
+  <header class="page-header">
+    <div class="breadcrumb">
+      <a href="/">LyraZur Tools</a> · <span>Test Data Forge</span>
     </div>
-  </div>
+    <h1 class="page-title">Test Data Forge</h1>
+    <p class="page-subtitle">Elegant test data generator for Software Testing.</p>
+  </header>
 
-  <script>
-    const dataTypeEl = document.getElementById("dataType");
-    const countEl = document.getElementById("count");
-    const formatToggleEl = document.getElementById("formatToggle");
-    const generateBtn = document.getElementById("generateBtn");
-    const copyBtn = document.getElementById("copyBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
-    const outputBox = document.getElementById("outputBox");
-    const outputMeta = document.getElementById("outputMeta");
+  <!-- CONFIGURATION -->
+  <section class="section-card" id="configuration-section">
+    <h2 class="section-title">Configuration</h2>
+    <p class="section-description">
+      Choose what kind of data you want to generate and how it should be structured.
+    </p>
 
-    let currentFormat = "json";
-    let lastData = [];
+    <div class="config-grid">
+      <div class="form-field">
+        <label class="form-label">
+          Data type
+          <span class="tooltip" data-tooltip="Select the logical structure of the generated records.">i</span>
+        </label>
+        <select id="dataTypeSelect">
+          <option value="user">User</option>
+          <option value="product" disabled>Product (coming soon)</option>
+          <option value="order" disabled>Order (coming soon)</option>
+          <option value="randomString" disabled>Random String (coming soon)</option>
+          <option value="dateSet" disabled>Date Set (coming soon)</option>
+          <option value="edgeCases" disabled>Edge Cases (coming soon)</option>
+        </select>
+      </div>
 
-    // --- Helpers ---
-    function randomItem(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+      <div class="form-field">
+        <label class="form-label">
+          Record count
+          <span class="tooltip" data-tooltip="How many records should be generated in a single run.">i</span>
+        </label>
+        <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
+        <div class="inline-note">1–200 records</div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">
+          Output format
+          <span class="tooltip" data-tooltip="Choose between JSON or a table-like structure.">i</span>
+        </label>
+        <div class="pill-toggle" id="outputFormatToggle">
+          <div class="pill-option active" data-format="json">JSON</div>
+          <div class="pill-option" data-format="table">Table</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="btn btn-primary" id="generateBtn">
+        <span class="btn-icon">⚙️</span>
+        Generate
+      </button>
+      <button class="btn btn-ghost" id="copyBtn">
+        <span class="btn-icon">📋</span>
+        Copy
+      </button>
+      <button class="btn btn-ghost" id="downloadBtn">
+        <span class="btn-icon">⬇️</span>
+        Download JSON
+      </button>
+    </div>
+  </section>
+
+  <!-- FIELD CONFIGURATION -->
+  <section class="section-card" id="field-config-section">
+    <h2 class="section-title">Field configuration</h2>
+    <p class="section-description">
+      Fine‑tune how each field is generated. Configuration adapts to the selected data type.
+    </p>
+
+    <!-- USER CONFIGURATION CARDS -->
+    <div id="userConfigCards" class="cards-grid">
+      <!-- Name Settings – full width -->
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Name settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Name language
+              <span class="tooltip" data-tooltip="Choose the language and style of generated names.">i</span>
+            </label>
+            <div class="radio-group" id="nameLanguageGroup">
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="english" checked />
+                <span>English</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="czech" />
+                <span>Czech</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="mixed" />
+                <span>Mixed</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="nameLanguage" value="custom" />
+                <span>Custom list</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
+          <div class="form-label">
+            Czech name rules
+            <span class="tooltip" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
+          </div>
+          <div class="checkbox-group">
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleGenderEnding" checked />
+              <span>Apply gender‑correct surname endings</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleAllowNonDeclined" checked />
+              <span>Allow non‑declined surnames (Novak, Dvorak)</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleNoMaleWithOva" checked />
+              <span>Never mix male first name with “‑ová” surname</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="ruleNoFemaleWithMaleSurname" checked />
+              <span>Never mix female first name with male‑form surname only</span>
+            </label>
+          </div>
+          <div class="inline-note">
+            Example of valid combinations: Eva Nováková, Miroslav Novák, Eva Novak.  
+            Invalid combinations (never generated): Miroslav Nováková.
+          </div>
+        </div>
+
+        <div id="customNameListBlock" style="display:none; margin-top:14px;">
+          <label class="form-label">
+            Custom name list
+            <span class="tooltip" data-tooltip="One name per line. If only first names are provided, surnames will be generated. If full names are provided, they are used as‑is.">i</span>
+          </label>
+          <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
+        </div>
+      </div>
+
+      <!-- ID Settings – half width -->
+      <div class="field-card">
+        <h3 class="field-card-title">ID settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID length
+              <span class="tooltip" data-tooltip="How many digits the ID should have. Leading zeros will be added if needed.">i</span>
+            </label>
+            <select id="idLengthSelect">
+              <option value="3">3 digits (000–999)</option>
+              <option value="4">4 digits (0000–9999)</option>
+              <option value="5" selected>5 digits (00000–99999)</option>
+              <option value="6">6 digits (000000–999999)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="idCustomLengthField" style="display:none;">
+            <label class="form-label">
+              Custom length
+              <span class="tooltip" data-tooltip="Specify the exact number of digits for the ID.">i</span>
+            </label>
+            <input id="idCustomLengthInput" class="input" type="number" min="1" max="12" value="5" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID range – from
+              <span class="tooltip" data-tooltip="Minimum numeric value for the ID. It will be padded with zeros if needed.">i</span>
+            </label>
+            <input id="idRangeFromInput" class="input" type="text" value="00000" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              ID range – to
+              <span class="tooltip" data-tooltip="Maximum numeric value for the ID. It will be padded with zeros if needed.">i</span>
+            </label>
+            <input id="idRangeToInput" class="input" type="text" value="99999" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              ID format
+              <span class="tooltip" data-tooltip="Choose how the final ID should look.">i</span>
+            </label>
+            <select id="idFormatSelect">
+              <option value="numeric">Numeric only</option>
+              <option value="numericPadded" selected>Numeric with leading zeros</option>
+              <option value="prefix">Prefix + number</option>
+              <option value="suffix">Suffix + number</option>
+              <option value="pattern">Custom pattern</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" id="idPrefixField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Prefix
+              <span class="tooltip" data-tooltip="Text added before the numeric part.">i</span>
+            </label>
+            <input id="idPrefixInput" class="input" type="text" placeholder="USR-" />
+          </div>
+        </div>
+
+        <div class="form-row" id="idSuffixField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Suffix
+              <span class="tooltip" data-tooltip="Text added after the numeric part.">i</span>
+            </label>
+            <input id="idSuffixInput" class="input" type="text" placeholder="-CZ" />
+          </div>
+        </div>
+
+        <div class="form-row" id="idPatternField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">
+              Custom pattern
+              <span class="tooltip" data-tooltip="Use # symbols for digits. Example: USR-{#####} → USR-00052.">i</span>
+            </label>
+            <input id="idPatternInput" class="input" type="text" value="USR-{#####}" />
+            <div class="inline-note">
+              <strong>#</strong> = digit. Use braces to group digits if you like, e.g. <code>USR-{#####}</code>.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div class="form-label">
+            Preview
+            <span class="tooltip" data-tooltip="Live preview of how generated IDs will look.">i</span>
+          </div>
+          <div id="idPreviewBox" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background:#f6f6f6; border-radius:8px; padding:8px 10px; color:#333;">
+            USR-00052<br />
+            USR-00053<br />
+            USR-00054
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Settings – half width -->
+      <div class="field-card">
+        <h3 class="field-card-title">Email settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Domain
+              <span class="tooltip" data-tooltip="Domain part of the email address.">i</span>
+            </label>
+            <input id="emailDomainInput" class="input" type="text" value="example.com" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Email format
+              <span class="tooltip" data-tooltip="Choose how the email address should be constructed from the name.">i</span>
+            </label>
+            <div class="radio-group" id="emailFormatGroup">
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="firstLast" checked />
+                <span>{first}.{last}@domain</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="fullName" />
+                <span>{name}@domain</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="emailFormat" value="random" />
+                <span>Random pattern</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Settings – full width -->
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Role settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Roles
+              <span class="tooltip" data-tooltip="Select which roles can be assigned to generated users.">i</span>
+            </label>
+            <div class="checkbox-group" id="roleCheckboxGroup">
+              <label class="checkbox-option">
+                <input type="checkbox" value="user" checked />
+                <span>user</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="admin" checked />
+                <span>admin</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="tester" checked />
+                <span>tester</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" value="viewer" />
+                <span>viewer</span>
+              </label>
+            </div>
+            <div style="margin-top:8px;">
+              <button class="btn btn-ghost" type="button" id="addRoleBtn">
+                <span class="btn-icon">＋</span>
+                Add custom role
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" id="customRoleField" style="display:none; margin-top:4px;">
+          <div class="form-field">
+            <label class="form-label">
+              New role
+            </label>
+            <input id="customRoleInput" class="input" type="text" placeholder="e.g. auditor" />
+          </div>
+          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
+            <button class="btn btn-primary" type="button" id="confirmAddRoleBtn">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Status – half width -->
+      <div class="field-card">
+        <h3 class="field-card-title">Active status</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              Active flag
+              <span class="tooltip" data-tooltip="Control how the 'active' flag is generated.">i</span>
+            </label>
+            <div class="radio-group" id="activeStatusGroup">
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="random" checked />
+                <span>Random</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="true" />
+                <span>Always true</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="activeStatus" value="false" />
+                <span>Always false</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date Settings – half width -->
+      <div class="field-card">
+        <h3 class="field-card-title">Date settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">
+              CreatedAt – from
+              <span class="tooltip" data-tooltip="Earliest possible creation date.">i</span>
+            </label>
+            <input id="createdFromInput" class="input" type="date" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              CreatedAt – to
+              <span class="tooltip" data-tooltip="Latest possible creation date.">i</span>
+            </label>
+            <input id="createdToInput" class="input" type="date" />
+          </div>
+        </div>
+        <div class="inline-note">
+          If left empty, dates will be generated within a reasonable default range.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTPUT -->
+  <section class="section-card" id="output-section">
+    <h2 class="section-title">Output</h2>
+    <p class="section-description">
+      Generated data preview. You can copy it or download it as JSON.
+    </p>
+
+    <div class="output-meta">
+      <div>
+        <span id="outputMetaRecords">0 records</span> ·
+        <span id="outputMetaFormat">JSON format</span>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Test Data Forge</span>
+      </div>
+    </div>
+
+    <div class="output-box" id="outputBox">
+      <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Utility helpers
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function getRadioValue(name) {
+    const el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  function padNumber(num, length) {
+    let s = String(Math.floor(Math.abs(num)));
+    while (s.length < length) s = "0" + s;
+    return s;
+  }
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Output format toggle
+  const outputFormatToggle = $("outputFormatToggle");
+  let outputFormat = "json";
+
+  outputFormatToggle.addEventListener("click", (e) => {
+    const option = e.target.closest(".pill-option");
+    if (!option) return;
+    document
+      .querySelectorAll("#outputFormatToggle .pill-option")
+      .forEach((el) => el.classList.remove("active"));
+    option.classList.add("active");
+    outputFormat = option.dataset.format;
+    $("outputMetaFormat").textContent =
+      outputFormat === "json" ? "JSON format" : "Table format";
+    renderOutput(lastGeneratedData);
+  });
+
+  // Name language logic (Czech rules + custom list)
+  const nameLanguageGroup = $("nameLanguageGroup");
+  const czechNameRulesBlock = $("czechNameRulesBlock");
+  const customNameListBlock = $("customNameListBlock");
+
+  nameLanguageGroup.addEventListener("change", () => {
+    const value = getRadioValue("nameLanguage");
+    czechNameRulesBlock.style.display =
+      value === "czech" || value === "mixed" ? "block" : "none";
+    customNameListBlock.style.display = value === "custom" ? "block" : "none";
+  });
+
+  // ID settings logic
+  const idLengthSelect = $("idLengthSelect");
+  const idCustomLengthField = $("idCustomLengthField");
+  const idCustomLengthInput = $("idCustomLengthInput");
+  const idRangeFromInput = $("idRangeFromInput");
+  const idRangeToInput = $("idRangeToInput");
+  const idFormatSelect = $("idFormatSelect");
+  const idPrefixField = $("idPrefixField");
+  const idSuffixField = $("idSuffixField");
+  const idPatternField = $("idPatternField");
+  const idPrefixInput = $("idPrefixInput");
+  const idSuffixInput = $("idSuffixInput");
+  const idPatternInput = $("idPatternInput");
+  const idPreviewBox = $("idPreviewBox");
+
+  function getIdLength() {
+    const val = idLengthSelect.value;
+    if (val === "custom") {
+      const n = parseInt(idCustomLengthInput.value, 10);
+      return isNaN(n) || n < 1 ? 1 : Math.min(n, 12);
     }
+    return parseInt(val, 10);
+  }
 
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+  function syncIdRangePlaceholders() {
+    const len = getIdLength();
+    const max = Math.pow(10, len) - 1;
+    const minStr = padNumber(0, len);
+    const maxStr = padNumber(max, len);
+
+    if (!idRangeFromInput.value || idRangeFromInput.value.length !== len) {
+      idRangeFromInput.value = minStr;
     }
+    if (!idRangeToInput.value || idRangeToInput.value.length !== len) {
+      idRangeToInput.value = maxStr;
+    }
+  }
 
-    function randomString(length) {
-      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let out = "";
-      for (let i = 0; i < length; i++) {
-        out += chars.charAt(Math.floor(Math.random() * chars.length));
+  idLengthSelect.addEventListener("change", () => {
+    const val = idLengthSelect.value;
+    idCustomLengthField.style.display = val === "custom" ? "block" : "none";
+    syncIdRangePlaceholders();
+    updateIdPreview();
+  });
+
+  idCustomLengthInput.addEventListener("input", () => {
+    syncIdRangePlaceholders();
+    updateIdPreview();
+  });
+
+  idRangeFromInput.addEventListener("input", updateIdPreview);
+  idRangeToInput.addEventListener("input", updateIdPreview);
+  idFormatSelect.addEventListener("change", () => {
+    const val = idFormatSelect.value;
+    idPrefixField.style.display = val === "prefix" ? "block" : "none";
+    idSuffixField.style.display = val === "suffix" ? "block" : "none";
+    idPatternField.style.display = val === "pattern" ? "block" : "none";
+    updateIdPreview();
+  });
+  idPrefixInput.addEventListener("input", updateIdPreview);
+  idSuffixInput.addEventListener("input", updateIdPreview);
+  idPatternInput.addEventListener("input", updateIdPreview);
+
+  function buildIdFromNumber(num) {
+    const len = getIdLength();
+    const format = idFormatSelect.value;
+    const padded = padNumber(num, len);
+
+    if (format === "numeric") return String(num);
+    if (format === "numericPadded") return padded;
+    if (format === "prefix") return (idPrefixInput.value || "") + padded;
+    if (format === "suffix") return padded + (idSuffixInput.value || "");
+    if (format === "pattern") {
+      const pattern = idPatternInput.value || "{#####}";
+      const digits = padded;
+      // Replace first {...} block containing # with digits
+      const match = pattern.match(/\{(#+)\}/);
+      if (match) {
+        const count = match[1].length;
+        const slice = digits.slice(-count);
+        return pattern.replace(match[0], slice);
       }
-      return out;
-    }
-
-    function randomEmail(name) {
-      const domains = ["example.com", "test.io", "qa.local", "mail.dev"];
-      const clean = name.toLowerCase().replace(/\s+/g, ".");
-      return clean + "@" + randomItem(domains);
-    }
-
-    function randomDateInRange(start, end) {
-      const ts = start.getTime() + Math.random() * (end.getTime() - start.getTime());
-      return new Date(ts);
-    }
-
-    function formatISODate(d) {
-      return d.toISOString();
-    }
-
-    // --- Data generators ---
-    function generateUser() {
-      const firstNames = ["Anna", "Lenka", "Eva", "Klara", "Tereza", "Peter", "John", "Lucas", "David", "Martin"];
-      const lastNames = ["Novak", "Smith", "Brown", "Taylor", "Dvorak", "Kral", "Green", "White"];
-      const roles = ["user", "admin", "tester", "viewer"];
-
-      const first = randomItem(firstNames);
-      const last = randomItem(lastNames);
-      const fullName = first + " " + last;
-
-      return {
-        id: randomInt(1000, 9999),
-        name: fullName,
-        email: randomEmail(fullName),
-        role: randomItem(roles),
-        active: Math.random() > 0.15,
-        createdAt: formatISODate(randomDateInRange(new Date(2020, 0, 1), new Date()))
-      };
-    }
-
-    function generateProduct() {
-      const adjectives = ["Premium", "Basic", "Deluxe", "Eco", "Smart", "Compact"];
-      const nouns = ["Chair", "Desk", "Lamp", "Monitor", "Keyboard", "Headphones"];
-      const categories = ["office", "home", "electronics", "accessories"];
-
-      const name = randomItem(adjectives) + " " + randomItem(nouns);
-
-      return {
-        id: "P-" + randomInt(10000, 99999),
-        name,
-        category: randomItem(categories),
-        price: parseFloat((Math.random() * 500 + 10).toFixed(2)),
-        inStock: Math.random() > 0.2,
-        tags: [randomItem(["new", "sale", "bestseller", "refurbished"])],
-      };
-    }
-
-    function generateOrder() {
-      const statuses = ["pending", "processing", "shipped", "delivered", "cancelled"];
-      const now = new Date();
-      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-
-      const created = randomDateInRange(past, now);
-      const shipped = Math.random() > 0.4 ? randomDateInRange(created, now) : null;
-
-      return {
-        orderId: "ORD-" + randomInt(100000, 999999),
-        userId: randomInt(1000, 9999),
-        total: parseFloat((Math.random() * 1000 + 50).toFixed(2)),
-        currency: "EUR",
-        status: randomItem(statuses),
-        createdAt: formatISODate(created),
-        shippedAt: shipped ? formatISODate(shipped) : null
-      };
-    }
-
-    function generateRandomString() {
-      const lengths = [8, 16, 32, 64, 128];
-      const length = randomItem(lengths);
-      return {
-        length,
-        value: randomString(length)
-      };
-    }
-
-    function generateDateSet() {
-      const now = new Date();
-      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-      const future = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-
-      return {
-        now: formatISODate(now),
-        past: formatISODate(randomDateInRange(past, now)),
-        future: formatISODate(randomDateInRange(now, future))
-      };
-    }
-
-    function generateEdgeCases() {
-      return {
-        emptyString: "",
-        longString: randomString(256),
-        zero: 0,
-        negativeNumber: -42,
-        maxInt32: 2147483647,
-        minInt32: -2147483648,
-        nullValue: null,
-        undefinedValue: undefined,
-        specialChars: "!@#$%^&*()_+{}[]:\";'<>?,./\\|`~",
-        unicodeText: "Žluťoučký kůň 🐎 über café 東京"
-      };
-    }
-
-    function generateData(type, count) {
-      const result = [];
-      for (let i = 0; i < count; i++) {
-        switch (type) {
-          case "user":
-            result.push(generateUser());
-            break;
-          case "product":
-            result.push(generateProduct());
-            break;
-          case "order":
-            result.push(generateOrder());
-            break;
-          case "randomString":
-            result.push(generateRandomString());
-            break;
-          case "dateSet":
-            result.push(generateDateSet());
-            break;
-          case "edgeCases":
-            result.push(generateEdgeCases());
-            break;
-          default:
-            result.push({ index: i, value: randomString(12) });
-        }
+      // Fallback: replace first sequence of # outside braces
+      const hashMatch = pattern.match(/#+/);
+      if (hashMatch) {
+        const count = hashMatch[0].length;
+        const slice = digits.slice(-count);
+        return pattern.replace(hashMatch[0], slice);
       }
-      return result;
+      return pattern + digits;
+    }
+    return padded;
+  }
+
+  function updateIdPreview() {
+    const len = getIdLength();
+    const fromStr = idRangeFromInput.value || padNumber(0, len);
+    const toStr = idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
+
+    const fromNum = parseInt(fromStr, 10);
+    const toNum = parseInt(toStr, 10);
+    if (isNaN(fromNum) || isNaN(toNum) || fromNum > toNum) {
+      idPreviewBox.textContent = "Invalid range.";
+      return;
     }
 
-    function renderJSON(data) {
-      outputBox.textContent = JSON.stringify(data, null, 2);
+    const base = fromNum;
+    const lines = [];
+    for (let i = 0; i < 3; i++) {
+      const n = base + i;
+      if (n > toNum) break;
+      lines.push(buildIdFromNumber(n));
     }
+    idPreviewBox.textContent = lines.join("\n");
+  }
 
-    function renderTable(data) {
-      if (!Array.isArray(data) || data.length === 0) {
-        outputBox.textContent = "No data.";
-        return;
+  // Initial sync
+  syncIdRangePlaceholders();
+  updateIdPreview();
+
+  // Role adding
+  const addRoleBtn = $("addRoleBtn");
+  const customRoleField = $("customRoleField");
+  const customRoleInput = $("customRoleInput");
+  const confirmAddRoleBtn = $("confirmAddRoleBtn");
+  const roleCheckboxGroup = $("roleCheckboxGroup");
+
+  addRoleBtn.addEventListener("click", () => {
+    customRoleField.style.display = "flex";
+    customRoleInput.focus();
+  });
+
+  confirmAddRoleBtn.addEventListener("click", () => {
+    const value = (customRoleInput.value || "").trim();
+    if (!value) return;
+    const label = document.createElement("label");
+    label.className = "checkbox-option";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = value;
+    input.checked = true;
+    const span = document.createElement("span");
+    span.textContent = value;
+    label.appendChild(input);
+    label.appendChild(span);
+    roleCheckboxGroup.appendChild(label);
+    customRoleInput.value = "";
+    customRoleField.style.display = "none";
+  });
+
+  // Active status, email format etc. are read directly when generating
+
+  // Simple name pools (English + Czech) – demo only
+  const englishFirstNamesMale = ["John", "Michael", "David", "James", "Robert"];
+  const englishFirstNamesFemale = ["Emma", "Olivia", "Sophia", "Ava", "Emily"];
+  const englishLastNames = ["Smith", "Johnson", "Brown", "Taylor", "Wilson"];
+
+  const czechFirstNamesMale = ["Miroslav", "Jan", "Petr", "Tomáš", "Martin"];
+  const czechFirstNamesFemale = ["Eva", "Lucie", "Jana", "Petra", "Alena"];
+  const czechLastNamesBase = ["Novák", "Dvořák", "Svoboda", "Procházka", "Černý"];
+
+  function buildCzechSurname(base, isFemale, allowNonDeclined) {
+    if (!isFemale) {
+      // male
+      return base;
+    }
+    // female
+    if (!allowNonDeclined) {
+      // always declined
+      if (base.endsWith("ý")) return base.slice(0, -1) + "á";
+      if (base.endsWith("ek")) return base.slice(0, -2) + "ková";
+      if (base.endsWith("ák")) return base.slice(0, -2) + "áková";
+      return base + "ová";
+    }
+    // allow non-declined: randomly choose declined or not
+    const declined =
+      base.endsWith("ý") ? base.slice(0, -1) + "á" : base + "ová";
+    return Math.random() < 0.5 ? declined : base;
+  }
+
+  function generateName() {
+    const mode = getRadioValue("nameLanguage");
+    const useCzechRules =
+      mode === "czech" || mode === "mixed"
+        ? {
+            genderEnding: $("ruleGenderEnding").checked,
+            allowNonDeclined: $("ruleAllowNonDeclined").checked,
+            noMaleWithOva: $("ruleNoMaleWithOva").checked,
+            noFemaleWithMaleSurname: $("ruleNoFemaleWithMaleSurname").checked,
+          }
+        : null;
+
+    // Custom list
+    if (mode === "custom") {
+      const raw = $("customNameList").value || "";
+      const lines = raw
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
+      if (lines.length > 0) {
+        const pick = lines[randomInt(0, lines.length - 1)];
+        return { fullName: pick, firstName: pick, lastName: "" };
       }
-
-      const keys = Object.keys(data[0]);
-      let html = "<table><thead><tr>";
-      keys.forEach(k => {
-        html += "<th>" + k + "</th>";
-      });
-      html += "</tr></thead><tbody>";
-
-      data.forEach(row => {
-        html += "<tr>";
-        keys.forEach(k => {
-          let value = row[k];
-          if (value === null) value = "null";
-          else if (value === undefined) value = "undefined";
-          else if (typeof value === "object") value = JSON.stringify(value);
-          html += "<td>" + String(value) + "</td>";
-        });
-        html += "</tr>";
-      });
-
-      html += "</tbody></table>";
-      outputBox.innerHTML = html;
+      // fallback to English
     }
 
-    function updateOutput() {
-      if (!lastData || lastData.length === 0) {
-        outputBox.textContent = "{ }";
-        outputMeta.textContent = "Nothing generated yet.";
-        return;
-      }
-
-      if (currentFormat === "json") {
-        renderJSON(lastData);
+    // Mixed: randomly choose English or Czech
+    if (mode === "mixed") {
+      if (Math.random() < 0.5) {
+        return generateEnglishName();
       } else {
-        renderTable(lastData);
+        return generateCzechName(useCzechRules);
       }
-
-      outputMeta.textContent = `${lastData.length} record(s) · Format: ${currentFormat.toUpperCase()}`;
     }
 
-    // --- Event handlers ---
-    formatToggleEl.addEventListener("click", (e) => {
-      const btn = e.target.closest(".toggle-btn");
-      if (!btn) return;
-      const format = btn.getAttribute("data-format");
-      if (!format) return;
+    if (mode === "czech") {
+      return generateCzechName(useCzechRules);
+    }
 
-      currentFormat = format;
+    // default English
+    return generateEnglishName();
+  }
 
-      Array.from(formatToggleEl.querySelectorAll(".toggle-btn")).forEach(b =>
-        b.classList.toggle("active", b === btn)
+  function generateEnglishName() {
+    const isFemale = Math.random() < 0.5;
+    const first = isFemale
+      ? englishFirstNamesFemale[randomInt(0, englishFirstNamesFemale.length - 1)]
+      : englishFirstNamesMale[randomInt(0, englishFirstNamesMale.length - 1)];
+    const last =
+      englishLastNames[randomInt(0, englishLastNames.length - 1)];
+    return { fullName: first + " " + last, firstName: first, lastName: last };
+  }
+
+  function generateCzechName(rules) {
+    const isFemale = Math.random() < 0.5;
+    const first = isFemale
+      ? czechFirstNamesFemale[randomInt(0, czechFirstNamesFemale.length - 1)]
+      : czechFirstNamesMale[randomInt(0, czechFirstNamesMale.length - 1)];
+    const baseSurname =
+      czechLastNamesBase[randomInt(0, czechLastNamesBase.length - 1)];
+
+    let surname = baseSurname;
+    if (rules && rules.genderEnding) {
+      surname = buildCzechSurname(
+        baseSurname,
+        isFemale,
+        !!rules.allowNonDeclined
       );
+    }
 
-      updateOutput();
-    });
+    // enforce "no male with -ová"
+    if (
+      rules &&
+      rules.noMaleWithOva &&
+      !isFemale &&
+      surname.toLowerCase().endsWith("ová")
+    ) {
+      surname = baseSurname; // fallback to base male form
+    }
 
-    generateBtn.addEventListener("click", () => {
-      const type = dataTypeEl.value;
-      let count = parseInt(countEl.value, 10);
-      if (isNaN(count) || count < 1) count = 1;
-      if (count > 200) count = 200;
-      countEl.value = count;
+    // enforce "no female with male-only surname" – simplified:
+    if (
+      rules &&
+      rules.noFemaleWithMaleSurname &&
+      isFemale &&
+      !surname.toLowerCase().endsWith("á") &&
+      !surname.toLowerCase().endsWith("ová")
+    ) {
+      surname = buildCzechSurname(baseSurname, true, false);
+    }
 
-      lastData = generateData(type, count);
-      updateOutput();
-    });
+    return { fullName: first + " " + surname, firstName: first, lastName: surname };
+  }
 
-    copyBtn.addEventListener("click", async () => {
-      if (!lastData || lastData.length === 0) return;
-      const text = JSON.stringify(lastData, null, 2);
-      try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => (copyBtn.textContent = "Copy to clipboard"), 1200);
-      } catch (e) {
-        alert("Copy failed. Your browser may not support clipboard API.");
+  function generateEmail(nameObj) {
+    const domain = ($("emailDomainInput").value || "example.com").trim();
+    const format = getRadioValue("emailFormat") || "firstLast";
+
+    const first = nameObj.firstName || "";
+    const last = nameObj.lastName || "";
+    const full = nameObj.fullName || "";
+
+    function slugify(str) {
+      return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9]+/g, ".")
+        .replace(/^\.+|\.+$/g, "")
+        .toLowerCase();
+    }
+
+    if (format === "firstLast") {
+      const local = slugify(first) + "." + slugify(last);
+      return local + "@" + domain;
+    }
+    if (format === "fullName") {
+      const local = slugify(full);
+      return local + "@" + domain;
+    }
+    // random pattern
+    const patterns = [
+      () => slugify(first[0] || "") + slugify(last),
+      () => slugify(first) + randomInt(1, 999),
+      () => slugify(first[0] || "") + slugify(last) + randomInt(1, 99),
+    ];
+    const local = patterns[randomInt(0, patterns.length - 1)]();
+    return local + "@" + domain;
+  }
+
+  function generateId() {
+    const len = getIdLength();
+    const fromStr = idRangeFromInput.value || padNumber(0, len);
+    const toStr =
+      idRangeToInput.value || padNumber(Math.pow(10, len) - 1, len);
+    let fromNum = parseInt(fromStr, 10);
+    let toNum = parseInt(toStr, 10);
+    if (isNaN(fromNum)) fromNum = 0;
+    if (isNaN(toNum)) toNum = Math.pow(10, len) - 1;
+    if (fromNum > toNum) [fromNum, toNum] = [toNum, fromNum];
+    const n = randomInt(fromNum, toNum);
+    return buildIdFromNumber(n);
+  }
+
+  function generateRole() {
+    const checked = Array.from(
+      roleCheckboxGroup.querySelectorAll("input[type=checkbox]:checked")
+    ).map((el) => el.value);
+    if (checked.length === 0) return null;
+    return checked[randomInt(0, checked.length - 1)];
+  }
+
+  function generateActive() {
+    const mode = getRadioValue("activeStatus") || "random";
+    if (mode === "true") return true;
+    if (mode === "false") return false;
+    return Math.random() < 0.5;
+  }
+
+  function generateCreatedAt() {
+    const fromVal = $("createdFromInput").value;
+    const toVal = $("createdToInput").value;
+
+    let fromDate = fromVal ? new Date(fromVal) : null;
+    let toDate = toVal ? new Date(toVal) : null;
+
+    if (!fromDate || isNaN(fromDate.getTime())) {
+      fromDate = new Date();
+      fromDate.setFullYear(fromDate.getFullYear() - 1);
+    }
+    if (!toDate || isNaN(toDate.getTime())) {
+      toDate = new Date();
+    }
+    if (fromDate > toDate) {
+      const tmp = fromDate;
+      fromDate = toDate;
+      toDate = tmp;
+    }
+
+    const t1 = fromDate.getTime();
+    const t2 = toDate.getTime();
+    const t = randomInt(t1, t2);
+    return new Date(t).toISOString();
+  }
+
+  // Generate user record
+  function generateUserRecord() {
+    const id = generateId();
+    const nameObj = generateName();
+    const email = generateEmail(nameObj);
+    const role = generateRole();
+    const active = generateActive();
+    const createdAt = generateCreatedAt();
+
+    return {
+      id,
+      name: nameObj.fullName,
+      email,
+      role,
+      active,
+      createdAt,
+    };
+  }
+
+  let lastGeneratedData = [];
+
+  function renderOutput(data) {
+    const box = $("outputBox");
+    if (!data || data.length === 0) {
+      box.innerHTML =
+        '<span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>';
+      $("outputMetaRecords").textContent = "0 records";
+      return;
+    }
+
+    $("outputMetaRecords").textContent = data.length + " records";
+
+    if (outputFormat === "table") {
+      // simple table-like text
+      const headers = Object.keys(data[0]);
+      const lines = [];
+      lines.push(headers.join(" | "));
+      lines.push(headers.map(() => "---").join(" | "));
+      data.forEach((row) => {
+        lines.push(headers.map((h) => String(row[h])).join(" | "));
+      });
+      box.textContent = lines.join("\n");
+    } else {
+      box.textContent = JSON.stringify(data, null, 2);
+    }
+  }
+
+  // Generate button
+  $("generateBtn").addEventListener("click", () => {
+    const count = parseInt($("recordCountInput").value, 10) || 1;
+    const safeCount = Math.max(1, Math.min(count, 200));
+    $("recordCountInput").value = safeCount;
+
+    const dataType = $("dataTypeSelect").value;
+    const records = [];
+
+    if (dataType === "user") {
+      for (let i = 0; i < safeCount; i++) {
+        records.push(generateUserRecord());
       }
-    });
+    } else {
+      // future: other data types
+    }
 
-    downloadBtn.addEventListener("click", () => {
-      if (!lastData || lastData.length === 0) return;
-      const blob = new Blob([JSON.stringify(lastData, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "test-data.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-  </script>
+    lastGeneratedData = records;
+    renderOutput(records);
+  });
+
+  // Copy button
+  $("copyBtn").addEventListener("click", async () => {
+    if (!lastGeneratedData || lastGeneratedData.length === 0) return;
+    const text =
+      outputFormat === "json"
+        ? JSON.stringify(lastGeneratedData, null, 2)
+        : $("outputBox").textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      console.warn("Clipboard copy failed", e);
+    }
+  });
+
+  // Download button
+  $("downloadBtn").addEventListener("click", () => {
+    if (!lastGeneratedData || lastGeneratedData.length === 0) return;
+    const blob = new Blob(
+      [JSON.stringify(lastGeneratedData, null, 2)],
+      { type: "application/json" }
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "test-data.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
 </body>
 </html>
