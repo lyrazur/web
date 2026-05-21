@@ -218,6 +218,10 @@
       transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
     }
 
+    .primary-btn span {
+      font-size: 1rem;
+    }
+
     .primary-btn:hover {
       transform: translateY(-1px);
       box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4);
@@ -336,7 +340,7 @@
       <main class="layout">
         <!-- LEFT: Controls -->
         <section class="card">
-          <h2>Configuration</h2>
+          <h2>Konfigurace</h2>
           <p class="card-subtitle">
             Choose the data type, number of records, and output format. Everything runs locally in your browser.
           </p>
@@ -454,10 +458,10 @@
       return d.toISOString();
     }
 
-    // --- Data generators ---
+    // --- Generátory dat ---
     function generateUser() {
-      const firstNames = ["Anna", "Lenka", "Eva", "Klara", "Tereza", "Peter", "John", "Lucas", "David", "Martin"];
-      const lastNames = ["Novak", "Smith", "Brown", "Taylor", "Dvorak", "Kral", "Green", "White"];
+      const firstNames = ["Anna", "Lenka", "Eva", "Klara", "Tereza", "Petr", "Jan", "Lukas", "David", "Martin"];
+      const lastNames = ["Novakova", "Svobodova", "Kralova", "Dvorakova", "Novak", "Svoboda", "Kral", "Dvorak"];
       const roles = ["user", "admin", "tester", "viewer"];
 
       const first = randomItem(firstNames);
@@ -521,4 +525,188 @@
 
     function generateDateSet() {
       const now = new Date();
-      const past = new Date(now.getFullYear()
+      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+      const future = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+      return {
+        now: formatISODate(now),
+        past: formatISODate(randomDateInRange(past, now)),
+        future: formatISODate(randomDateInRange(now, future)),
+        invalid: "2024-13-40T25:61:00Z"
+      };
+    }
+
+    function generateEdgeCases() {
+      return {
+        emptyString: "",
+        longString: "x".repeat(1024),
+        specialChars: "!@#$%^&*()_+{}[]:\";'<>?,./\\|`~",
+        unicode: "Žluťoučký kůň 🐎 pěl ďábelské ódy 🎶",
+        nullValue: null,
+        zero: 0,
+        negativeNumber: -123,
+        bigNumber: 9999999999,
+        booleanTrue: true,
+        booleanFalse: false,
+        arrayMixed: [null, "", 0, "test", { nested: true }],
+        objectWithMissingFields: { id: 1, name: null }
+      };
+    }
+
+    function generateData(type, count) {
+      const result = [];
+      for (let i = 0; i < count; i++) {
+        switch (type) {
+          case "user":
+            result.push(generateUser());
+            break;
+          case "product":
+            result.push(generateProduct());
+            break;
+          case "order":
+            result.push(generateOrder());
+            break;
+          case "randomString":
+            result.push(generateRandomString());
+            break;
+          case "dateSet":
+            result.push(generateDateSet());
+            break;
+          case "edgeCases":
+            result.push(generateEdgeCases());
+            break;
+          default:
+            result.push({});
+        }
+      }
+      return result;
+    }
+
+    // --- Render ---
+    function renderJSON(data) {
+      outputBox.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function renderTable(data) {
+      if (!Array.isArray(data) || data.length === 0) {
+        outputBox.textContent = "Žádná data k zobrazení v tabulce.";
+        return;
+      }
+
+      const keys = Array.from(
+        data.reduce((set, item) => {
+          Object.keys(item).forEach((k) => set.add(k));
+          return set;
+        }, new Set())
+      );
+
+      let html = "<table><thead><tr>";
+      keys.forEach((k) => {
+        html += "<th>" + k + "</th>";
+      });
+      html += "</tr></thead><tbody>";
+
+      data.forEach((row) => {
+        html += "<tr>";
+        keys.forEach((k) => {
+          let value = row[k];
+          if (typeof value === "object") {
+            value = JSON.stringify(value);
+          }
+          html += "<td>" + (value === undefined ? "" : value) + "</td>";
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      outputBox.innerHTML = html;
+    }
+
+    function updateOutputMeta(type, count) {
+      const labelMap = {
+        user: "User",
+        product: "Product",
+        order: "Order",
+        randomString: "Random string",
+        dateSet: "Date set",
+        edgeCases: "Edge cases"
+      };
+      const label = labelMap[type] || type;
+      outputMeta.textContent = `${count} × ${label} · Formát: ${currentFormat.toUpperCase()}`;
+    }
+
+    // --- Eventy ---
+    formatToggleEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".toggle-btn");
+      if (!btn) return;
+      const format = btn.getAttribute("data-format");
+      if (!format) return;
+
+      currentFormat = format;
+      Array.from(formatToggleEl.querySelectorAll(".toggle-btn")).forEach((b) =>
+        b.classList.toggle("active", b === btn)
+      );
+
+      if (lastData && lastData.length > 0) {
+        if (currentFormat === "json") {
+          renderJSON(lastData);
+        } else {
+          renderTable(lastData);
+        }
+      }
+    });
+
+    generateBtn.addEventListener("click", () => {
+      const type = dataTypeEl.value;
+      let count = parseInt(countEl.value, 10);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 200) count = 200;
+      countEl.value = count;
+
+      const data = generateData(type, count);
+      lastData = data;
+
+      if (currentFormat === "json") {
+        renderJSON(data);
+      } else {
+        renderTable(data);
+      }
+
+      updateOutputMeta(type, count);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!lastData || lastData.length === 0) return;
+      try {
+        const text =
+          currentFormat === "json"
+            ? JSON.stringify(lastData, null, 2)
+            : outputBox.innerText;
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied ✔";
+        setTimeout(() => (copyBtn.innerHTML = '<span>📋</span><span>Copy to clipboard</span>'), 1200);
+      } catch (e) {
+        alert("Copy failed.");
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!lastData || lastData.length === 0) return;
+      const blob = new Blob([JSON.stringify(lastData, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "test-data.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial dummy state
+    lastData = [];
+  </script>
+</body>
+</html>
