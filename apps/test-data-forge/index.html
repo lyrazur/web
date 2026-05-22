@@ -455,3 +455,223 @@
           </div>
           <div class="form-field">
             <label class="form-label">Dimensions (text)</label>
+            <input id="productDimensionsInput" class="input" type="text" value="10x5x3 cm" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ORDER CONFIG -->
+    <div id="orderConfigCards" class="cards-grid" style="display:none;">
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Order settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Order ID pattern</label>
+            <input id="orderIdPatternInput" class="input" type="text" value="ORD-#####"/>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Status options</label>
+            <div class="checkbox-group" id="orderStatusGroup">
+              <label class="checkbox-option"><input type="checkbox" value="pending" checked><span>pending</span></label>
+              <label class="checkbox-option"><input type="checkbox" value="paid" checked><span>paid</span></label>
+              <label class="checkbox-option"><input type="checkbox" value="shipped"><span>shipped</span></label>
+              <label class="checkbox-option"><input type="checkbox" value="cancelled"><span>cancelled</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Quantity – min</label>
+            <input id="orderQtyMinInput" class="input" type="number" min="1" value="1" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Quantity – max</label>
+            <input id="orderQtyMaxInput" class="input" type="number" min="1" value="5" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Link to users</label>
+            <select id="orderUserLinkSelect">
+              <option value="generated" selected>Use generated users</option>
+              <option value="synthetic">Create synthetic user IDs</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Link to products</label>
+            <select id="orderProductLinkSelect">
+              <option value="generated" selected>Use generated products</option>
+              <option value="synthetic">Create synthetic product SKUs</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RANDOM STRING CONFIG -->
+    <div id="randomStringConfig" class="cards-grid" style="display:none;">
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Random String settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Length</label>
+            <input id="randStrLength" class="input" type="number" min="1" max="1024" value="12" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Charset</label>
+            <select id="randStrCharset">
+              <option value="alphanumeric" selected>Alphanumeric</option>
+              <option value="alpha">Letters only</option>
+              <option value="numeric">Digits only</option>
+              <option value="hex">Hex</option>
+              <option value="base64">Base64</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" id="randStrCustomField" style="display:none;">
+          <div class="form-field">
+            <label class="form-label">Custom charset</label>
+            <input id="randStrCustomCharset" class="input" type="text" placeholder="e.g. ABCDEF012345" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Unique strings</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="randUnique" value="no" checked><span>No</span></label>
+              <label class="radio-option"><input type="radio" name="randUnique" value="yes"><span>Yes</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATE SET CONFIG -->
+    <div id="dateSetConfig" class="cards-grid" style="display:none;">
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Date Set settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Start date</label>
+            <input id="dateSetStart" class="input" type="date" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">End date</label>
+            <input id="dateSetEnd" class="input" type="date" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Frequency</label>
+            <select id="dateSetFrequency">
+              <option value="daily">Daily</option>
+              <option value="weekly" selected>Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Dates per record</label>
+            <input id="dateSetCount" class="input" type="number" min="1" max="365" value="5" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Output format</label>
+            <select id="dateSetFormat">
+              <option value="iso" selected>ISO 8601</option>
+              <option value="dateOnly">YYYY-MM-DD</option>
+              <option value="timestamp">Unix ms</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EDGE CASES CONFIG -->
+    <div id="edgeCasesConfig" class="cards-grid" style="display:none;">
+      <div class="field-card card-full">
+        <h3 class="field-card-title">Edge Cases settings</h3>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Include nulls</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="edgeNulls" value="no" checked><span>No</span></label>
+              <label class="radio-option"><input type="radio" name="edgeNulls" value="yes"><span>Yes</span></label>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Include empty strings</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="edgeEmpty" value="no" checked><span>No</span></label>
+              <label class="radio-option"><input type="radio" name="edgeEmpty" value="yes"><span>Yes</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Include SQL-like payloads</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="edgeSql" value="no" checked><span>No</span></label>
+              <label class="radio-option"><input type="radio" name="edgeSql" value="yes"><span>Yes</span></label>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Include very long strings</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="edgeLong" value="no" checked><span>No</span></label>
+              <label class="radio-option"><input type="radio" name="edgeLong" value="yes"><span>Yes</span></label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- BUTTONS -->
+  <div class="button-row" style="margin-bottom:24px;">
+    <button class="btn btn-primary" id="generateBtn">⚙️ Generate</button>
+    <button class="btn btn-ghost" id="copyBtn">📋 Copy</button>
+    <button class="btn btn-ghost" id="downloadBtn">⬇️ Download JSON</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <section class="section-card" id="output-section">
+    <h2 class="section-title">Output</h2>
+    <p class="section-description">
+      Generated data preview. You can copy it or download it as JSON.
+    </p>
+
+    <div class="output-meta">
+      <div>
+        <span id="outputMetaRecords">0 records</span> ·
+        <span id="outputMetaFormat">JSON format</span>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Test Data Forge</span>
+      </div>
+    </div>
+
+    <div class="output-box" id="outputBox" tabindex="0" aria-live="polite">
+      <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
+      <button class="copy-btn" id="copyOutputBtn" aria-label="Copy output">Copy</button>
+    </div>
+  </section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
