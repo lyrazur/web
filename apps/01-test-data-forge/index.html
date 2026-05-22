@@ -63,6 +63,28 @@
       font-size: 0.98rem;
     }
 
+    .main-nav {
+  background: white;
+  border-bottom: 1px solid #eee;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: #d4af37;
+}
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -322,6 +344,10 @@
   </style>
 </head>
 <body>
+  <nav class="main-nav">
+  <a href="/">Home</a>
+  </nav>
+
   <div class="page">
     <div class="container">
       <header>
