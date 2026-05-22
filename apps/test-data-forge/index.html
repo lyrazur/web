@@ -33,22 +33,22 @@
       <div class="form-field">
         <label class="form-label">
           Data type
-          <span class="tooltip" data-tooltip="Select the logical structure of the generated records.">i</span>
+          <span class="tooltip" tabindex="0" data-tooltip="Select the logical structure of the generated records.">i</span>
         </label>
         <select id="dataTypeSelect">
           <option value="user" selected>User</option>
           <option value="product">Product</option>
-          <option value="order" disabled>Order (coming soon)</option>
-          <option value="randomString" disabled>Random String (coming soon)</option>
-          <option value="dateSet" disabled>Date Set (coming soon)</option>
-          <option value="edgeCases" disabled>Edge Cases (coming soon)</option>
+          <option value="order">Order</option>
+          <option value="randomString">Random String</option>
+          <option value="dateSet">Date Set</option>
+          <option value="edgeCases">Edge Cases</option>
         </select>
       </div>
 
       <div class="form-field">
         <label class="form-label">
           Record count
-          <span class="tooltip" data-tooltip="How many records should be generated in a single run.">i</span>
+          <span class="tooltip" tabindex="0" data-tooltip="How many records should be generated in a single run.">i</span>
         </label>
         <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
         <div class="inline-note">1–200 records</div>
@@ -57,11 +57,11 @@
       <div class="form-field">
         <label class="form-label">
           Output format
-          <span class="tooltip" data-tooltip="Choose between JSON or a table-like structure.">i</span>
+          <span class="tooltip" tabindex="0" data-tooltip="Choose between JSON or a table-like structure.">i</span>
         </label>
-        <div class="pill-toggle" id="outputFormatToggle">
-          <div class="pill-option active" data-format="json">JSON</div>
-          <div class="pill-option" data-format="table">Table</div>
+        <div class="pill-toggle" id="outputFormatToggle" role="tablist" aria-label="Output format">
+          <div class="pill-option active" data-format="json" role="tab" tabindex="0">JSON</div>
+          <div class="pill-option" data-format="table" role="tab" tabindex="0">Table</div>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
           <div class="form-field">
             <label class="form-label">
               Name language
-              <span class="tooltip" data-tooltip="Choose the language and style of generated names.">i</span>
+              <span class="tooltip" tabindex="0" data-tooltip="Choose the language and style of generated names.">i</span>
             </label>
             <div class="radio-group" id="nameLanguageGroup">
               <label class="radio-option">
@@ -110,7 +110,7 @@
         <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
           <div class="form-label">
             Czech name rules
-            <span class="tooltip" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
+            <span class="tooltip" tabindex="0" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
           </div>
           <div class="checkbox-group">
             <label class="checkbox-option">
@@ -135,7 +135,7 @@
         <div id="customNameListBlock" style="display:none; margin-top:14px;">
           <label class="form-label">
             Custom name list
-            <span class="tooltip" data-tooltip="One name per line.">i</span>
+            <span class="tooltip" tabindex="0" data-tooltip="One name per line.">i</span>
           </label>
           <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
         </div>
@@ -209,8 +209,9 @@
 
         <div style="margin-top:10px;">
           <div class="form-label">Preview</div>
-          <div id="idPreviewBox" class="id-preview-box">
+          <div id="idPreviewBox" class="id-preview-box" aria-live="polite" role="status">
             USR-00052<br>USR-00053<br>USR-00054
+            <button class="copy-btn" id="copyIdPreviewBtn" aria-label="Copy ID preview">Copy</button>
           </div>
         </div>
       </div>
@@ -260,7 +261,7 @@
             </div>
 
             <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addRoleBtn">＋ Add custom role</button>
+              <button class="btn btn-ghost" type="button" id="addRoleBtn" aria-expanded="false">＋ Add custom role</button>
             </div>
           </div>
         </div>
@@ -318,7 +319,7 @@
           <div class="form-field">
             <label class="form-label">
               Name source
-              <span class="tooltip" data-tooltip="Use built‑in sample names or your own list.">i</span>
+              <span class="tooltip" tabindex="0" data-tooltip="Use built‑in sample names or your own list.">i</span>
             </label>
             <div class="radio-group" id="productNameSourceGroup">
               <label class="radio-option">
@@ -336,7 +337,7 @@
         <div id="productCustomNameBlock" style="display:none; margin-top:8px;">
           <label class="form-label">
             Custom product names
-            <span class="tooltip" data-tooltip="One product name per line.">i</span>
+            <span class="tooltip" tabindex="0" data-tooltip="One product name per line.">i</span>
           </label>
           <textarea id="productCustomNameList" placeholder="Wireless Mouse&#10;Mechanical Keyboard&#10;Noise‑cancelling Headphones"></textarea>
         </div>
@@ -349,7 +350,7 @@
           <div class="form-field">
             <label class="form-label">
               Categories
-              <span class="tooltip" data-tooltip="Select which categories can be used.">i</span>
+              <span class="tooltip" tabindex="0" data-tooltip="Select which categories can be used.">i</span>
             </label>
             <div class="checkbox-group" id="productCategoryGroup">
               <label class="checkbox-option"><input type="checkbox" value="Electronics" checked><span>Electronics</span></label>
@@ -365,7 +366,7 @@
             </div>
 
             <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addProductCategoryBtn">＋ Add custom category</button>
+              <button class="btn btn-ghost" type="button" id="addProductCategoryBtn" aria-expanded="false">＋ Add custom category</button>
             </div>
           </div>
         </div>
@@ -414,7 +415,7 @@
           <div class="form-field">
             <label class="form-label">
               In stock
-              <span class="tooltip" data-tooltip="Control how often products are in stock.">i</span>
+              <span class="tooltip" tabindex="0" data-tooltip="Control how often products are in stock.">i</span>
             </label>
             <div class="radio-group" id="productStockModeGroup">
               <label class="radio-option">
@@ -437,7 +438,7 @@
           <div class="form-field">
             <label class="form-label">
               SKU pattern
-              <span class="tooltip" data-tooltip="Use # for digits, e.g. PRD-#####.">i</span>
+              <span class="tooltip" tabindex="0" data-tooltip="Use # for digits, e.g. PRD-#####.">i</span>
             </label>
             <input id="productSkuPatternInput" class="input" type="text" value="PRD-#####"/>
           </div>
@@ -454,45 +455,3 @@
           </div>
           <div class="form-field">
             <label class="form-label">Dimensions (text)</label>
-            <input id="productDimensionsInput" class="input" type="text" value="10x5x3 cm" />
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- BUTTONS -->
-  <div class="button-row" style="margin-bottom:24px;">
-    <button class="btn btn-primary" id="generateBtn">⚙️ Generate</button>
-    <button class="btn btn-ghost" id="copyBtn">📋 Copy</button>
-    <button class="btn btn-ghost" id="downloadBtn">⬇️ Download JSON</button>
-  </div>
-
-  <!-- OUTPUT -->
-  <section class="section-card" id="output-section">
-    <h2 class="section-title">Output</h2>
-    <p class="section-description">
-      Generated data preview. You can copy it or download it as JSON.
-    </p>
-
-    <div class="output-meta">
-      <div>
-        <span id="outputMetaRecords">0 records</span> ·
-        <span id="outputMetaFormat">JSON format</span>
-      </div>
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span>Test Data Forge</span>
-      </div>
-    </div>
-
-    <div class="output-box" id="outputBox">
-      <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
-    </div>
-  </section>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
