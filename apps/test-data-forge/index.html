@@ -3,675 +3,665 @@
 <head>
   <meta charset="UTF-8" />
   <title>Test Data Forge – LyraZur Tools</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-<nav class="main-nav">
-  <a href="/">Home</a>
-</nav>
-
-<div class="page">
-  <header class="page-header">
-    <div class="breadcrumb">
-      <a href="/">LyraZur Tools</a> · <span>Test Data Forge</span>
-    </div>
-    <h1 class="page-title">Test Data Forge</h1>
-    <p class="page-subtitle">Test data generator for Software Testing.</p>
-  </header>
-
-  <!-- CONFIGURATION -->
-  <section class="section-card" id="configuration-section">
-    <h2 class="section-title">Configuration</h2>
-    <p class="section-description">
-      Choose what kind of data you want to generate and how it should be structured.
-    </p>
-
-    <div class="config-grid">
-      <div class="form-field">
-        <label class="form-label">
-          Data type
-          <span class="tooltip" tabindex="0" data-tooltip="Select the logical structure of the generated records.">i</span>
-        </label>
-        <select id="dataTypeSelect">
-          <option value="user" selected>User</option>
-          <option value="product">Product</option>
-          <option value="order">Order</option>
-          <option value="randomString">Random String</option>
-          <option value="dateSet">Date Set</option>
-          <option value="edgeCases">Edge Cases</option>
-        </select>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1>Test Data Forge</h1>
+        <p class="app-subtitle">
+          Generate realistic, structured test data for QA and development.
+        </p>
       </div>
-
-      <div class="form-field">
-        <label class="form-label">
-          Record count
-          <span class="tooltip" tabindex="0" data-tooltip="How many records should be generated in a single run.">i</span>
-        </label>
-        <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
-        <div class="inline-note">1–200 records</div>
+      <div class="app-header-meta">
+        <span class="badge">LyraZur Tools</span>
       </div>
+    </header>
 
-      <div class="form-field">
-        <label class="form-label">
-          Output format
-          <span class="tooltip" tabindex="0" data-tooltip="Choose between JSON or a table-like structure.">i</span>
-        </label>
-        <div class="pill-toggle" id="outputFormatToggle" role="tablist" aria-label="Output format">
-          <div class="pill-option active" data-format="json" role="tab" tabindex="0">JSON</div>
-          <div class="pill-option" data-format="table" role="tab" tabindex="0">Table</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <main class="app-main">
+      <!-- CONFIGURATION PANEL -->
+      <section class="panel panel-config">
+        <header class="panel-header">
+          <h2>Configuration</h2>
+          <p>Choose what kind of data you want to generate and how it should be structured.</p>
+        </header>
 
-  <!-- FIELD CONFIGURATION -->
-  <section class="section-card" id="field-config-section">
-    <h2 class="section-title">Field configuration</h2>
-    <p class="section-description">
-      Fine‑tune how each field is generated. Configuration adapts to the selected data type.
-    </p>
-
-    <!-- USER CONFIG -->
-    <div id="userConfigCards" class="cards-grid">
-
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Name settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Name language
-              <span class="tooltip" tabindex="0" data-tooltip="Choose the language and style of generated names.">i</span>
-            </label>
-            <div class="radio-group" id="nameLanguageGroup">
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="english" checked />
-                <span>English</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="czech" />
-                <span>Czech</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="mixed" />
-                <span>Mixed</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="custom" />
-                <span>Custom list</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
-          <div class="form-label">
-            Czech name rules
-            <span class="tooltip" tabindex="0" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
-          </div>
-          <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleGenderEnding" checked />
-              <span>Apply gender‑correct surname endings</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleAllowNonDeclined" checked />
-              <span>Allow non‑declined surnames (Novak, Dvorak)</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoMaleWithOva" checked />
-              <span>Never mix male first name with “‑ová” surname</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoFemaleWithMaleSurname" checked />
-              <span>Never mix female first name with male‑form surname only</span>
-            </label>
-          </div>
-        </div>
-
-        <div id="customNameListBlock" style="display:none; margin-top:14px;">
-          <label class="form-label">
-            Custom name list
-            <span class="tooltip" tabindex="0" data-tooltip="One name per line.">i</span>
-          </label>
-          <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">ID settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID length</label>
-            <select id="idLengthSelect">
-              <option value="3">3 digits</option>
-              <option value="4">4 digits</option>
-              <option value="5" selected>5 digits</option>
-              <option value="6">6 digits</option>
-              <option value="custom">Custom</option>
+        <div class="panel-body panel-body-grid">
+          <!-- Data type -->
+          <div class="field-group">
+            <label for="dataTypeSelect" class="field-label">Data type</label>
+            <select id="dataTypeSelect" class="select">
+              <option value="user">User</option>
+              <option value="product">Product</option>
+              <option value="order">Order</option>
+              <option value="randomString">Random String</option>
+              <option value="dateSet">Date Set</option>
+              <option value="edgeCases">Edge Cases</option>
             </select>
+            <p class="field-help">Select the entity you want to generate.</p>
           </div>
 
-          <div class="form-field" id="idCustomLengthField" style="display:none;">
-            <label class="form-label">Custom length</label>
-            <input id="idCustomLengthInput" class="input" type="number" min="1" max="12" value="5" />
+          <!-- Record count -->
+          <div class="field-group">
+            <label for="recordCountInput" class="field-label">Record count</label>
+            <input id="recordCountInput" type="number" min="1" max="200" value="10" class="input" />
+            <p class="field-help">Between 1 and 200 records.</p>
           </div>
-        </div>
 
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID range – from</label>
-            <input id="idRangeFromInput" class="input" type="text" value="00000" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">ID range – to</label>
-            <input id="idRangeToInput" class="input" type="text" value="99999" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID format</label>
-            <select id="idFormatSelect">
-              <option value="numeric">Numeric only</option>
-              <option value="numericPadded" selected>Numeric padded</option>
-              <option value="prefix">Prefix</option>
-              <option value="suffix">Suffix</option>
-              <option value="pattern">Pattern</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" id="idPrefixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Prefix</label>
-            <input id="idPrefixInput" class="input" type="text" placeholder="USR-" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idSuffixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Suffix</label>
-            <input id="idSuffixInput" class="input" type="text" placeholder="-CZ" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idPatternField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Pattern</label>
-            <input id="idPatternInput" class="input" type="text" value="USR-{#####}" />
-          </div>
-        </div>
-
-        <div style="margin-top:10px;">
-          <div class="form-label">Preview</div>
-          <div id="idPreviewBox" class="id-preview-box" aria-live="polite" role="status">
-            USR-00052<br>USR-00053<br>USR-00054
-            <button class="copy-btn" id="copyIdPreviewBtn" aria-label="Copy ID preview">Copy</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Email settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Domain</label>
-            <input id="emailDomainInput" class="input" type="text" value="example.com" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Email format</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="firstLast" checked />
-                <span>{first}.{last}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="fullName" />
-                <span>{name}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="random" />
-                <span>Random</span>
-              </label>
+          <!-- Output format -->
+          <div class="field-group">
+            <span class="field-label">Output format</span>
+            <div id="outputFormatToggle" class="pill-toggle">
+              <button type="button" class="pill-option active" data-format="json">JSON</button>
+              <button type="button" class="pill-option" data-format="table">Table</button>
             </div>
+            <p class="field-help">Choose how the generated data should be displayed.</p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Role settings</h3>
+      <!-- FIELD CONFIGURATION -->
+      <section class="panel panel-config">
+        <header class="panel-header">
+          <h2>Field configuration</h2>
+          <p>Fine‑tune how each field is generated. Configuration adapts to the selected data type.</p>
+        </header>
 
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Roles</label>
-            <div class="checkbox-group" id="roleCheckboxGroup">
-              <label class="checkbox-option"><input type="checkbox" value="user" checked><span>user</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="admin" checked><span>admin</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="tester" checked><span>tester</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="viewer"><span>viewer</span></label>
-            </div>
+        <div class="panel-body">
+          <!-- USER CONFIG -->
+          <div id="userConfigCards" class="config-grid">
+            <!-- Name settings -->
+            <article class="config-card">
+              <h3>Name settings</h3>
+              <p class="config-desc">Control language and source of generated names.</p>
 
-            <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addRoleBtn" aria-expanded="false">＋ Add custom role</button>
-            </div>
+              <div class="field-group">
+                <span class="field-label">Name language</span>
+                <div id="nameLanguageGroup" class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="nameLanguage" value="english" checked />
+                    <span>English</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="nameLanguage" value="czech" />
+                    <span>Czech</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="nameLanguage" value="mixed" />
+                    <span>Mixed</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="nameLanguage" value="custom" />
+                    <span>Custom list</span>
+                  </label>
+                </div>
+              </div>
+
+              <div id="czechNameRulesBlock" class="field-group hidden">
+                <span class="field-label">Czech surname rules</span>
+                <label class="checkbox-option">
+                  <input type="checkbox" id="ruleGenderEnding" checked />
+                  <span>Use gender‑specific endings</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" id="ruleAllowNonDeclined" />
+                  <span>Allow non‑declined surnames</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" id="ruleNoMaleWithOva" />
+                  <span>Prevent male surnames ending with “‑ová”</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" id="ruleNoFemaleWithMaleSurname" />
+                  <span>Prevent female surnames with male form</span>
+                </label>
+              </div>
+
+              <div id="customNameListBlock" class="field-group hidden">
+                <label for="customNameList" class="field-label">Custom names</label>
+                <textarea id="customNameList" class="textarea" rows="4"
+                  placeholder="One name per line (e.g. “Jane Doe”)"></textarea>
+              </div>
+            </article>
+
+            <!-- ID settings -->
+            <article class="config-card">
+              <h3>ID settings</h3>
+              <p class="config-desc">Control length, range, and format of generated IDs.</p>
+
+              <div class="field-group">
+                <label for="idLengthSelect" class="field-label">ID length</label>
+                <select id="idLengthSelect" class="select">
+                  <option value="5">5 digits</option>
+                  <option value="6">6 digits</option>
+                  <option value="8">8 digits</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+
+              <div id="idCustomLengthField" class="field-group hidden">
+                <label for="idCustomLengthInput" class="field-label">Custom length</label>
+                <input id="idCustomLengthInput" type="number" min="1" max="12" value="5" class="input" />
+              </div>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="idRangeFromInput" class="field-label">ID range – from</label>
+                  <input id="idRangeFromInput" type="text" class="input" />
+                </div>
+                <div>
+                  <label for="idRangeToInput" class="field-label">ID range – to</label>
+                  <input id="idRangeToInput" type="text" class="input" />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="idFormatSelect" class="field-label">ID format</label>
+                <select id="idFormatSelect" class="select">
+                  <option value="numericPadded">Numeric (padded)</option>
+                  <option value="numeric">Numeric (raw)</option>
+                  <option value="prefix">Prefix + number</option>
+                  <option value="suffix">Number + suffix</option>
+                  <option value="pattern">Pattern</option>
+                </select>
+              </div>
+
+              <div id="idPrefixField" class="field-group hidden">
+                <label for="idPrefixInput" class="field-label">Prefix</label>
+                <input id="idPrefixInput" type="text" class="input" placeholder="USR-" />
+              </div>
+
+              <div id="idSuffixField" class="field-group hidden">
+                <label for="idSuffixInput" class="field-label">Suffix</label>
+                <input id="idSuffixInput" type="text" class="input" placeholder="-A" />
+              </div>
+
+              <div id="idPatternField" class="field-group hidden">
+                <label for="idPatternInput" class="field-label">Pattern</label>
+                <input id="idPatternInput" type="text" class="input" placeholder="USR-{#####}" />
+                <p class="field-help">Use {#####} or ##### as numeric placeholder.</p>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Preview</span>
+                <pre id="idPreviewBox" class="preview-box"></pre>
+              </div>
+            </article>
+
+            <!-- Email / status / createdAt -->
+            <article class="config-card">
+              <h3>Email & status</h3>
+              <p class="config-desc">Control email format, active flag, and created date.</p>
+
+              <div class="field-group">
+                <label for="emailDomainInput" class="field-label">Email domain</label>
+                <input id="emailDomainInput" type="text" class="input" value="example.com" />
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Email format</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="emailFormat" value="firstLast" checked />
+                    <span>(first).(last)@domain</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="emailFormat" value="fullName" />
+                    <span>{name}@domain</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="emailFormat" value="random" />
+                    <span>Random pattern</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Active status</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="activeStatus" value="random" checked />
+                    <span>Random</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="activeStatus" value="true" />
+                    <span>Always active</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="activeStatus" value="false" />
+                    <span>Always inactive</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="createdFromInput" class="field-label">Created from</label>
+                  <input id="createdFromInput" type="date" class="input" />
+                </div>
+                <div>
+                  <label for="createdToInput" class="field-label">Created to</label>
+                  <input id="createdToInput" type="date" class="input" />
+                </div>
+              </div>
+            </article>
+
+            <!-- Roles -->
+            <article class="config-card">
+              <h3>Roles</h3>
+              <p class="config-desc">Assign roles to generated users.</p>
+
+              <div id="roleCheckboxGroup" class="checkbox-group">
+                <label class="checkbox-option">
+                  <input type="checkbox" value="user" checked />
+                  <span>User</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="admin" />
+                  <span>Admin</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="manager" />
+                  <span>Manager</span>
+                </label>
+              </div>
+
+              <div class="field-group-inline align-end">
+                <button type="button" id="addRoleBtn" class="btn btn-secondary">Add custom role</button>
+              </div>
+
+              <div id="customRoleField" class="field-group-inline hidden">
+                <input id="customRoleInput" type="text" class="input" placeholder="Custom role name" />
+                <button type="button" id="confirmAddRoleBtn" class="btn btn-primary btn-sm">Add</button>
+              </div>
+            </article>
+          </div>
+
+          <!-- PRODUCT CONFIG -->
+          <div id="productConfigCards" class="config-grid hidden">
+            <article class="config-card">
+              <h3>Product name</h3>
+              <p class="config-desc">Choose how product names are generated.</p>
+
+              <div class="field-group">
+                <span class="field-label">Name source</span>
+                <div id="productNameSourceGroup" class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="productNameSource" value="builtin" checked />
+                    <span>Built‑in sample names</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="productNameSource" value="custom" />
+                    <span>Custom list</span>
+                  </label>
+                </div>
+              </div>
+
+              <div id="productCustomNameBlock" class="field-group hidden">
+                <label for="productCustomNameList" class="field-label">Custom product names</label>
+                <textarea id="productCustomNameList" class="textarea" rows="4"
+                  placeholder="One product name per line"></textarea>
+              </div>
+            </article>
+
+            <article class="config-card">
+              <h3>Categories</h3>
+              <p class="config-desc">Control product categories and add your own.</p>
+
+              <div id="productCategoryGroup" class="checkbox-group">
+                <label class="checkbox-option">
+                  <input type="checkbox" value="Electronics" checked />
+                  <span>Electronics</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="Office" />
+                  <span>Office</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="Accessories" />
+                  <span>Accessories</span>
+                </label>
+              </div>
+
+              <div class="field-group-inline align-end">
+                <button type="button" id="addProductCategoryBtn" class="btn btn-secondary">Add category</button>
+              </div>
+
+              <div id="productCustomCategoryField" class="field-group-inline hidden">
+                <input id="productCustomCategoryInput" type="text" class="input" placeholder="Custom category" />
+                <button type="button" id="confirmAddProductCategoryBtn" class="btn btn-primary btn-sm">Add</button>
+              </div>
+            </article>
+
+            <article class="config-card">
+              <h3>Price & stock</h3>
+              <p class="config-desc">Configure price range, currency, and stock behavior.</p>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="productPriceMinInput" class="field-label">Price from</label>
+                  <input id="productPriceMinInput" type="number" step="0.01" class="input" value="100" />
+                </div>
+                <div>
+                  <label for="productPriceMaxInput" class="field-label">Price to</label>
+                  <input id="productPriceMaxInput" type="number" step="0.01" class="input" value="1000" />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="productCurrencySelect" class="field-label">Currency</label>
+                <select id="productCurrencySelect" class="select">
+                  <option value="CZK">CZK</option>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">In stock</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="productStockMode" value="random" checked />
+                    <span>Random</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="productStockMode" value="true" />
+                    <span>Always in stock</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="productStockMode" value="false" />
+                    <span>Always out of stock</span>
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <article class="config-card">
+              <h3>SKU & dimensions</h3>
+              <p class="config-desc">Control SKU pattern and optional physical attributes.</p>
+
+              <div class="field-group">
+                <label for="productSkuPatternInput" class="field-label">SKU pattern</label>
+                <input id="productSkuPatternInput" type="text" class="input" value="PRD-#####"
+                  placeholder="PRD-#####" />
+                <p class="field-help">Use ##### as numeric placeholder.</p>
+              </div>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="productWeightInput" class="field-label">Weight (kg)</label>
+                  <input id="productWeightInput" type="number" step="0.01" class="input" />
+                </div>
+                <div>
+                  <label for="productDimensionsInput" class="field-label">Dimensions (L×W×H)</label>
+                  <input id="productDimensionsInput" type="text" class="input" placeholder="e.g. 30×20×10 cm" />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- ORDER CONFIG -->
+          <div id="orderConfigCards" class="config-grid hidden">
+            <article class="config-card">
+              <h3>Order basics</h3>
+              <p class="config-desc">Configure order IDs, quantities, and status.</p>
+
+              <div class="field-group">
+                <label for="orderIdPatternInput" class="field-label">Order ID pattern</label>
+                <input id="orderIdPatternInput" type="text" class="input" value="ORD-#####"
+                  placeholder="ORD-#####" />
+                <p class="field-help">Use ##### as numeric placeholder.</p>
+              </div>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="orderQtyMinInput" class="field-label">Quantity from</label>
+                  <input id="orderQtyMinInput" type="number" min="1" class="input" value="1" />
+                </div>
+                <div>
+                  <label for="orderQtyMaxInput" class="field-label">Quantity to</label>
+                  <input id="orderQtyMaxInput" type="number" min="1" class="input" value="5" />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Status pool</span>
+                <div id="orderStatusGroup" class="checkbox-group">
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="pending" checked />
+                    <span>pending</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="paid" checked />
+                    <span>paid</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="shipped" />
+                    <span>shipped</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="cancelled" />
+                    <span>cancelled</span>
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <article class="config-card">
+              <h3>Order dates & totals</h3>
+              <p class="config-desc">Control order date range and total amount range.</p>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="orderDateFromInput" class="field-label">Order date from</label>
+                  <input id="orderDateFromInput" type="date" class="input" />
+                </div>
+                <div>
+                  <label for="orderDateToInput" class="field-label">Order date to</label>
+                  <input id="orderDateToInput" type="date" class="input" />
+                </div>
+              </div>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="orderTotalMinInput" class="field-label">Total from</label>
+                  <input id="orderTotalMinInput" type="number" step="0.01" class="input" value="100" />
+                </div>
+                <div>
+                  <label for="orderTotalMaxInput" class="field-label">Total to</label>
+                  <input id="orderTotalMaxInput" type="number" step="0.01" class="input" value="5000" />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- RANDOM STRING CONFIG -->
+          <div id="randomStringConfig" class="config-grid hidden">
+            <article class="config-card">
+              <h3>Random string</h3>
+              <p class="config-desc">Generate arbitrary random strings for testing.</p>
+
+              <div class="field-group">
+                <label for="rsLengthInput" class="field-label">Length</label>
+                <input id="rsLengthInput" type="number" min="1" max="512" value="16" class="input" />
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Character set</span>
+                <div id="rsCharsetGroup" class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="rsCharset" value="alnum" checked />
+                    <span>Alphanumeric</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="rsCharset" value="alpha" />
+                    <span>Letters only</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="rsCharset" value="numeric" />
+                    <span>Digits only</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="rsCharset" value="hex" />
+                    <span>Hex</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="rsCharset" value="custom" />
+                    <span>Custom</span>
+                  </label>
+                </div>
+              </div>
+
+              <div id="rsCustomCharsetField" class="field-group hidden">
+                <label for="rsCustomCharsetInput" class="field-label">Custom character set</label>
+                <input id="rsCustomCharsetInput" type="text" class="input" placeholder="e.g. ABC123!?" />
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Uniqueness</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="rsUniqueMode" value="allowDuplicates" checked />
+                    <span>Allow duplicates</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="rsUniqueMode" value="unique" />
+                    <span>Try to keep unique</span>
+                  </label>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- DATE SET CONFIG -->
+          <div id="dateSetConfig" class="config-grid hidden">
+            <article class="config-card">
+              <h3>Date set</h3>
+              <p class="config-desc">Generate sets of dates for scheduling and timeline tests.</p>
+
+              <div class="field-group field-group-inline">
+                <div>
+                  <label for="dsStartInput" class="field-label">Start date</label>
+                  <input id="dsStartInput" type="date" class="input" />
+                </div>
+                <div>
+                  <label for="dsEndInput" class="field-label">End date</label>
+                  <input id="dsEndInput" type="date" class="input" />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="dsCountInput" class="field-label">Dates per record</label>
+                <input id="dsCountInput" type="number" min="1" max="50" value="5" class="input" />
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Frequency</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="dsFrequency" value="daily" checked />
+                    <span>Daily</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="dsFrequency" value="weekly" />
+                    <span>Weekly</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="dsFrequency" value="monthly" />
+                    <span>Monthly</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Format</span>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="dsFormat" value="iso" checked />
+                    <span>ISO datetime</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="dsFormat" value="date" />
+                    <span>Date only</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="dsFormat" value="timestamp" />
+                    <span>Unix timestamp</span>
+                  </label>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- EDGE CASES CONFIG -->
+          <div id="edgeCasesConfig" class="config-grid hidden">
+            <article class="config-card">
+              <h3>Edge cases</h3>
+              <p class="config-desc">Generate pathological values to stress your system.</p>
+
+              <div class="field-group">
+                <span class="field-label">Include</span>
+                <div id="ecIncludeGroup" class="checkbox-group">
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="nulls" checked />
+                    <span>Nulls</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="emptyStrings" checked />
+                    <span>Empty strings</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="longStrings" checked />
+                    <span>Very long strings</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="sql" checked />
+                    <span>SQL payloads</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="unicode" checked />
+                    <span>Unicode / emoji</span>
+                  </label>
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="extremeNumbers" checked />
+                    <span>Extreme numbers</span>
+                  </label>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
+      </section>
 
-        <div class="form-row" id="customRoleField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">New role</label>
-            <input id="customRoleInput" class="input" type="text" placeholder="e.g. auditor" />
+      <!-- OUTPUT PANEL -->
+      <section class="panel panel-output">
+        <header class="panel-header panel-header-output">
+          <div>
+            <h2>Output</h2>
+            <p>Generated data preview. Copy or download for use in your tests.</p>
           </div>
-          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
-            <button class="btn btn-primary" type="button" id="confirmAddRoleBtn">Add</button>
+          <div class="output-meta">
+            <span id="outputMetaFormat" class="meta-pill">JSON format</span>
+            <span id="outputMetaRecords" class="meta-pill">0 records</span>
           </div>
+        </header>
+
+        <div class="panel-body panel-body-output">
+          <div class="output-toolbar">
+            <button type="button" id="generateBtn" class="btn btn-primary">Generate</button>
+            <button type="button" id="copyBtn" class="btn btn-secondary">Copy</button>
+            <button type="button" id="downloadBtn" class="btn btn-secondary">Download JSON</button>
+          </div>
+          <pre id="outputBox" class="output-box">
+<span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
+          </pre>
         </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Active status</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Active flag</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="activeStatus" value="random" checked><span>Random</span></label>
-              <label class="radio-option"><input type="radio" name="activeStatus" value="true"><span>Always true</span></label>
-              <label class="radio-option"><input type="radio" name="activeStatus" value="false"><span>Always false</span></label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Date settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">CreatedAt – from</label>
-            <input id="createdFromInput" class="input" type="date" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">CreatedAt – to</label>
-            <input id="createdToInput" class="input" type="date" />
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- PRODUCT CONFIG -->
-    <div id="productConfigCards" class="cards-grid" style="display:none;">
-
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Product name</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Name source
-              <span class="tooltip" tabindex="0" data-tooltip="Use built‑in sample names or your own list.">i</span>
-            </label>
-            <div class="radio-group" id="productNameSourceGroup">
-              <label class="radio-option">
-                <input type="radio" name="productNameSource" value="builtin" checked />
-                <span>Built‑in list</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productNameSource" value="custom" />
-                <span>Custom list</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div id="productCustomNameBlock" style="display:none; margin-top:8px;">
-          <label class="form-label">
-            Custom product names
-            <span class="tooltip" tabindex="0" data-tooltip="One product name per line.">i</span>
-          </label>
-          <textarea id="productCustomNameList" placeholder="Wireless Mouse&#10;Mechanical Keyboard&#10;Noise‑cancelling Headphones"></textarea>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Category</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Categories
-              <span class="tooltip" tabindex="0" data-tooltip="Select which categories can be used.">i</span>
-            </label>
-            <div class="checkbox-group" id="productCategoryGroup">
-              <label class="checkbox-option"><input type="checkbox" value="Electronics" checked><span>Electronics</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Books" checked><span>Books</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Clothing" checked><span>Clothing</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Home" checked><span>Home</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Toys"><span>Toys</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Tools"><span>Tools</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Beauty"><span>Beauty</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Sports"><span>Sports</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Office"><span>Office</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Food"><span>Food</span></label>
-            </div>
-
-            <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addProductCategoryBtn" aria-expanded="false">＋ Add custom category</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row" id="productCustomCategoryField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">New category</label>
-            <input id="productCustomCategoryInput" class="input" type="text" placeholder="e.g. Gaming" />
-          </div>
-          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
-            <button class="btn btn-primary" type="button" id="confirmAddProductCategoryBtn">Add</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Price & currency</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Price – min</label>
-            <input id="productPriceMinInput" class="input" type="number" min="0" step="0.01" value="100" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Price – max</label>
-            <input id="productPriceMaxInput" class="input" type="number" min="0" step="0.01" value="2000" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Currency</label>
-            <select id="productCurrencySelect">
-              <option value="CZK" selected>CZK</option>
-              <option value="EUR">EUR</option>
-              <option value="USD">USD</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Stock & SKU</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              In stock
-              <span class="tooltip" tabindex="0" data-tooltip="Control how often products are in stock.">i</span>
-            </label>
-            <div class="radio-group" id="productStockModeGroup">
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="random" checked />
-                <span>Random</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="true" />
-                <span>Always in stock</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="false" />
-                <span>Always out of stock</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              SKU pattern
-              <span class="tooltip" tabindex="0" data-tooltip="Use # for digits, e.g. PRD-#####.">i</span>
-            </label>
-            <input id="productSkuPatternInput" class="input" type="text" value="PRD-#####"/>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Weight & dimensions</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Weight (kg) – approx</label>
-            <input id="productWeightInput" class="input" type="number" min="0" step="0.01" value="0.5" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Dimensions (text)</label>
-            <input id="productDimensionsInput" class="input" type="text" value="10x5x3 cm" />
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ORDER CONFIG -->
-    <div id="orderConfigCards" class="cards-grid" style="display:none;">
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Order settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Order ID pattern</label>
-            <input id="orderIdPatternInput" class="input" type="text" value="ORD-#####"/>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Status options</label>
-            <div class="checkbox-group" id="orderStatusGroup">
-              <label class="checkbox-option"><input type="checkbox" value="pending" checked><span>pending</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="paid" checked><span>paid</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="shipped"><span>shipped</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="cancelled"><span>cancelled</span></label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Quantity – min</label>
-            <input id="orderQtyMinInput" class="input" type="number" min="1" value="1" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Quantity – max</label>
-            <input id="orderQtyMaxInput" class="input" type="number" min="1" value="5" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Link to users</label>
-            <select id="orderUserLinkSelect">
-              <option value="generated" selected>Use generated users</option>
-              <option value="synthetic">Create synthetic user IDs</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Link to products</label>
-            <select id="orderProductLinkSelect">
-              <option value="generated" selected>Use generated products</option>
-              <option value="synthetic">Create synthetic product SKUs</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RANDOM STRING CONFIG -->
-    <div id="randomStringConfig" class="cards-grid" style="display:none;">
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Random String settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Length</label>
-            <input id="randStrLength" class="input" type="number" min="1" max="1024" value="12" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Charset</label>
-            <select id="randStrCharset">
-              <option value="alphanumeric" selected>Alphanumeric</option>
-              <option value="alpha">Letters only</option>
-              <option value="numeric">Digits only</option>
-              <option value="hex">Hex</option>
-              <option value="base64">Base64</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" id="randStrCustomField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Custom charset</label>
-            <input id="randStrCustomCharset" class="input" type="text" placeholder="e.g. ABCDEF012345" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Unique strings</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="randUnique" value="no" checked><span>No</span></label>
-              <label class="radio-option"><input type="radio" name="randUnique" value="yes"><span>Yes</span></label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DATE SET CONFIG -->
-    <div id="dateSetConfig" class="cards-grid" style="display:none;">
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Date Set settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Start date</label>
-            <input id="dateSetStart" class="input" type="date" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">End date</label>
-            <input id="dateSetEnd" class="input" type="date" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Frequency</label>
-            <select id="dateSetFrequency">
-              <option value="daily">Daily</option>
-              <option value="weekly" selected>Weekly</option>
-              <option value="monthly">Monthly</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Dates per record</label>
-            <input id="dateSetCount" class="input" type="number" min="1" max="365" value="5" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Output format</label>
-            <select id="dateSetFormat">
-              <option value="iso" selected>ISO 8601</option>
-              <option value="dateOnly">YYYY-MM-DD</option>
-              <option value="timestamp">Unix ms</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- EDGE CASES CONFIG -->
-    <div id="edgeCasesConfig" class="cards-grid" style="display:none;">
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Edge Cases settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Include nulls</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="edgeNulls" value="no" checked><span>No</span></label>
-              <label class="radio-option"><input type="radio" name="edgeNulls" value="yes"><span>Yes</span></label>
-            </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Include empty strings</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="edgeEmpty" value="no" checked><span>No</span></label>
-              <label class="radio-option"><input type="radio" name="edgeEmpty" value="yes"><span>Yes</span></label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Include SQL-like payloads</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="edgeSql" value="no" checked><span>No</span></label>
-              <label class="radio-option"><input type="radio" name="edgeSql" value="yes"><span>Yes</span></label>
-            </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Include very long strings</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="edgeLong" value="no" checked><span>No</span></label>
-              <label class="radio-option"><input type="radio" name="edgeLong" value="yes"><span>Yes</span></label>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- BUTTONS -->
-  <div class="button-row" style="margin-bottom:24px;">
-    <button class="btn btn-primary" id="generateBtn">⚙️ Generate</button>
-    <button class="btn btn-ghost" id="copyBtn">📋 Copy</button>
-    <button class="btn btn-ghost" id="downloadBtn">⬇️ Download JSON</button>
+      </section>
+    </main>
   </div>
 
-  <!-- OUTPUT -->
-  <section class="section-card" id="output-section">
-    <h2 class="section-title">Output</h2>
-    <p class="section-description">
-      Generated data preview. You can copy it or download it as JSON.
-    </p>
-
-    <div class="output-meta">
-      <div>
-        <span id="outputMetaRecords">0 records</span> ·
-        <span id="outputMetaFormat">JSON format</span>
-      </div>
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span>Test Data Forge</span>
-      </div>
-    </div>
-
-    <div class="output-box" id="outputBox" tabindex="0" aria-live="polite">
-      <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
-      <button class="copy-btn" id="copyOutputBtn" aria-label="Copy output">Copy</button>
-    </div>
-  </section>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
