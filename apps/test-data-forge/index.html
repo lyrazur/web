@@ -1,719 +1,768 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
   <meta charset="UTF-8" />
-  <title>Test Data Forge – LyraZur Tools</title>
+  <title>Test Data Forge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --accent: #d4af37;
+      --accent-soft: rgba(212, 175, 55, 0.12);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius-lg: 18px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      --font-serif: "Playfair Display", "Georgia", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top left, #fdfcfb, #f3f4f6);
+      color: var(--text-main);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      margin: 0 0 8px;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #7c651e;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #4b5563;
+    }
+
+    .card-subtitle {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .field label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .field small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    select,
+    input[type="number"] {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 7px 9px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+      background: #ffffff;
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #6b7280;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .toggle-btn.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .primary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    }
+
+    .primary-btn span {
+      font-size: 1rem;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
+      opacity: 0.95;
+    }
+
+    .secondary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #ffffff;
+      color: #374151;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.1s ease, border-color 0.1s ease;
+    }
+
+    .secondary-btn:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .secondary-btn span {
+      font-size: 0.9rem;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .output-header-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4b5563;
+    }
+
+    .output-header-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .output-box {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #0b1120;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      max-height: 360px;
+      overflow: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    th,
+    td {
+      border: 1px solid #1f2937;
+      padding: 4px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: #020617;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+  </style>
 </head>
-
 <body>
-
-<nav class="main-nav">
-  <a href="/">Home</a>
-</nav>
-
-<div class="page">
-  <header class="page-header">
-    <div class="breadcrumb">
-      <a href="/">LyraZur Tools</a> · <span>Test Data Forge</span>
-    </div>
-    <h1 class="page-title">Test Data Forge</h1>
-    <p class="page-subtitle">Test data generator for Software Testing.</p>
-  </header>
-
-  <!-- CONFIGURATION -->
-  <section class="section-card" id="configuration-section">
-    <h2 class="section-title">Configuration</h2>
-    <p class="section-description">
-      Choose what kind of data you want to generate and how it should be structured.
-    </p>
-
-    <div class="config-grid">
-      <div class="form-field">
-        <label class="form-label">
-          Data type
-          <span class="tooltip" data-tooltip="Select the logical structure of the generated records.">i</span>
-        </label>
-        <select id="dataTypeSelect">
-          <option value="user" selected>User</option>
-          <option value="product">Product</option>
-          <option value="order" disabled>Order (coming soon)</option>
-          <option value="randomString" disabled>Random String (coming soon)</option>
-          <option value="dateSet" disabled>Date Set (coming soon)</option>
-          <option value="edgeCases" disabled>Edge Cases (coming soon)</option>
-        </select>
-      </div>
-
-      <div class="form-field">
-        <label class="form-label">
-          Record count
-          <span class="tooltip" data-tooltip="How many records should be generated in a single run.">i</span>
-        </label>
-        <input id="recordCountInput" class="input" type="number" min="1" max="200" value="10" />
-        <div class="inline-note">1–200 records</div>
-      </div>
-
-      <div class="form-field">
-        <label class="form-label">
-          Output format
-          <span class="tooltip" data-tooltip="Choose between JSON or a table-like structure.">i</span>
-        </label>
-        <div class="pill-toggle" id="outputFormatToggle">
-          <div class="pill-option active" data-format="json">JSON</div>
-          <div class="pill-option" data-format="table">Table</div>
+  <div class="page">
+    <div class="container">
+      <header>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>QA utility · Test Data Forge</span>
         </div>
-      </div>
-    </div>
-  </section>
+        <h1>Generate perfect test data in seconds.</h1>
+        <p>Malý, ale chytrý generátor testovacích dat pro manuální i automatizované testování.</p>
+      </header>
 
-  <!-- FIELD CONFIGURATION -->
-  <section class="section-card" id="field-config-section">
-    <h2 class="section-title">Field configuration</h2>
-    <p class="section-description">
-      Fine‑tune how each field is generated. Configuration adapts to the selected data type.
-    </p>
+      <main class="layout">
+        <!-- LEFT: Controls -->
+        <section class="card">
+          <h2>Konfigurace</h2>
+          <p class="card-subtitle">
+            Vyber typ dat, počet záznamů a formát výstupu. Všechno běží čistě v prohlížeči.
+          </p>
 
-    <!-- USER CONFIG -->
-    <div id="userConfigCards" class="cards-grid">
-
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Name settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Name language
-              <span class="tooltip" data-tooltip="Choose the language and style of generated names.">i</span>
-            </label>
-            <div class="radio-group" id="nameLanguageGroup">
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="english" checked />
-                <span>English</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="czech" />
-                <span>Czech</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="mixed" />
-                <span>Mixed</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="nameLanguage" value="custom" />
-                <span>Custom list</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div id="czechNameRulesBlock" style="display:none; margin-top:8px;">
-          <div class="form-label">
-            Czech name rules
-            <span class="tooltip" data-tooltip="Ensures grammatically correct combinations of Czech first names and surnames.">i</span>
-          </div>
-          <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleGenderEnding" checked />
-              <span>Apply gender‑correct surname endings</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleAllowNonDeclined" checked />
-              <span>Allow non‑declined surnames (Novak, Dvorak)</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoMaleWithOva" checked />
-              <span>Never mix male first name with “‑ová” surname</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" id="ruleNoFemaleWithMaleSurname" checked />
-              <span>Never mix female first name with male‑form surname only</span>
-            </label>
-          </div>
-        </div>
-
-        <div id="customNameListBlock" style="display:none; margin-top:14px;">
-          <label class="form-label">
-            Custom name list
-            <span class="tooltip" data-tooltip="One name per line.">i</span>
-          </label>
-          <textarea id="customNameList" placeholder="Eva Nováková&#10;Miroslav Novák&#10;John Smith"></textarea>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">ID settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID length</label>
-            <select id="idLengthSelect">
-              <option value="3">3 digits</option>
-              <option value="4">4 digits</option>
-              <option value="5" selected>5 digits</option>
-              <option value="6">6 digits</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-
-          <div class="form-field" id="idCustomLengthField" style="display:none;">
-            <label class="form-label">Custom length</label>
-            <input id="idCustomLengthInput" class="input" type="number" min="1" max="12" value="5" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID range – from</label>
-            <input id="idRangeFromInput" class="input" type="text" value="00000" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">ID range – to</label>
-            <input id="idRangeToInput" class="input" type="text" value="99999" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">ID format</label>
-            <select id="idFormatSelect">
-              <option value="numeric">Numeric only</option>
-              <option value="numericPadded" selected>Numeric padded</option>
-              <option value="prefix">Prefix</option>
-              <option value="suffix">Suffix</option>
-              <option value="pattern">Pattern</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" id="idPrefixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Prefix</label>
-            <input id="idPrefixInput" class="input" type="text" placeholder="USR-" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idSuffixField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Suffix</label>
-            <input id="idSuffixInput" class="input" type="text" placeholder="-CZ" />
-          </div>
-        </div>
-
-        <div class="form-row" id="idPatternField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">Pattern</label>
-            <input id="idPatternInput" class="input" type="text" value="USR-{#####}" />
-          </div>
-        </div>
-
-        <div style="margin-top:10px;">
-          <div class="form-label">Preview</div>
-          <div id="idPreviewBox" class="id-preview-box">
-            USR-00052<br>USR-00053<br>USR-00054
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Email settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Domain</label>
-            <input id="emailDomainInput" class="input" type="text" value="example.com" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Email format</label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="firstLast" checked />
-                <span>{first}.{last}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="fullName" />
-                <span>{name}@domain</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="emailFormat" value="random" />
-                <span>Random</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Role settings</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Roles</label>
-            <div class="checkbox-group" id="roleCheckboxGroup">
-              <label class="checkbox-option"><input type="checkbox" value="user" checked><span>user</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="admin" checked><span>admin</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="tester" checked><span>tester</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="viewer"><span>viewer</span></label>
+          <div class="form-grid">
+            <div class="field">
+              <label for="dataType">Typ dat</label>
+              <select id="dataType">
+                <option value="user">User</option>
+                <option value="product">Product</option>
+                <option value="order">Order</option>
+                <option value="randomString">Random string</option>
+                <option value="dateSet">Date set</option>
+                <option value="edgeCases">Edge cases</option>
+              </select>
+              <small>Různé presety pro běžné QA scénáře.</small>
             </div>
 
-            <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addRoleBtn">＋ Add custom role</button>
+            <div class="field">
+              <label for="count">Počet záznamů</label>
+              <input id="count" type="number" min="1" max="200" value="5" />
+              <small>Rozumný rozsah: 1–200.</small>
             </div>
           </div>
-        </div>
 
-        <div class="form-row" id="customRoleField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">New role</label>
-            <input id="customRoleInput" class="input" type="text" placeholder="e.g. auditor" />
-          </div>
-          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
-            <button class="btn btn-primary" type="button" id="confirmAddRoleBtn">Add</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Active status</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Active flag</label>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="activeStatus" value="random" checked><span>Random</span></label>
-              <label class="radio-option"><input type="radio" name="activeStatus" value="true"><span>Always true</span></label>
-              <label class="radio-option"><input type="radio" name="activeStatus" value="false"><span>Always false</span></label>
+          <div class="toggle-row">
+            <div class="field" style="margin: 0;">
+              <label>Formát výstupu</label>
+              <div class="toggle-group" id="formatToggle">
+                <button class="toggle-btn active" data-format="json">JSON</button>
+                <button class="toggle-btn" data-format="table">Tabulka</button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="field-card">
-        <h3 class="field-card-title">Date settings</h3>
+          <button class="primary-btn" id="generateBtn">
+            <span>⚡</span>
+            <span>Generate</span>
+          </button>
 
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">CreatedAt – from</label>
-            <input id="createdFromInput" class="input" type="date" />
+          <div class="secondary-actions">
+            <button class="secondary-btn" id="copyBtn">
+              <span>📋</span>
+              <span>Copy to clipboard</span>
+            </button>
+            <button class="secondary-btn" id="downloadBtn">
+              <span>⬇️</span>
+              <span>Download JSON</span>
+            </button>
           </div>
-          <div class="form-field">
-            <label class="form-label">CreatedAt – to</label>
-            <input id="createdToInput" class="input" type="date" />
-          </div>
-        </div>
-      </div>
+        </section>
 
-    </div>
-
-    <!-- PRODUCT CONFIG -->
-    <div id="productConfigCards" class="cards-grid" style="display:none;">
-
-      <div class="field-card card-full">
-        <h3 class="field-card-title">Product name</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Name source
-              <span class="tooltip" data-tooltip="Use built‑in sample names or your own list.">i</span>
-            </label>
-            <div class="radio-group" id="productNameSourceGroup">
-              <label class="radio-option">
-                <input type="radio" name="productNameSource" value="builtin" checked />
-                <span>Built‑in list</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productNameSource" value="custom" />
-                <span>Custom list</span>
-              </label>
+        <!-- RIGHT: Output -->
+        <section class="card">
+          <div class="output-header">
+            <div class="output-header-title">Output</div>
+            <div class="output-header-meta" id="outputMeta">
+              Zatím nic nevygenerováno.
             </div>
           </div>
-        </div>
-
-        <div id="productCustomNameBlock" style="display:none; margin-top:8px;">
-          <label class="form-label">
-            Custom product names
-            <span class="tooltip" data-tooltip="One product name per line.">i</span>
-          </label>
-          <textarea id="productCustomNameList" placeholder="Wireless Mouse&#10;Mechanical Keyboard&#10;Noise‑cancelling Headphones"></textarea>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Category</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              Categories
-              <span class="tooltip" data-tooltip="Select which categories can be used.">i</span>
-            </label>
-            <div class="checkbox-group" id="productCategoryGroup">
-              <label class="checkbox-option"><input type="checkbox" value="Electronics" checked><span>Electronics</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Books" checked><span>Books</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Clothing" checked><span>Clothing</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Home" checked><span>Home</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Toys"><span>Toys</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Tools"><span>Tools</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Beauty"><span>Beauty</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Sports"><span>Sports</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Office"><span>Office</span></label>
-              <label class="checkbox-option"><input type="checkbox" value="Food"><span>Food</span></label>
-            </div>
-
-            <div style="margin-top:8px;">
-              <button class="btn btn-ghost" type="button" id="addProductCategoryBtn">＋ Add custom category</button>
-            </div>
+          <div class="output-box" id="outputBox">
+{ }
           </div>
-        </div>
-
-        <div class="form-row" id="productCustomCategoryField" style="display:none;">
-          <div class="form-field">
-            <label class="form-label">New category</label>
-            <input id="productCustomCategoryInput" class="input" type="text" placeholder="e.g. Gaming" />
+          <div class="footer-note">
+            Tip: vygenerovaná data můžeš rovnou použít v Postmanu, Cypressu nebo jako seed pro test DB.
           </div>
-          <div class="form-field" style="flex:0 0 auto; align-self:flex-end;">
-            <button class="btn btn-primary" type="button" id="confirmAddProductCategoryBtn">Add</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Price & currency</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Price – min</label>
-            <input id="productPriceMinInput" class="input" type="number" min="0" step="0.01" value="100" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Price – max</label>
-            <input id="productPriceMaxInput" class="input" type="number" min="0" step="0.01" value="2000" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Currency</label>
-            <select id="productCurrencySelect">
-              <option value="CZK" selected>CZK</option>
-              <option value="EUR">EUR</option>
-              <option value="USD">USD</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Stock & SKU</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              In stock
-              <span class="tooltip" data-tooltip="Control how often products are in stock.">i</span>
-            </label>
-            <div class="radio-group" id="productStockModeGroup">
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="random" checked />
-                <span>Random</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="true" />
-                <span>Always in stock</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="productStockMode" value="false" />
-                <span>Always out of stock</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">
-              SKU pattern
-              <span class="tooltip" data-tooltip="Use # for digits, e.g. PRD-#####.">i</span>
-            </label>
-            <input id="productSkuPatternInput" class="input" type="text" value="PRD-#####"/>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-card">
-        <h3 class="field-card-title">Weight & dimensions</h3>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label class="form-label">Weight (kg) – approx</label>
-            <input id="productWeightInput" class="input" type="number" min="0" step="0.01" value="0.5" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Dimensions (text)</label>
-            <input id="productDimensionsInput" class="input" type="text" value="10x5x3 cm" />
-          </div>
-        </div>
-      </div>
-
+        </section>
+      </main>
     </div>
-
-    <!-- Edge Cases – Configuration -->
-  <div class="section-card" id="edgeCasesSection">
-  <h2 class="section-title">Edge Cases</h2>
-  <p class="section-description">
-    Generate extreme, boundary and pathological values for robustness, security and negative-path testing.
-  </p>
-
-  <!-- Edge Cases cards grid -->
-  <div class="cards-grid" id="edgeCasesConfigCards" style="display: none;">
-
-    <!-- Edge Case Groups – master switches -->
-    <div class="field-card card-full">
-      <div class="field-card-title">Edge Case Groups</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupString" checked>
-          <span>String edge cases</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupNumber" checked>
-          <span>Number edge cases</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupBoolean" checked>
-          <span>Boolean edge cases</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupNullLike" checked>
-          <span>Null-like values</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupSecurity">
-          <span>Security payloads (SQLi, XSS)</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecGroupCustom">
-          <span>Custom values</span>
-        </label>
-      </div>
-      <p class="inline-note">
-        Select which edge case groups should be included in generated records.
-      </p>
-    </div>
-
-    <!-- String Edge Cases -->
-    <div class="field-card" id="ecStringCard">
-      <div class="field-card-title">String edge cases</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringEmpty" checked>
-          <span>Empty string ""</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringSpace" checked>
-          <span>Single space " "</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringMultiSpace">
-          <span>Multiple spaces "     "</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringLong">
-          <span>Very long string</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringSpecial">
-          <span>Special characters !@#$%^&amp;*()</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringEmoji">
-          <span>Unicode / emoji</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecStringZeroWidth">
-          <span>Zero-width characters</span>
-        </label>
-      </div>
-      <p class="inline-note">
-        These values are ideal for trimming, encoding and UI rendering edge cases.
-      </p>
-    </div>
-
-    <!-- Number Edge Cases -->
-    <div class="field-card" id="ecNumberCard">
-      <div class="field-card-title">Number edge cases</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberZero" checked>
-          <span>0</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberMinusOne" checked>
-          <span>-1</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberLarge">
-          <span>Very large number</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberSmall">
-          <span>Very small number</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberNaN">
-          <span>NaN</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNumberInfinity">
-          <span>Infinity / -Infinity</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Boolean Edge Cases -->
-    <div class="field-card" id="ecBooleanCard">
-      <div class="field-card-title">Boolean edge cases</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecBoolTrue" checked>
-          <span>true</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecBoolFalse" checked>
-          <span>false</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecBoolStringTrue">
-          <span>"true" (string)</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecBoolStringFalse">
-          <span>"false" (string)</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Null-like Edge Cases -->
-    <div class="field-card" id="ecNullLikeCard">
-      <div class="field-card-title">Null-like values</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNullNull" checked>
-          <span>null</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNullUndefined" checked>
-          <span>undefined</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNullEmptyString">
-          <span>"" (empty string)</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNullStringNull">
-          <span>"null"</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecNullStringUndefined">
-          <span>"undefined"</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Security Payloads -->
-    <div class="field-card" id="ecSecurityCard">
-      <div class="field-card-title">Security payloads</div>
-      <div class="checkbox-group">
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecSqlInjection">
-          <span>SQL injection patterns</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecXssPayloads">
-          <span>XSS payloads</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecHtmlInjection">
-          <span>HTML injection</span>
-        </label>
-        <label class="checkbox-option">
-          <input type="checkbox" id="ecPathTraversal">
-          <span>Path traversal</span>
-        </label>
-      </div>
-      <div class="radio-group mt-10">
-        <label class="radio-option">
-          <input type="radio" name="ecSecurityMode" value="safe" checked>
-          <span>Safe mode (escaped / encoded)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="ecSecurityMode" value="raw">
-          <span>Raw mode (exact payload)</span>
-        </label>
-      </div>
-      <p class="inline-note">
-        Use safe mode for UI tests, raw mode for backend and security testing.
-      </p>
-    </div>
-
-    <!-- Custom Edge Cases -->
-    <div class="field-card card-full" id="ecCustomCard">
-      <div class="field-card-title">Custom edge values</div>
-      <div class="form-field">
-        <label class="form-label" for="ecCustomList">
-          Custom values (one per line)
-        </label>
-        <textarea id="ecCustomList" placeholder="null
-undefined
-&quot;&quot;
-custom-edge-value"></textarea>
-        <p class="inline-note">
-          Each non-empty line will be treated as a separate edge case value.
-        </p>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-    
-  </section>
-
-  <!-- BUTTONS -->
-  <div class="button-row" style="margin-bottom:24px;">
-    <button class="btn btn-primary" id="generateBtn">⚙️ Generate</button>
-    <button class="btn btn-ghost" id="copyBtn">📋 Copy</button>
-    <button class="btn btn-ghost" id="downloadBtn">⬇️ Download JSON</button>
   </div>
 
-  <!-- OUTPUT -->
-  <section class="section-card" id="output-section">
-    <h2 class="section-title">Output</h2>
-    <p class="section-description">
-      Generated data preview. You can copy it or download it as JSON.
-    </p>
+  <script>
+    const dataTypeEl = document.getElementById("dataType");
+    const countEl = document.getElementById("count");
+    const formatToggleEl = document.getElementById("formatToggle");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const outputBox = document.getElementById("outputBox");
+    const outputMeta = document.getElementById("outputMeta");
 
-    <div class="output-meta">
-      <div>
-        <span id="outputMetaRecords">0 records</span> ·
-        <span id="outputMetaFormat">JSON format</span>
-      </div>
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span>Test Data Forge</span>
-      </div>
-    </div>
+    let currentFormat = "json";
+    let lastData = [];
 
-    <div class="output-box" id="outputBox">
-      <span class="output-empty">No data generated yet. Click “Generate” to create sample test data.</span>
-    </div>
-  </section>
-</div>
+    // --- Helpers ---
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
 
-<script src="script.js"></script>
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomString(length) {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let out = "";
+      for (let i = 0; i < length; i++) {
+        out += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return out;
+    }
+
+    function randomEmail(name) {
+      const domains = ["example.com", "test.io", "qa.local", "mail.dev"];
+      const clean = name.toLowerCase().replace(/\s+/g, ".");
+      return clean + "@" + randomItem(domains);
+    }
+
+    function randomDateInRange(start, end) {
+      const ts = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+      return new Date(ts);
+    }
+
+    function formatISODate(d) {
+      return d.toISOString();
+    }
+
+    // --- Generátory dat ---
+    function generateUser() {
+      const firstNames = ["Anna", "Lenka", "Eva", "Klara", "Tereza", "Petr", "Jan", "Lukas", "David", "Martin"];
+      const lastNames = ["Novakova", "Svobodova", "Kralova", "Dvorakova", "Novak", "Svoboda", "Kral", "Dvorak"];
+      const roles = ["user", "admin", "tester", "viewer"];
+
+      const first = randomItem(firstNames);
+      const last = randomItem(lastNames);
+      const fullName = first + " " + last;
+
+      return {
+        id: randomInt(1000, 9999),
+        name: fullName,
+        email: randomEmail(fullName),
+        role: randomItem(roles),
+        active: Math.random() > 0.15,
+        createdAt: formatISODate(randomDateInRange(new Date(2020, 0, 1), new Date()))
+      };
+    }
+
+    function generateProduct() {
+      const adjectives = ["Premium", "Basic", "Deluxe", "Eco", "Smart", "Compact"];
+      const nouns = ["Chair", "Desk", "Lamp", "Monitor", "Keyboard", "Headphones"];
+      const categories = ["office", "home", "electronics", "accessories"];
+
+      const name = randomItem(adjectives) + " " + randomItem(nouns);
+
+      return {
+        id: "P-" + randomInt(10000, 99999),
+        name,
+        category: randomItem(categories),
+        price: parseFloat((Math.random() * 500 + 10).toFixed(2)),
+        inStock: Math.random() > 0.2,
+        tags: [randomItem(["new", "sale", "bestseller", "refurbished"])],
+      };
+    }
+
+    function generateOrder() {
+      const statuses = ["pending", "processing", "shipped", "delivered", "cancelled"];
+      const now = new Date();
+      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+
+      const created = randomDateInRange(past, now);
+      const shipped = Math.random() > 0.4 ? randomDateInRange(created, now) : null;
+
+      return {
+        orderId: "ORD-" + randomInt(100000, 999999),
+        userId: randomInt(1000, 9999),
+        total: parseFloat((Math.random() * 1000 + 50).toFixed(2)),
+        currency: "EUR",
+        status: randomItem(statuses),
+        createdAt: formatISODate(created),
+        shippedAt: shipped ? formatISODate(shipped) : null
+      };
+    }
+
+    function generateRandomString() {
+      const lengths = [8, 16, 32, 64, 128];
+      const length = randomItem(lengths);
+      return {
+        length,
+        value: randomString(length)
+      };
+    }
+
+    function generateDateSet() {
+      const now = new Date();
+      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+      const future = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+      return {
+        now: formatISODate(now),
+        past: formatISODate(randomDateInRange(past, now)),
+        future: formatISODate(randomDateInRange(now, future)),
+        invalid: "2024-13-40T25:61:00Z"
+      };
+    }
+
+    function generateEdgeCases() {
+  const stringCases = [
+    "",
+    " ",
+    "     ",
+    "x".repeat(1024),
+    "!@#$%^&*()_+{}[]:\";'<>?,./\\|`~",
+    "Žluťoučký kůň 🐎 pěl ďábelské ódy 🎶",
+    "\u200B",
+    "<script>alert(1)</script>",
+    "<img src=x onerror=alert(1)>"
+  ];
+
+  const numberCases = [
+    0,
+    -1,
+    -123,
+    9999999999,
+    -9999999999,
+    NaN,
+    Infinity,
+    -Infinity
+  ];
+
+  const booleanCases = [
+    true,
+    false,
+    "true",
+    "false"
+  ];
+
+  const nullCases = [
+    null,
+    undefined,
+    "",
+    "null",
+    "undefined"
+  ];
+
+  const securityCases = [
+    "' OR 1=1 --",
+    "\" OR \"\"=\"",
+    "DROP TABLE users;",
+    "../../../../etc/passwd",
+    "<script>alert('XSS')</script>",
+    "<img src=x onerror=alert('XSS')>"
+  ];
+
+  const mixedCases = [
+    [null, "", 0, "test", { nested: true }],
+    { id: 1, name: null },
+    { weird: [undefined, NaN, Infinity] }
+  ];
+
+  // Spojíme všechny skupiny do jedné velké
+  const all = [
+    ...stringCases,
+    ...numberCases,
+    ...booleanCases,
+    ...nullCases,
+    ...securityCases,
+    ...mixedCases
+  ];
+
+  // Náhodně vybereme jednu hodnotu
+  const value = randomItem(all);
+
+  return {
+    edgeValue: value
+  };
+}
+
+
+    function generateData(type, count) {
+      const result = [];
+      for (let i = 0; i < count; i++) {
+        switch (type) {
+          case "user":
+            result.push(generateUser());
+            break;
+          case "product":
+            result.push(generateProduct());
+            break;
+          case "order":
+            result.push(generateOrder());
+            break;
+          case "randomString":
+            result.push(generateRandomString());
+            break;
+          case "dateSet":
+            result.push(generateDateSet());
+            break;
+          case "edgeCases":
+            result.push(generateEdgeCases());
+            break;
+          default:
+            result.push({});
+        }
+      }
+      return result;
+    }
+
+    // --- Render ---
+    function renderJSON(data) {
+      outputBox.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function renderTable(data) {
+      if (!Array.isArray(data) || data.length === 0) {
+        outputBox.textContent = "Žádná data k zobrazení v tabulce.";
+        return;
+      }
+
+      const keys = Array.from(
+        data.reduce((set, item) => {
+          Object.keys(item).forEach((k) => set.add(k));
+          return set;
+        }, new Set())
+      );
+
+      let html = "<table><thead><tr>";
+      keys.forEach((k) => {
+        html += "<th>" + k + "</th>";
+      });
+      html += "</tr></thead><tbody>";
+
+      data.forEach((row) => {
+        html += "<tr>";
+        keys.forEach((k) => {
+          let value = row[k];
+          if (typeof value === "object") {
+            value = JSON.stringify(value);
+          }
+          html += "<td>" + (value === undefined ? "" : value) + "</td>";
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      outputBox.innerHTML = html;
+    }
+
+    function updateOutputMeta(type, count) {
+      const labelMap = {
+        user: "User",
+        product: "Product",
+        order: "Order",
+        randomString: "Random string",
+        dateSet: "Date set",
+        edgeCases: "Edge cases"
+      };
+      const label = labelMap[type] || type;
+      outputMeta.textContent = `${count} × ${label} · Formát: ${currentFormat.toUpperCase()}`;
+    }
+
+    // --- Eventy ---
+    formatToggleEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".toggle-btn");
+      if (!btn) return;
+      const format = btn.getAttribute("data-format");
+      if (!format) return;
+
+      currentFormat = format;
+      Array.from(formatToggleEl.querySelectorAll(".toggle-btn")).forEach((b) =>
+        b.classList.toggle("active", b === btn)
+      );
+
+      if (lastData && lastData.length > 0) {
+        if (currentFormat === "json") {
+          renderJSON(lastData);
+        } else {
+          renderTable(lastData);
+        }
+      }
+    });
+
+    generateBtn.addEventListener("click", () => {
+      const type = dataTypeEl.value;
+      let count = parseInt(countEl.value, 10);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 200) count = 200;
+      countEl.value = count;
+
+      const data = generateData(type, count);
+      lastData = data;
+
+      if (currentFormat === "json") {
+        renderJSON(data);
+      } else {
+        renderTable(data);
+      }
+
+      updateOutputMeta(type, count);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!lastData || lastData.length === 0) return;
+      try {
+        const text =
+          currentFormat === "json"
+            ? JSON.stringify(lastData, null, 2)
+            : outputBox.innerText;
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied ✔";
+        setTimeout(() => (copyBtn.innerHTML = '<span>📋</span><span>Copy to clipboard</span>'), 1200);
+      } catch (e) {
+        alert("Copy failed.");
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!lastData || lastData.length === 0) return;
+      const blob = new Blob([JSON.stringify(lastData, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "test-data.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial dummy state
+    lastData = [];
+  </script>
 </body>
 </html>
