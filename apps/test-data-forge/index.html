@@ -460,6 +460,227 @@
       </div>
 
     </div>
+
+    <!-- Edge Cases – Configuration -->
+  <div class="section-card" id="edgeCasesSection">
+  <h2 class="section-title">Edge Cases</h2>
+  <p class="section-description">
+    Generate extreme, boundary and pathological values for robustness, security and negative-path testing.
+  </p>
+
+  <!-- Edge Cases cards grid -->
+  <div class="cards-grid" id="edgeCasesConfigCards" style="display: none;">
+
+    <!-- Edge Case Groups – master switches -->
+    <div class="field-card card-full">
+      <div class="field-card-title">Edge Case Groups</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupString" checked>
+          <span>String edge cases</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupNumber" checked>
+          <span>Number edge cases</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupBoolean" checked>
+          <span>Boolean edge cases</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupNullLike" checked>
+          <span>Null-like values</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupSecurity">
+          <span>Security payloads (SQLi, XSS)</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecGroupCustom">
+          <span>Custom values</span>
+        </label>
+      </div>
+      <p class="inline-note">
+        Select which edge case groups should be included in generated records.
+      </p>
+    </div>
+
+    <!-- String Edge Cases -->
+    <div class="field-card" id="ecStringCard">
+      <div class="field-card-title">String edge cases</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringEmpty" checked>
+          <span>Empty string ""</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringSpace" checked>
+          <span>Single space " "</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringMultiSpace">
+          <span>Multiple spaces "     "</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringLong">
+          <span>Very long string</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringSpecial">
+          <span>Special characters !@#$%^&amp;*()</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringEmoji">
+          <span>Unicode / emoji</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecStringZeroWidth">
+          <span>Zero-width characters</span>
+        </label>
+      </div>
+      <p class="inline-note">
+        These values are ideal for trimming, encoding and UI rendering edge cases.
+      </p>
+    </div>
+
+    <!-- Number Edge Cases -->
+    <div class="field-card" id="ecNumberCard">
+      <div class="field-card-title">Number edge cases</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberZero" checked>
+          <span>0</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberMinusOne" checked>
+          <span>-1</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberLarge">
+          <span>Very large number</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberSmall">
+          <span>Very small number</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberNaN">
+          <span>NaN</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNumberInfinity">
+          <span>Infinity / -Infinity</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Boolean Edge Cases -->
+    <div class="field-card" id="ecBooleanCard">
+      <div class="field-card-title">Boolean edge cases</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecBoolTrue" checked>
+          <span>true</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecBoolFalse" checked>
+          <span>false</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecBoolStringTrue">
+          <span>"true" (string)</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecBoolStringFalse">
+          <span>"false" (string)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Null-like Edge Cases -->
+    <div class="field-card" id="ecNullLikeCard">
+      <div class="field-card-title">Null-like values</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNullNull" checked>
+          <span>null</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNullUndefined" checked>
+          <span>undefined</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNullEmptyString">
+          <span>"" (empty string)</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNullStringNull">
+          <span>"null"</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecNullStringUndefined">
+          <span>"undefined"</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Security Payloads -->
+    <div class="field-card" id="ecSecurityCard">
+      <div class="field-card-title">Security payloads</div>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecSqlInjection">
+          <span>SQL injection patterns</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecXssPayloads">
+          <span>XSS payloads</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecHtmlInjection">
+          <span>HTML injection</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" id="ecPathTraversal">
+          <span>Path traversal</span>
+        </label>
+      </div>
+      <div class="radio-group mt-10">
+        <label class="radio-option">
+          <input type="radio" name="ecSecurityMode" value="safe" checked>
+          <span>Safe mode (escaped / encoded)</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="ecSecurityMode" value="raw">
+          <span>Raw mode (exact payload)</span>
+        </label>
+      </div>
+      <p class="inline-note">
+        Use safe mode for UI tests, raw mode for backend and security testing.
+      </p>
+    </div>
+
+    <!-- Custom Edge Cases -->
+    <div class="field-card card-full" id="ecCustomCard">
+      <div class="field-card-title">Custom edge values</div>
+      <div class="form-field">
+        <label class="form-label" for="ecCustomList">
+          Custom values (one per line)
+        </label>
+        <textarea id="ecCustomList" placeholder="null
+undefined
+&quot;&quot;
+custom-edge-value"></textarea>
+        <p class="inline-note">
+          Each non-empty line will be treated as a separate edge case value.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    
   </section>
 
   <!-- BUTTONS -->
