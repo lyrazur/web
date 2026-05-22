@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Data Forge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --accent: #d4af37;
+      --accent-soft: rgba(212, 175, 55, 0.12);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --radius-lg: 18px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      --font-serif: "Playfair Display", "Georgia", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at top left, #fdfcfb, #f3f4f6);
+      color: var(--text-main);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      margin: 0 0 8px;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #7c651e;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #4b5563;
+    }
+
+    .card-subtitle {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .field label {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .field small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    select,
+    input[type="number"] {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 7px 9px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    select:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+      background: #ffffff;
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #6b7280;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .toggle-btn.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .primary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+    }
+
+    .primary-btn span {
+      font-size: 1rem;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.4);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.3);
+      opacity: 0.95;
+    }
+
+    .secondary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #ffffff;
+      color: #374151;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.1s ease, border-color 0.1s ease;
+    }
+
+    .secondary-btn:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .secondary-btn span {
+      font-size: 0.9rem;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .output-header-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4b5563;
+    }
+
+    .output-header-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .output-box {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #0b1120;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      max-height: 360px;
+      overflow: auto;
+      white-space: pre;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    th,
+    td {
+      border: 1px solid #1f2937;
+      padding: 4px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: #020617;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+      <header>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>QA utility · Test Data Forge</span>
+        </div>
+        <h1>Generate perfect test data in seconds.</h1>
+        <p>Malý, ale chytrý generátor testovacích dat pro manuální i automatizované testování.</p>
+      </header>
+
+      <main class="layout">
+        <!-- LEFT: Controls -->
+        <section class="card">
+          <h2>Konfigurace</h2>
+          <p class="card-subtitle">
+            Vyber typ dat, počet záznamů a formát výstupu. Všechno běží čistě v prohlížeči.
+          </p>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="dataType">Typ dat</label>
+              <select id="dataType">
+                <option value="user">User</option>
+                <option value="product">Product</option>
+                <option value="order">Order</option>
+                <option value="randomString">Random string</option>
+                <option value="dateSet">Date set</option>
+                <option value="edgeCases">Edge cases</option>
+              </select>
+              <small>Různé presety pro běžné QA scénáře.</small>
+            </div>
+
+            <div class="field">
+              <label for="count">Počet záznamů</label>
+              <input id="count" type="number" min="1" max="200" value="5" />
+              <small>Rozumný rozsah: 1–200.</small>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="field" style="margin: 0;">
+              <label>Formát výstupu</label>
+              <div class="toggle-group" id="formatToggle">
+                <button class="toggle-btn active" data-format="json">JSON</button>
+                <button class="toggle-btn" data-format="table">Tabulka</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="primary-btn" id="generateBtn">
+            <span>⚡</span>
+            <span>Generate</span>
+          </button>
+
+          <div class="secondary-actions">
+            <button class="secondary-btn" id="copyBtn">
+              <span>📋</span>
+              <span>Copy to clipboard</span>
+            </button>
+            <button class="secondary-btn" id="downloadBtn">
+              <span>⬇️</span>
+              <span>Download JSON</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- RIGHT: Output -->
+        <section class="card">
+          <div class="output-header">
+            <div class="output-header-title">Output</div>
+            <div class="output-header-meta" id="outputMeta">
+              Zatím nic nevygenerováno.
+            </div>
+          </div>
+          <div class="output-box" id="outputBox">
+{ }
+          </div>
+          <div class="footer-note">
+            Tip: vygenerovaná data můžeš rovnou použít v Postmanu, Cypressu nebo jako seed pro test DB.
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const dataTypeEl = document.getElementById("dataType");
+    const countEl = document.getElementById("count");
+    const formatToggleEl = document.getElementById("formatToggle");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const outputBox = document.getElementById("outputBox");
+    const outputMeta = document.getElementById("outputMeta");
+
+    let currentFormat = "json";
+    let lastData = [];
+
+    // --- Helpers ---
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomString(length) {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let out = "";
+      for (let i = 0; i < length; i++) {
+        out += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return out;
+    }
+
+    function randomEmail(name) {
+      const domains = ["example.com", "test.io", "qa.local", "mail.dev"];
+      const clean = name.toLowerCase().replace(/\s+/g, ".");
+      return clean + "@" + randomItem(domains);
+    }
+
+    function randomDateInRange(start, end) {
+      const ts = start.getTime() + Math.random() * (end.getTime() - start.getTime());
+      return new Date(ts);
+    }
+
+    function formatISODate(d) {
+      return d.toISOString();
+    }
+
+    // --- Generátory dat ---
+    function generateUser() {
+      const firstNames = ["Anna", "Lenka", "Eva", "Klara", "Tereza", "Petr", "Jan", "Lukas", "David", "Martin"];
+      const lastNames = ["Novakova", "Svobodova", "Kralova", "Dvorakova", "Novak", "Svoboda", "Kral", "Dvorak"];
+      const roles = ["user", "admin", "tester", "viewer"];
+
+      const first = randomItem(firstNames);
+      const last = randomItem(lastNames);
+      const fullName = first + " " + last;
+
+      return {
+        id: randomInt(1000, 9999),
+        name: fullName,
+        email: randomEmail(fullName),
+        role: randomItem(roles),
+        active: Math.random() > 0.15,
+        createdAt: formatISODate(randomDateInRange(new Date(2020, 0, 1), new Date()))
+      };
+    }
+
+    function generateProduct() {
+      const adjectives = ["Premium", "Basic", "Deluxe", "Eco", "Smart", "Compact"];
+      const nouns = ["Chair", "Desk", "Lamp", "Monitor", "Keyboard", "Headphones"];
+      const categories = ["office", "home", "electronics", "accessories"];
+
+      const name = randomItem(adjectives) + " " + randomItem(nouns);
+
+      return {
+        id: "P-" + randomInt(10000, 99999),
+        name,
+        category: randomItem(categories),
+        price: parseFloat((Math.random() * 500 + 10).toFixed(2)),
+        inStock: Math.random() > 0.2,
+        tags: [randomItem(["new", "sale", "bestseller", "refurbished"])],
+      };
+    }
+
+    function generateOrder() {
+      const statuses = ["pending", "processing", "shipped", "delivered", "cancelled"];
+      const now = new Date();
+      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+
+      const created = randomDateInRange(past, now);
+      const shipped = Math.random() > 0.4 ? randomDateInRange(created, now) : null;
+
+      return {
+        orderId: "ORD-" + randomInt(100000, 999999),
+        userId: randomInt(1000, 9999),
+        total: parseFloat((Math.random() * 1000 + 50).toFixed(2)),
+        currency: "EUR",
+        status: randomItem(statuses),
+        createdAt: formatISODate(created),
+        shippedAt: shipped ? formatISODate(shipped) : null
+      };
+    }
+
+    function generateRandomString() {
+      const lengths = [8, 16, 32, 64, 128];
+      const length = randomItem(lengths);
+      return {
+        length,
+        value: randomString(length)
+      };
+    }
+
+    function generateDateSet() {
+      const now = new Date();
+      const past = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+      const future = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+
+      return {
+        now: formatISODate(now),
+        past: formatISODate(randomDateInRange(past, now)),
+        future: formatISODate(randomDateInRange(now, future)),
+        invalid: "2024-13-40T25:61:00Z"
+      };
+    }
+
+    function generateEdgeCases() {
+      return {
+        emptyString: "",
+        longString: "x".repeat(1024),
+        specialChars: "!@#$%^&*()_+{}[]:\";'<>?,./\\|`~",
+        unicode: "Žluťoučký kůň 🐎 pěl ďábelské ódy 🎶",
+        nullValue: null,
+        zero: 0,
+        negativeNumber: -123,
+        bigNumber: 9999999999,
+        booleanTrue: true,
+        booleanFalse: false,
+        arrayMixed: [null, "", 0, "test", { nested: true }],
+        objectWithMissingFields: { id: 1, name: null }
+      };
+    }
+
+    function generateData(type, count) {
+      const result = [];
+      for (let i = 0; i < count; i++) {
+        switch (type) {
+          case "user":
+            result.push(generateUser());
+            break;
+          case "product":
+            result.push(generateProduct());
+            break;
+          case "order":
+            result.push(generateOrder());
+            break;
+          case "randomString":
+            result.push(generateRandomString());
+            break;
+          case "dateSet":
+            result.push(generateDateSet());
+            break;
+          case "edgeCases":
+            result.push(generateEdgeCases());
+            break;
+          default:
+            result.push({});
+        }
+      }
+      return result;
+    }
+
+    // --- Render ---
+    function renderJSON(data) {
+      outputBox.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function renderTable(data) {
+      if (!Array.isArray(data) || data.length === 0) {
+        outputBox.textContent = "Žádná data k zobrazení v tabulce.";
+        return;
+      }
+
+      const keys = Array.from(
+        data.reduce((set, item) => {
+          Object.keys(item).forEach((k) => set.add(k));
+          return set;
+        }, new Set())
+      );
+
+      let html = "<table><thead><tr>";
+      keys.forEach((k) => {
+        html += "<th>" + k + "</th>";
+      });
+      html += "</tr></thead><tbody>";
+
+      data.forEach((row) => {
+        html += "<tr>";
+        keys.forEach((k) => {
+          let value = row[k];
+          if (typeof value === "object") {
+            value = JSON.stringify(value);
+          }
+          html += "<td>" + (value === undefined ? "" : value) + "</td>";
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      outputBox.innerHTML = html;
+    }
+
+    function updateOutputMeta(type, count) {
+      const labelMap = {
+        user: "User",
+        product: "Product",
+        order: "Order",
+        randomString: "Random string",
+        dateSet: "Date set",
+        edgeCases: "Edge cases"
+      };
+      const label = labelMap[type] || type;
+      outputMeta.textContent = `${count} × ${label} · Formát: ${currentFormat.toUpperCase()}`;
+    }
+
+    // --- Eventy ---
+    formatToggleEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".toggle-btn");
+      if (!btn) return;
+      const format = btn.getAttribute("data-format");
+      if (!format) return;
+
+      currentFormat = format;
+      Array.from(formatToggleEl.querySelectorAll(".toggle-btn")).forEach((b) =>
+        b.classList.toggle("active", b === btn)
+      );
+
+      if (lastData && lastData.length > 0) {
+        if (currentFormat === "json") {
+          renderJSON(lastData);
+        } else {
+          renderTable(lastData);
+        }
+      }
+    });
+
+    generateBtn.addEventListener("click", () => {
+      const type = dataTypeEl.value;
+      let count = parseInt(countEl.value, 10);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 200) count = 200;
+      countEl.value = count;
+
+      const data = generateData(type, count);
+      lastData = data;
+
+      if (currentFormat === "json") {
+        renderJSON(data);
+      } else {
+        renderTable(data);
+      }
+
+      updateOutputMeta(type, count);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!lastData || lastData.length === 0) return;
+      try {
+        const text =
+          currentFormat === "json"
+            ? JSON.stringify(lastData, null, 2)
+            : outputBox.innerText;
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied ✔";
+        setTimeout(() => (copyBtn.innerHTML = '<span>📋</span><span>Copy to clipboard</span>'), 1200);
+      } catch (e) {
+        alert("Copy failed.");
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!lastData || lastData.length === 0) return;
+      const blob = new Blob([JSON.stringify(lastData, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "test-data.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial dummy state
+    lastData = [];
+  </script>
+</body>
+</html>
