@@ -81,6 +81,31 @@ body {
   color: var(--text-muted);
 }
 
+/* Menu - Home */
+
+.main-nav {
+  background: white;
+  border-bottom: 1px solid #eee;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: #d4af37;
+}
+
+
 /* Panels */
 
 .app-main {
